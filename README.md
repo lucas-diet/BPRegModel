@@ -1,1 +1,1 @@
-# BP-Regulation-Model
+# BPRegModel
