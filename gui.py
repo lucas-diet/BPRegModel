@@ -1,7 +1,7 @@
 
 from tkinter import *
 
-class App():
+class GuiApp():
     def __init__(self, master):
         self.master = master
         master.title('BloodPressureSim')
@@ -14,7 +14,7 @@ class App():
 
 if __name__ == '__main__':
     root = Tk()
-    app = App(root)
+    app = GuiApp(root)
     root.mainloop()
     
 
