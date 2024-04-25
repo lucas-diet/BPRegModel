@@ -36,19 +36,25 @@ def simulate_blood_pressure(duration, heart_rate, systolic_factor=1.2, diastolic
 # Simuliere Blutdruck mit einer Herzfrequenz von 75 Schlägen pro Minute für 60 Sekunden
 duration = 60  # Sekunden
 heart_rate = 10  # Schläge pro Minute
-systolic_pressure, diastolic_pressure , mad_1, mad_2 = simulate_blood_pressure(duration, heart_rate)
+systolic_pressure, diastolic_pressure, mad_1, mad_2 = simulate_blood_pressure(duration, heart_rate)
+
+#systolic_pressure_ = np.max(blood_pressure)
+#diastolic_pressure_ = np.min(blood_pressure)
 
 # Plot der simulierten Blutdruckwerte
 #fig, axs = plt.subplots(2)
 #fig.suptitle('Simulierter Blutdruck über Zeit (Herzfrequenz = {} bpm)'.format(heart_rate))
-plt.plot(np.linspace(0, duration, len(systolic_pressure)), systolic_pressure, label='systolische Blutdruck')
-plt.plot(np.linspace(0, duration, len(diastolic_pressure)), diastolic_pressure, label='diastolische Blutdruck')
+plt.plot(np.linspace(0, duration, len(systolic_pressure)), systolic_pressure, label='systolischer Blutdruck')
+plt.plot(np.linspace(0, duration, len(diastolic_pressure)), diastolic_pressure, label='diastolischer Blutdruck')
 
-plt.plot(np.linspace(0, duration, len(mad_1)), mad_1, label='herznahe Arterien mittleren arteriellen Blutdruck', color='red')
-plt.plot(np.linspace(0, duration, len(mad_2)), mad_2, label='herzferne Arterien mittleren arteriellen Blutdruc', color='green')
+#plt.plot(np.linspace(0, duration, 2), [systolic_pressure_, systolic_pressure_], 'r--', label='Systolischer Druck')
+#plt.plot(np.linspace(0, duration, 2), [diastolic_pressure_, diastolic_pressure_], 'g--', label='Diastolischer Druck')
+
+plt.plot(np.linspace(0, duration, len(mad_1)), mad_1, label='herznahe Arterien mittlerer arterieller Blutdruck', color='red')
+plt.plot(np.linspace(0, duration, len(mad_2)), mad_2, label='herzferne Arterien mittlerer arterieller Blutdruc', color='green')
 
 plt.xlabel('Zeit (s)')
 plt.ylabel('mmHg')
 plt.grid(True)
-plt.legend()
+plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, shadow=True, ncol=5)
 plt.show()
