@@ -1,8 +1,9 @@
 
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-def simulate_blood_pressure(duration, heart_rate, systolic_factor=1.2, diastolic_factor=0.8, noise_level=0.0):
+def simulate_blood_pressure(duration, heart_rate, systolic, systolic_factor=1.2, diastolic_factor=0.8):
     """
     Simuliert den Blutdruck über eine bestimmte Dauer basierend auf der Herzfrequenz.
     
@@ -18,41 +19,26 @@ def simulate_blood_pressure(duration, heart_rate, systolic_factor=1.2, diastolic
     """
     # Zeitachse
     t = np.linspace(0, duration, int(duration * 100))  # Abtastung mit 100 Hz
-    
+
     # Simuliere Herzfrequenz mit Sinusfunktion
-    heart_rate_signal = np.sin(2 * np.pi * heart_rate/ 60 * t) + 1
+    heart_rate_signal = systolic * np.sin(2 * np.pi * (heart_rate/60) * t) + 0.63 * systolic * np.sin(4 * np.pi * (heart_rate / 60) * t + (2 / np.pi))
     
-    # Skaliere den Blutdruck basierend auf der Herzfrequenz
-    systolic_pressure = systolic_factor * heart_rate_signal + np.random.normal(scale=noise_level, size=len(t))
-    diastolic_pressure = diastolic_factor * heart_rate_signal + np.random.normal(scale=noise_level, size=len(t))
+    diastolic_pressure = diastolic_factor * heart_rate_signal
+    systolic_pressure = systolic_factor * heart_rate_signal
 
-    blood_pressure = systolic_factor * heart_rate_signal + diastolic_factor * heart_rate_signal + np.random.normal(scale=noise_level, size=len(t))
-
-    mad_1 = diastolic_pressure + (1/2) * (systolic_pressure - diastolic_pressure)
-    mad_2 = diastolic_pressure + (1/3) * (systolic_pressure - diastolic_pressure)
+    mean_blood_pressure = diastolic_pressure + (1/3) * (systolic_pressure - diastolic_pressure)
     
-    return systolic_pressure, diastolic_pressure, mad_1, mad_2
+    return mean_blood_pressure
 
 # Simuliere Blutdruck mit einer Herzfrequenz von 75 Schlägen pro Minute für 60 Sekunden
-duration = 60  # Sekunden
-heart_rate = 10  # Schläge pro Minute
-systolic_pressure, diastolic_pressure, mad_1, mad_2 = simulate_blood_pressure(duration, heart_rate)
+duration = 10  # Sekunden
+heart_rate = 50  # Schläge pro Minute
+systolic = 120
+blood_pressure = simulate_blood_pressure(duration, heart_rate, systolic)
 
-#systolic_pressure_ = np.max(blood_pressure)
-#diastolic_pressure_ = np.min(blood_pressure)
 
 # Plot der simulierten Blutdruckwerte
-#fig, axs = plt.subplots(2)
-#fig.suptitle('Simulierter Blutdruck über Zeit (Herzfrequenz = {} bpm)'.format(heart_rate))
-plt.plot(np.linspace(0, duration, len(systolic_pressure)), systolic_pressure, label='systolischer Blutdruck')
-plt.plot(np.linspace(0, duration, len(diastolic_pressure)), diastolic_pressure, label='diastolischer Blutdruck')
-
-#plt.plot(np.linspace(0, duration, 2), [systolic_pressure_, systolic_pressure_], 'r--', label='Systolischer Druck')
-#plt.plot(np.linspace(0, duration, 2), [diastolic_pressure_, diastolic_pressure_], 'g--', label='Diastolischer Druck')
-
-plt.plot(np.linspace(0, duration, len(mad_1)), mad_1, label='herznahe Arterien mittlerer arterieller Blutdruck', color='red')
-plt.plot(np.linspace(0, duration, len(mad_2)), mad_2, label='herzferne Arterien mittlerer arterieller Blutdruc', color='green')
-
+plt.plot(np.linspace(0, duration, len(blood_pressure)), blood_pressure, label='Blutdruck (mmHg)')
 plt.xlabel('Zeit (s)')
 plt.ylabel('mmHg')
 plt.grid(True)
