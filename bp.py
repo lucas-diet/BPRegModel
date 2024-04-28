@@ -20,7 +20,7 @@ class BloodPressure():
             diastolic_factor (float): Faktor zur Skalierung des diastolischen Drucks (Standard: 0.8).
         
         Returns:
-            tuple: Ein Array, um den mittleren Blutdruck zu simulieren.
+            Ein Array, um den mittleren Blutdruck zu simulieren.
         """
         duration = self.duration
         heart_rate = self.heart_rate
