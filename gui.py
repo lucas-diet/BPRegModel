@@ -26,7 +26,7 @@ class GuiApp():
             entry.bind('<FocusIn>', lambda event, widget=entry, key=key: self.onFocusIn(widget, key))
             entry.bind('<FocusOut>', lambda event, widget=entry, key=key, placeholder=placeholder: self.onFocusOut(widget, key, placeholder))
             self.entries[key] = entry
-            entry.config(bg='white', fg='gray')
+            entry.config(bg='white', fg='black')
             row += 1
             if row == 3:
                 row = 0
