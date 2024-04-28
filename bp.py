@@ -19,10 +19,9 @@ class BloodPressure():
             heart_rate (int): Herzschläge pro Minute (Beats Per Minute).
             systolic_factor (float): Faktor zur Skalierung des systolischen Drucks (Standard: 1.2).
             diastolic_factor (float): Faktor zur Skalierung des diastolischen Drucks (Standard: 0.8).
-            noise_level (float): Niveau des Rauschens in der Simulation (Standard: 0.2).
         
         Returns:
-            tuple: Zwei Arrays für den simulierten systolischen und diastolischen Blutdruck.
+            tuple: Ein Array, um den mittleren Blutdruck zu simulieren.
         """
         duration = self.duration
         heart_rate = self.heart_rate
