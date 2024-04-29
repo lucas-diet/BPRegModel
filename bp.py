@@ -57,8 +57,6 @@ diastolic = 80
 
 bp_sim = BloodPressure(duration, heart_rate, systolic, diastolic)
 bp = bp_sim.simulate_blood_pressure()
-print(np.max(bp))
-print(np.min(bp))
 
 # Plot der simulierten Blutdruckwerte
 plt.plot(np.linspace(0, duration, len(bp)), bp, label='Blutdruck (mmHg)')
