@@ -9,16 +9,12 @@ class BloodPressure():
         self.heart_rate = heart_rate
         self.systolic = systolic
 
-    def simulate_blood_pressure(self, systolic_factor=1.2, diastolic_factor=0.8):
-        """
+    def simulate_bp(self):
+        """_summary_
         Simuliert den Blutdruck über eine bestimmte Dauer basierend auf der Herzfrequenz.
         
         Args:
-            duration (float): Simulationsdauer in Sekunden.
-            heart_rate (int): Herzschläge pro Minute (Beats Per Minute).
-            systolic_factor (float): Faktor zur Skalierung des systolischen Drucks (Standard: 1.2).
-            diastolic_factor (float): Faktor zur Skalierung des diastolischen Drucks (Standard: 0.8).
-        
+            
         Returns:
             Ein Array, um den mittleren Blutdruck zu simulieren.
         """
@@ -33,30 +29,46 @@ class BloodPressure():
         p1 = systolic * np.sin(2 * np.pi * (heart_rate/60) * t)
         p2 = 0.63 * systolic * np.sin(4 * np.pi * (heart_rate / 60) * t + (2 / np.pi))
 
-        heart_rate_signal = systolic + diastolic + p1 + p2
+        heart_rate_signal = p1 + p2
         
-        diastolic_pressure = diastolic_factor * heart_rate_signal
-        systolic_pressure = systolic_factor * heart_rate_signal
+        # systolic_factor = systolic / 100 -> um zu skalieren
+        # diastolic_factor = diastolic / 100 -> um zu skalieren
+        diastolic_pressure = (diastolic / 100) * heart_rate_signal
+        systolic_pressure = (systolic / 100) * heart_rate_signal
 
-        mean_blood_pressure = diastolic_pressure + (1/3) * (systolic_pressure - diastolic_pressure)
+        mean_bp = diastolic_pressure + (1/3) * (systolic_pressure - diastolic_pressure)
+        
+        bp = self.normalize_bp(mean_bp)
 
+        return bp
+    
+    def normalize_bp(self, mean_bp):
+        """_summary_
+            Normalisiert den durchschnuttlichen Blutdruck, indem im ersten Schritt auf [0,1]
+            skaliert wird und im zweiten Schritt auf [diastolic, systolic].
+        Args:
+            mean_bp: Durchschnittlicher Blutdruck 
+
+        Returns:
+            _type_: _description_
+        """
         # Normalisiere die Blutdruckwerte
-        max_bp = np.max(mean_blood_pressure)
-        min_bp = np.min(mean_blood_pressure)
+        max_bp = np.max(mean_bp)
+        min_bp = np.min(mean_bp)
 		
-        normalized_bp = (mean_blood_pressure - min_bp) / (max_bp - min_bp)  # Auf [0, 1] normalisieren
+        normalized_bp = (mean_bp - min_bp) / (max_bp - min_bp)  # Auf [0, 1] normalisieren
         normalized_bp = normalized_bp * (systolic - diastolic) + diastolic  # Skalieren auf [diastolic, systolic]
 		
         return normalized_bp
 
 # Simulation des Blutdruck
-duration = 10       # Sekunden
-heart_rate = 50     # Schläge pro Minute
+duration = 120       # Sekunden
+heart_rate = 10     # Schläge pro Minute
 systolic = 120
-diastolic = 80   
+diastolic = 80
 
 bp_sim = BloodPressure(duration, heart_rate, systolic, diastolic)
-bp = bp_sim.simulate_blood_pressure()
+bp = bp_sim.simulate_bp()
 
 # Plot der simulierten Blutdruckwerte
 plt.plot(np.linspace(0, duration, len(bp)), bp, label='Blutdruck (mmHg)')
