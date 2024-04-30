@@ -9,11 +9,6 @@ class GuiApp():
 
         self.duration_holder = 'duration'
         self.heartRate_holder = 'heart rate'
-
-        #self.placeholders = {
-        #    'duration': 'duration',
-        #    'heartRate': 'heart rate',
-        #    'systolic': 'systolic'}
         
         self.duration_label = Label(master, text='duration:', width=12)
         self.duration_label.place(x=5,y=10)
