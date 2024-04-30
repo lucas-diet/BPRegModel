@@ -34,6 +34,18 @@ class GuiApp():
         self.diastolic_input = Entry(master, width=10, bg='white', fg='black')
         self.diastolic_input.place(x=150,y=130)
 
+        self.bloodVolume_label = Label(master, text='blood Volume:', width=12)
+        self.bloodVolume_label.place(x=5, y=170)
+
+        self.bloodVolume_input = Entry(master, width=10, bg='white', fg='black')
+        self.bloodVolume_input.place(x=150,y=170)
+
+        self.vesselRadius_label = Label(master, text='vessel Radius:', width=12)
+        self.vesselRadius_label.place(x=5, y=210)
+
+        self.vesselRadius_input = Entry(master, width=10, bg='white', fg='black')
+        self.vesselRadius_input.place(x=150,y=210)
+
 if __name__ == '__main__':
     root = Tk()
     app = GuiApp(root)
