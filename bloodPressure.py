@@ -8,6 +8,7 @@ class BloodPressure():
         self. duration = duration
         self.heart_rate = heart_rate
         self.systolic = systolic
+        self.diastolic = diastolic
 
     def simulate_bp(self):
         """_summary_
@@ -21,6 +22,7 @@ class BloodPressure():
         duration = self.duration
         heart_rate = self.heart_rate
         systolic = self.systolic
+        diastolic = self.diastolic
 
         # Zeitachse
         t = np.linspace(0, duration, int(duration * 100))  # Abtastung mit 100 Hz
