@@ -3,9 +3,9 @@ import numpy as np
 
 class VascularSystem():
 
-    def __init__(self, radius, wall, number):
+    def __init__(self, radius, wallThickness, number):
         self.radius = radius
-        self.wall = wall
+        self.wall = wallThickness
         self.number = number
 
     def aorta(self, number=1):
