@@ -66,8 +66,8 @@ class BloodPressure():
 # Simulation des Blutdruck
 duration = 120       # Sekunden
 heart_rate = 10     # Schläge pro Minute
-systolic = 120
-diastolic = 80
+systolic = 120      # TODO: soll noch simuliert werden mit Parametern
+diastolic = 80      # TODO: soll noch simuliert werden mit Parametern
 
 bp_sim = BloodPressure(duration, heart_rate, systolic, diastolic)
 bp = bp_sim.simulate_bp()
