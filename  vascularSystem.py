@@ -70,7 +70,7 @@ class VascularSystem():
             wallThickness 
         """
 
-        x, y, x1, y1, radius, wallThickness = self.vessel(self.aor_rad, wallThickness,lumRadi)
+        x, y, x1, y1, radius, wallThickness = self.vessel(self.aor_rad, wallThickness, lumRadi)
         return x, y, x1, y1, radius, wallThickness
     
     def arteries(self, wallThickness=1000, lumRadi=1):
@@ -181,7 +181,7 @@ class VascularSystem():
         x, y, x1, y1, radius, wallThickness = self.vessel(self.vc_rad, wallThickness, lumRadi)
         return x, y, x1, y1, radius, wallThickness
     
-    def vesselPlotter(self, lims=[]):
+    def vesselPlotter(self, lumRadi, lims=[]):
         """_summary_
             Funktion, um die Erzeugen Maße für die Gefäße zu plotten
         Args:
@@ -194,13 +194,13 @@ class VascularSystem():
         col = 4
         row = 2
 
-        aorta = self.aorta()
-        arteries = self.arteries()
-        arterioles = self.arterioles()
-        capillaries = self.capillaries()
-        venules = self.venules()
-        veins = self.veins()
-        venaCava = self.venaCava()
+        aorta = self.aorta(lumRadi=lumRadi[0])
+        arteries = self.arteries(lumRadi=lumRadi[1])
+        arterioles = self.arterioles(lumRadi=lumRadi[2])
+        capillaries = self.capillaries(lumRadi=lumRadi[3])
+        venules = self.venules(lumRadi=lumRadi[4])
+        veins = self.veins(lumRadi=lumRadi[5])
+        venaCava = self.venaCava(lumRadi=lumRadi[6])
         
         for i in range(1,8):
             fig.add_subplot(row, col, i)
@@ -385,13 +385,22 @@ viscocity = 1
 vs = VascularSystem(radi, viscocity)
 
 lims = [-20, 20]
-vs.vesselPlotter(lims)
+lumRadi = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu können
+
+vs.vesselPlotter(lumRadi, lims)
 
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
 type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
 
+print()
+print('######   Einzelwiderstände der verschiedenen Gefäßarten')
 resis = vs.vesselResistances(type, lens, radi, nums)
+for i in range(0,len(resis)):
+    print(type[i], ': ', resis[i], 'mm^3 / Pa s')
+
+print()
+print('######   Gesamtwiderstand')   
 print(vs.completeResistance(resis), 'mm^3 / Pa s')
 
-#plt.show()
+plt.show()
