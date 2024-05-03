@@ -193,6 +193,14 @@ class VascularSystem():
         plt.subplots_adjust(hspace=0.4)
         col = 4
         row = 2
+
+        aorta = self.aorta()
+        arteries = self.arteries()
+        arterioles = self.arterioles()
+        capillaries = self.capillaries()
+        venules = self.venules()
+        veins = self.veins()
+        venaCava = self.venaCava()
         
         for i in range(1,8):
             fig.add_subplot(row, col, i)
@@ -243,7 +251,7 @@ class VascularSystem():
         """
         self.viscocity = val
     
-    def resistances(self, lens, radius):
+    def resistance(self, lens, radius):
         """_summary_
             Helfer-Funktion
             Berechnet en Strömungswiderstand für gegebene Werte nach Hagen-Poiseuille-Gesetz und 
@@ -255,6 +263,7 @@ class VascularSystem():
         Returns:
             res (float): Strömungswiderstand in Pa s / mm^3 
         """
+
         res = (8 * self.viscocity * lens) / ((radius)**4 * np.pi)
         return res
 
@@ -289,37 +298,37 @@ class VascularSystem():
         for type in types:
             if type == 'aorta':
                 for i in range(0,nums[0]):
-                    aortaRes = self.resistances(lens[0], radius[0])
+                    aortaRes = self.resistance(lens[0], radius[0])
                     aortaArr.append(aortaRes)
             
             elif type == 'arteries':
                 for i in range(0,nums[1]):
-                    arteriesRes = self.resistances(lens[1], radius[1])
+                    arteriesRes = self.resistance(lens[1], radius[1])
                     arteriesArr.append(arteriesRes)
 
             elif type == 'arterioles':
                 for i in range(nums[2]):
-                    arteriolesRes = self.resistances(lens[2], radius[2])
+                    arteriolesRes = self.resistance(lens[2], radius[2])
                     arteriolesArr.append(arteriolesRes)
             
             elif type == 'capillaries':
                 for i in range(nums[3]):
-                    capillariesRes = self.resistances(lens[3], radius[3])
+                    capillariesRes = self.resistance(lens[3], radius[3])
                     capillariesArr.append(capillariesRes)
             
             elif type == 'venules':
                 for i in range(nums[4]):
-                    venulesRes = self.resistances(lens[4], radius[4])
+                    venulesRes = self.resistance(lens[4], radius[4])
                     venulesArr.append(venulesRes)
 
             elif type == 'veins':
                 for i in range(nums[5]):
-                    veinsRes = self.resistances(lens[5], radius[5])
+                    veinsRes = self.resistance(lens[5], radius[5])
                     veinsArr.append(veinsRes)
             
             elif type == 'venaCava':
                 for i in range(nums[6]):
-                    venaCavaRes = self.resistances(lens[6], radius[6])
+                    venaCavaRes = self.resistance(lens[6], radius[6])
                     venaCavaArr.append(venaCavaRes)      
 
         print('1', aortaArr, 'mm^3 / Pa s')
@@ -344,22 +353,15 @@ Parameter (Radien, in µm):
 """
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
-vs = VascularSystem(radi, 1)
-aorta = vs.aorta()
-arteries = vs.arteries()
-arterioles = vs.arterioles()
-capillaries = vs.capillaries()
-venules = vs.venules()
-veins = vs.veins()
-venaCava = vs.venaCava()
+viscocity = 1
+vs = VascularSystem(radi, viscocity)
 
 lims = [-20, 20]
 vs.vesselPlotter(lims)
+
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300]
 type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
-vis = vs.setViscocity(1)
-
 vs.vesselResistances(type, lens, radi, nums)
 
 #plt.show()
