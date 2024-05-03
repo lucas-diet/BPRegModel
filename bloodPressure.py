@@ -12,7 +12,7 @@ class BloodPressure():
 
     def simulate_bp(self):
         """_summary_
-        Simuliert den Blutdruck über eine bestimmte Dauer basierend auf der Herzfrequenz.
+            Simuliert den Blutdruck über eine bestimmte Dauer basierend auf der Herzfrequenz.
         
         Args:
             

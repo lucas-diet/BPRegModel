@@ -14,7 +14,7 @@ class VascularSystem():
         self.vc_rad = radi[6]       # v.cava
         self.viscocity = viscocity
 
-    def vessel(self, radius, wallThickness, lumRadi=1):
+    def vessel(self, radius, wallThickness, lumRadiF=1):
         """_summary_
             Nimmt den Radius, wanddicke und Radius des Lumens, um Gefäße mit den entsprechenden Maßen
             zu erzeugen.
@@ -23,7 +23,7 @@ class VascularSystem():
         Args:
             radius (float): Radius eines Gefäß in µm
             wallThickness (float): Wanddicke in µm
-            lumRadi (float): Radius des Lumen in µm
+            lumRadi (float): Faktor, um inneren Radius zu skalieren -> > 0 und <= 1
 
         Returns:
             
@@ -33,12 +33,18 @@ class VascularSystem():
 
         # wallThickness und radius ist in µm
         # wallThickness und radius in mm umrechnen
+        # lumiRadi = innerer Radius in µm -> wird in mm umgerechnet
         wallThickness *= 0.001
         radius *= 0.001
         
+        if lumRadiF > 1:
+            lumRadiF = 1
+        elif lumRadiF < 0:
+            lumRadiF = 0.1
+
         # Querschneitt (Lumen)
-        x = radius * np.cos(theta) * lumRadi
-        y = radius * np.sin(theta) * lumRadi
+        x = radius * np.cos(theta) * lumRadiF
+        y = radius * np.sin(theta) * lumRadiF
 
         # Querschnitt (komplett)
         cs = radius + wallThickness
@@ -55,7 +61,7 @@ class VascularSystem():
 
         return x, y, x1, y1, radius, wallThickness
 
-    def aorta(self, wallThickness=2000, lumRadi=1):
+    def aorta(self, wallThickness=2000, lumRadiF=1):
         """_summary_
             Nimmt die vessel-Funktion mit den Maßen für eine Aorta und erzeugt das entsprechende Gefäß.
         Args:
@@ -70,10 +76,10 @@ class VascularSystem():
             wallThickness 
         """
 
-        x, y, x1, y1, radius, wallThickness = self.vessel(self.aor_rad, wallThickness, lumRadi)
+        x, y, x1, y1, radius, wallThickness = self.vessel(self.aor_rad, wallThickness, lumRadiF)
         return x, y, x1, y1, radius, wallThickness
     
-    def arteries(self, wallThickness=1000, lumRadi=1):
+    def arteries(self, wallThickness=1000, lumRadiF=1):
         """_summary_
             Nimmt die vessel-Funktion mit den Maßen für eine Arterie und erzeugt das entsprechende Gefäß.
         Args:
@@ -88,10 +94,10 @@ class VascularSystem():
             wallThickness 
         """
 
-        x, y, x1, y1, radius, wallThickness = self.vessel(self.art1_rad, wallThickness, lumRadi)
+        x, y, x1, y1, radius, wallThickness = self.vessel(self.art1_rad, wallThickness, lumRadiF)
         return x, y, x1, y1, radius, wallThickness
 
-    def arterioles(self, wallThickness=30, lumRadi=1):
+    def arterioles(self, wallThickness=30, lumRadiF=1):
         """_summary_
             Nimmt die vessel-Funktion mit den Maßen für eine Arteriole und erzeugt das entsprechende Gefäß.
         Args:
@@ -106,10 +112,10 @@ class VascularSystem():
             wallThickness 
         """
         
-        x, y, x1, y1, radius, wallThickness = self.vessel(self.art2_rad, wallThickness, lumRadi)
+        x, y, x1, y1, radius, wallThickness = self.vessel(self.art2_rad, wallThickness, lumRadiF)
         return x, y, x1, y1, radius, wallThickness
 
-    def capillaries(self, wallThickness=1, lumRadi=1):
+    def capillaries(self, wallThickness=1, lumRadiF=1):
         """_summary_
             Nimmt die vessel-Funktion mit den Maßen für eine Kapillare und erzeugt das entsprechende Gefäß.
         Args:
@@ -124,10 +130,10 @@ class VascularSystem():
             wallThickness 
         """
         
-        x, y, x1, y1, radius, wallThickness = self.vessel(self.cap_rad, wallThickness, lumRadi)
+        x, y, x1, y1, radius, wallThickness = self.vessel(self.cap_rad, wallThickness, lumRadiF)
         return x, y, x1, y1, radius, wallThickness
 
-    def venules(self, wallThickness=2, lumRadi=1):
+    def venules(self, wallThickness=2, lumRadiF=1):
         """_summary_
             Nimmt die vessel-Funktion mit den Maßen für eine Venole und erzeugt das entsprechende Gefäß.
         Args:
@@ -142,10 +148,10 @@ class VascularSystem():
             wallThickness 
         """
         
-        x, y, x1, y1, radius, wallThickness = self.vessel(self.ven1_rad, wallThickness, lumRadi)
+        x, y, x1, y1, radius, wallThickness = self.vessel(self.ven1_rad, wallThickness, lumRadiF)
         return x, y, x1, y1, radius, wallThickness
 
-    def veins(self, wallThickness=500, lumRadi=1):
+    def veins(self, wallThickness=500, lumRadiF=1):
         """_summary_
             Nimmt die vessel-Funktion mit den Maßen für eine Vene und erzeugt das entsprechende Gefäß.
         Args:
@@ -160,10 +166,10 @@ class VascularSystem():
             wallThickness 
         """
         
-        x, y, x1, y1, radius, wallThickness = self.vessel(self.ven2_rad, wallThickness, lumRadi)
+        x, y, x1, y1, radius, wallThickness = self.vessel(self.ven2_rad, wallThickness, lumRadiF)
         return x, y, x1, y1, radius, wallThickness
 
-    def venaCava(self, wallThickness=1500, lumRadi=1):
+    def venaCava(self, wallThickness=1500, lumRadiF=1):
         """_summary_
             Nimmt die vessel-Funktion mit den Maßen für eine V.cava und erzeugt das entsprechende Gefäß.
         Args:
@@ -178,10 +184,10 @@ class VascularSystem():
             wallThickness 
         """
         
-        x, y, x1, y1, radius, wallThickness = self.vessel(self.vc_rad, wallThickness, lumRadi)
+        x, y, x1, y1, radius, wallThickness = self.vessel(self.vc_rad, wallThickness, lumRadiF)
         return x, y, x1, y1, radius, wallThickness
     
-    def vesselPlotter(self, lumRadi, lims=[]):
+    def vesselPlotter(self, lumRadiF, lims=[]):
         """_summary_
             Funktion, um die Erzeugen Maße für die Gefäße zu plotten
         Args:
@@ -194,13 +200,13 @@ class VascularSystem():
         col = 4
         row = 2
 
-        aorta = self.aorta(lumRadi=lumRadi[0])
-        arteries = self.arteries(lumRadi=lumRadi[1])
-        arterioles = self.arterioles(lumRadi=lumRadi[2])
-        capillaries = self.capillaries(lumRadi=lumRadi[3])
-        venules = self.venules(lumRadi=lumRadi[4])
-        veins = self.veins(lumRadi=lumRadi[5])
-        venaCava = self.venaCava(lumRadi=lumRadi[6])
+        aorta = self.aorta(lumRadiF=lumRadiF[0])
+        arteries = self.arteries(lumRadiF=lumRadiF[1])
+        arterioles = self.arterioles(lumRadiF=lumRadiF[2])
+        capillaries = self.capillaries(lumRadiF=lumRadiF[3])
+        venules = self.venules(lumRadiF=lumRadiF[4])
+        veins = self.veins(lumRadiF=lumRadiF[5])
+        venaCava = self.venaCava(lumRadiF=lumRadiF[6])
         
         for i in range(1,8):
             fig.add_subplot(row, col, i)
@@ -287,7 +293,7 @@ class VascularSystem():
     def serialResistance(self, arr):
         return np.sum(arr)
 
-    def vesselResistances(self, types, lens, radius, nums):
+    def vesselResistances(self, types, lens, radius, lumiRadi, nums):
         """_summary_
 
         Args_:
@@ -314,6 +320,7 @@ class VascularSystem():
         aortaCom = arteriesCom = arteriolesCom = capillariesCom = venulesCom = veinsCom = venaCavaCom = 0
         for i in range(0,len(radius)):
             radius[i] *= 0.001
+            radius[i] *= lumiRadi[i]
 
         for type in types:
             if type == 'aorta':
@@ -385,9 +392,9 @@ viscocity = 1
 vs = VascularSystem(radi, viscocity)
 
 lims = [-20, 20]
-lumRadi = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu können
+lumRadiF = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 
-vs.vesselPlotter(lumRadi, lims)
+vs.vesselPlotter(lumRadiF, lims)
 
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
@@ -395,12 +402,12 @@ type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'v
 
 print()
 print('######   Einzelwiderstände der verschiedenen Gefäßarten')
-resis = vs.vesselResistances(type, lens, radi, nums)
+resis = vs.vesselResistances(type, lens, radi, lumRadiF, nums)
 for i in range(0,len(resis)):
-    print(type[i], ': ', resis[i], 'mm^3 / Pa s')
+    print(type[i], ': ', resis[i], 'Pa s / mm^3')
 
 print()
 print('######   Gesamtwiderstand')   
-print(vs.completeResistance(resis), 'mm^3 / Pa s')
+print(vs.completeResistance(resis), 'Pa s / mm^3')
 
 plt.show()
