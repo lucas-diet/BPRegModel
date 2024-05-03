@@ -267,6 +267,26 @@ class VascularSystem():
         res = (8 * self.viscocity * lens) / ((radius)**4 * np.pi)
         return res
 
+    def parallelResistance(self, arr):
+        """_summary_
+
+        Args:
+            arr (Array, float): Beinhaltet die Gefäßwiderstände von parallel geschalteten Gefäßen
+
+        Returns:
+            pres (float): Gesamtwiderstand von parallel geschalteten Gefäßen
+        """
+        tmp = np.copy(arr)
+        for i in range(0,len(tmp)):
+            tmp[i] = 1 / tmp[i]
+
+        res = np.sum(tmp)
+        pRes = 1/res
+        return pRes
+    
+    def serialResistance(self, arr):
+        return np.sum(arr)
+
     def vesselResistances(self, types, lens, radius, nums):
         """_summary_
 
@@ -277,7 +297,7 @@ class VascularSystem():
             nums: (Array, int): Array mit Wertden für die Anzahl von jeder Art von Gefäß
 
         Returns:
-            #
+            res (Array, float): Array, wo jeder Wert jeweils den parallelen Widerstand entspricht
         """
 
         aortaArr = []
@@ -300,7 +320,7 @@ class VascularSystem():
                 for i in range(0,nums[0]):
                     aortaRes = self.resistance(lens[0], radius[0])
                     aortaArr.append(aortaRes)
-            
+
             elif type == 'arteries':
                 for i in range(0,nums[1]):
                     arteriesRes = self.resistance(lens[1], radius[1])
@@ -329,17 +349,25 @@ class VascularSystem():
             elif type == 'venaCava':
                 for i in range(nums[6]):
                     venaCavaRes = self.resistance(lens[6], radius[6])
-                    venaCavaArr.append(venaCavaRes)      
+                    venaCavaArr.append(venaCavaRes)
+        
+        aortaCom = self.parallelResistance(aortaArr)
+        arteriesCom = self.parallelResistance(arteriesArr) 
+        arteriolesCom = self.parallelResistance(arteriolesArr)
+        capillariesCom = self.parallelResistance(capillariesArr)
+        venulesCom = self.parallelResistance(venulesArr)
+        veinsCom = self.parallelResistance(veinsArr)
+        venaCavaCom = self.parallelResistance(venaCavaArr)
 
-        print('1', aortaArr, 'mm^3 / Pa s')
-        print('2', arteriesArr, 'mm^3 / Pa s')
-        print('3', arteriolesArr, 'mm^3 / Pa s')
-        print('4', capillariesArr, 'mm^3 / Pa s')
-        print('5', venulesArr, 'mm^3 / Pa s')
-        print('6', veinsArr, 'mm^3 / Pa s')
-        print('7', venaCavaArr, 'mm^3 / Pa s')
-        return 0
-
+        #print('1', aortaCom, 'mm^3 / Pa s')
+        res = [aortaCom, arteriesCom, arteriolesCom, capillariesCom, venulesCom, veinsCom, venaCavaCom]
+        return res
+    
+    def completeResistance(self, resis):
+        compRes = 0
+        for i in range(0,len(resis)):
+            compRes += resis[i]
+        return compRes
 
 """
 Parameter (Radien, in µm): 
@@ -360,8 +388,10 @@ lims = [-20, 20]
 vs.vesselPlotter(lims)
 
 nums = [1, 2, 4, 16, 4, 2, 1]
-lens = [200, 150, 100, 50, 100, 150, 300]
+lens = [200, 150, 100, 50, 100, 150, 300] # in mm
 type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
-vs.vesselResistances(type, lens, radi, nums)
+
+resis = vs.vesselResistances(type, lens, radi, nums)
+print(vs.completeResistance(resis), 'mm^3 / Pa s')
 
 #plt.show()
