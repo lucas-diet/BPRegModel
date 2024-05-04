@@ -33,7 +33,6 @@ class VascularSystem():
 
         # wallThickness und radius ist in µm
         # wallThickness und radius in mm umrechnen
-        # lumiRadi = innerer Radius in µm -> wird in mm umgerechnet
         wallThickness *= 0.001
         radius *= 0.001
         
@@ -42,7 +41,7 @@ class VascularSystem():
         elif lumRadiF < 0:
             lumRadiF = 0.1
 
-        # Querschneitt (Lumen)
+        # Querschnitt (Lumen)
         x = radius * np.cos(theta) * lumRadiF
         y = radius * np.sin(theta) * lumRadiF
 
@@ -52,7 +51,7 @@ class VascularSystem():
         x1 = cs * np.cos(theta)
         y1 = cs * np.sin(theta)
 
-        # Durchmesser halbieren
+        # Durchmesser halbieren = Radius
         x /= 2
         y /= 2
 
@@ -212,6 +211,7 @@ class VascularSystem():
             fig.add_subplot(row, col, i)
             plt.grid(True)
             plt.tick_params(labelleft = False)
+            plt.xlabel('mm')
 
             if i == 1:
                 plt.plot(aorta[0],aorta[1], 'red', linewidth=1)
@@ -228,7 +228,7 @@ class VascularSystem():
             elif i == 4:
                 plt.plot(capillaries[0],capillaries[1], 'red', linewidth=1)
                 plt.plot(capillaries[2],capillaries[3], 'black', linewidth=1)
-                plt.title('Kappilare')
+                plt.title('Kapillare')
             elif i == 5:
                 plt.plot(venules[0],venules[1], 'red', linewidth=1)
                 plt.plot(venules[2],venules[3], 'black', linewidth=1)
@@ -255,12 +255,13 @@ class VascularSystem():
         Args:
             val (float): Viskosität in Pa s (Pascal-Sekunde)
         """
+        
         self.viscocity = val
     
     def resistance(self, lens, radius):
         """_summary_
             Helfer-Funktion
-            Berechnet en Strömungswiderstand für gegebene Werte nach Hagen-Poiseuille-Gesetz und 
+            Berechnet den Strömungswiderstand für gegebene Werte nach Hagen-Poiseuille-Gesetz und 
             umformung durch das Ohm'sche Gesetz
         Args:
             lens (Array): Längen-Werte in mm
@@ -376,6 +377,7 @@ class VascularSystem():
             compRes += resis[i]
         return compRes
 
+
 """
 Parameter (Radien, in µm): 
     1. aorta
@@ -387,11 +389,11 @@ Parameter (Radien, in µm):
     7. venaCava 
 """
 
-radi = [20000, 4000, 20, 8, 20, 5000, 30000]
+radi = [20000, 4000, 20, 8, 20, 5000, 30000] # in µm
 viscocity = 1
 vs = VascularSystem(radi, viscocity)
 
-lims = [-20, 20]
+lims = [-17, 17]
 lumRadiF = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 
 vs.vesselPlotter(lumRadiF, lims)
