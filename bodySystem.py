@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-class VascularSystem():
+class BodySystem():
 
     def __init__(self, radi, viscocity):
         self.aor_rad = radi[0]      # aorta
@@ -391,25 +391,25 @@ Parameter (Radien, in µm):
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000] # in µm
 viscocity = 1
-vs = VascularSystem(radi, viscocity)
+bs = BodySystem(radi, viscocity)
 
 lims = [-17, 17]
 lumRadiF = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 
-vs.vesselPlotter(lumRadiF, lims)
+bs.vesselPlotter(lumRadiF, lims)
 
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
 type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
 
 print()
-print('######   Einzelwiderstände der verschiedenen Gefäßarten')
-resis = vs.vesselResistances(type, lens, radi, lumRadiF, nums)
+print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
+resis = bs.vesselResistances(type, lens, radi, lumRadiF, nums)
 for i in range(0,len(resis)):
     print(type[i], ': ', resis[i], 'Pa s / mm^3')
 
 print()
-print('######   Gesamtwiderstand')   
+print('######   Gesamtwiderstand', '\n')   
 print(vs.completeResistance(resis), 'Pa s / mm^3')
 
 plt.show()
