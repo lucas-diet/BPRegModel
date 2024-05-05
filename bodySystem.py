@@ -410,6 +410,6 @@ for i in range(0,len(resis)):
 
 print()
 print('######   Gesamtwiderstand', '\n')   
-print(vs.completeResistance(resis), 'Pa s / mm^3')
+print(bs.completeResistance(resis), 'Pa s / mm^3')
 
 plt.show()
