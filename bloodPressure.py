@@ -28,7 +28,7 @@ class BloodPressure():
         t = np.linspace(0, duration, int(duration * 100))  # Abtastung mit 100 Hz
 
         # Simuliere Herzfrequenz mit summierter Sinusfunktion
-        p1 = systolic * np.sin(2 * np.pi * (heart_rate/60) * t)
+        p1 = systolic * np.sin(2 * np.pi * (heart_rate / 60) * t)
         p2 = 0.63 * systolic * np.sin(4 * np.pi * (heart_rate / 60) * t + (2 / np.pi))
 
         heart_rate_signal = p1 + p2

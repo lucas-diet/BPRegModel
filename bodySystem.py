@@ -388,7 +388,7 @@ Parameter (Radien, in µm):
     6. veins
     7. venaCava 
 """
-
+"""
 radi = [20000, 4000, 20, 8, 20, 5000, 30000] # in µm
 viscocity = 1
 bs = BodySystem(radi, viscocity)
@@ -413,3 +413,4 @@ print('######   Gesamtwiderstand', '\n')
 print(bs.completeResistance(resis), 'Pa s / mm^3')
 
 plt.show()
+"""
