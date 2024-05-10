@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 
 class BloodPressure():
 
-    def __init__(self, duration=10, heart_rate=50, systolic=120, diastolic=80):
+    def __init__(self, duration=10, heartRate=50, systolic=120, diastolic=80):
         self. duration = duration
-        self.heart_rate = heart_rate
+        self.heartRate = heartRate
         self.systolic = systolic
         self.diastolic = diastolic
 
@@ -20,7 +20,7 @@ class BloodPressure():
             Ein Array, um den mittleren Blutdruck zu simulieren.
         """
         duration = self.duration
-        heart_rate = self.heart_rate
+        heartRate = self.heartRate
         systolic = self.systolic
         diastolic = self.diastolic
 
@@ -28,17 +28,17 @@ class BloodPressure():
         t = np.linspace(0, duration, int(duration * 100))  # Abtastung mit 100 Hz
 
         # Simuliere Herzfrequenz mit summierter Sinusfunktion
-        p1 = systolic * np.sin(2 * np.pi * (heart_rate / 60) * t)
-        p2 = 0.63 * systolic * np.sin(4 * np.pi * (heart_rate / 60) * t + (2 / np.pi))
+        p1 = systolic * np.sin(2 * np.pi * (heartRate / 60) * t)
+        p2 = 0.63 * systolic * np.sin(4 * np.pi * (heartRate / 60) * t + (2 / np.pi))
 
-        heart_rate_signal = p1 + p2
+        heartRateSignal = p1 + p2
         
         # systolic_factor = systolic / 100 -> um zu skalieren
         # diastolic_factor = diastolic / 100 -> um zu skalieren
-        diastolic_pressure = (diastolic / 100) * heart_rate_signal
-        systolic_pressure = (systolic / 100) * heart_rate_signal
+        diastolicPressure = (diastolic / 100) * heartRateSignal
+        systolicPressure = (systolic / 100) * heartRateSignal
 
-        mean_bp = diastolic_pressure + (1/3) * (systolic_pressure - diastolic_pressure)
+        mean_bp = diastolicPressure + (1/3) * (systolicPressure - diastolicPressure)
         
         bp = self.normalize_bp(mean_bp)
 
