@@ -10,7 +10,7 @@ class BloodPressure():
         self.systolic = systolic
         self.diastolic = diastolic
 
-    def simulate_bp(self):
+    def simulateBP(self):
         """_summary_
             Simuliert den Blutdruck über eine bestimmte Dauer basierend auf der Herzfrequenz.
         
@@ -40,11 +40,11 @@ class BloodPressure():
 
         mean_bp = diastolicPressure + (1/3) * (systolicPressure - diastolicPressure)
         
-        bp = self.normalize_bp(mean_bp)
+        bp = self.normalizeBP(mean_bp)
 
         return bp
     
-    def normalize_bp(self, mean_bp):
+    def normalizeBP(self, mean_bp):
         """_summary_
             Normalisiert den durchschnuttlichen Blutdruck, indem im ersten Schritt auf [0,1]
             skaliert wird und im zweiten Schritt auf [diastolic, systolic].
@@ -70,7 +70,7 @@ systolic = 120      # TODO: soll noch simuliert werden mit Parametern
 diastolic = 80      # TODO: soll noch simuliert werden mit Parametern
 
 bp_sim = BloodPressure(duration, heart_rate, systolic, diastolic)
-bp = bp_sim.simulate_bp()
+bp = bp_sim.simulateBP()
 
 # Plot der simulierten Blutdruckwerte
 plt.plot(np.linspace(0, duration, len(bp)), bp, label='Blutdruck (mmHg)')

@@ -376,6 +376,14 @@ class BodySystem():
         for i in range(0,len(resis)):
             compRes += resis[i]
         return compRes
+    
+    def vesselPressure(self, vis, lens, vol, radi):
+        radi /= 1000000   # µm umrechnen in m
+        vol /= 1000000     # ml umrechnen in l
+        lens /= 1000 # mm umrehcnen in m
+        
+        pressure = (8 * vis * lens * vol) / (np.pi * radi**4)
+        return pressure * 0.00750061    # in mmHg umrechnen
 
 
 """
@@ -388,7 +396,7 @@ Parameter (Radien, in µm):
     6. veins
     7. venaCava 
 """
-"""
+""""""
 radi = [20000, 4000, 20, 8, 20, 5000, 30000] # in µm
 viscocity = 1
 bs = BodySystem(radi, viscocity)
@@ -412,5 +420,10 @@ print()
 print('######   Gesamtwiderstand', '\n')   
 print(bs.completeResistance(resis), 'Pa s / mm^3')
 
+strokeVolume = 70
+print()
+print('######   Blutdruck der verschiedenen Gefäßarten', '\n')
+for i in range(0,len(lens)):
+    print(type[i], ': ', bs.vesselPressure(viscocity, lens[i], strokeVolume, radi[i]), 'mmHg')
+
 plt.show()
-"""
