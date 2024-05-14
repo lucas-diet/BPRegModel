@@ -89,11 +89,11 @@ class Heart():
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
 vis = 1
 heartRate = 70
-strokeVolume = 100
+strokeVolume = 70
 maxElasticity = 2
 edv = 110
 esv = 50
-maxTime = 20
+maxTime = 15
 dt = 0.01
 
 h = Heart(radi, vis, heartRate, strokeVolume, maxElasticity, edv, esv, maxTime, dt)
