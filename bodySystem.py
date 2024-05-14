@@ -396,7 +396,7 @@ Parameter (Radien, in µm):
     6. veins
     7. venaCava 
 """
-""""""
+
 radi = [20000, 4000, 20, 8, 20, 5000, 30000] # in µm
 viscocity = 1
 bs = BodySystem(radi, viscocity)
@@ -404,7 +404,7 @@ bs = BodySystem(radi, viscocity)
 lims = [-17, 17]
 lumRadiF = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 
-bs.vesselPlotter(lumRadiF, lims)
+#bs.vesselPlotter(lumRadiF, lims)
 
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
@@ -427,3 +427,4 @@ for i in range(0,len(lens)):
     print(type[i], ': ', bs.vesselPressure(viscocity, lens[i], strokeVolume, radi[i]), 'mmHg')
 
 plt.show()
+""""""

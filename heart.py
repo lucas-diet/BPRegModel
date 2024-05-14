@@ -17,7 +17,6 @@ class Heart():
         self.vis = vis
         self.viscocity = BodySystem(radi, vis)
 
-        
         self.time = np.arange(0, self.maxTime, dt)
         self.bloodVolume = np.zeros_like(self.time)
         self.bloodPressure = np.zeros_like(self.time)
@@ -27,9 +26,17 @@ class Heart():
         if i1 > i2:
             return True
         return False
+    
+    def findIndex(self, arr, val):
+        idx = None
+        for i in range(0, len(arr)):
+            if arr[i] == val:
+                idx = i
+                break
+        return idx
 
     def ventricleSimulation(self, vis, l, r):
-        for i in range(0,len(self.time)):
+        for i in range(0, len(self.time)):
             t = self.time[i]
             elasticity = 1 + np.sin(2 * np.pi * self.heartRate * t / 60)
             bs = BodySystem(self.radi, self.vis)
@@ -42,28 +49,22 @@ class Heart():
             
             self.bloodPressure[i] = elasticity * (self.bloodVolume[i] - self.esv)
 
-            p1 = 120 * np.sin(2 * np.pi * (heartRate / 60) * t)
-            p2 = 0.63 * 120 * np.sin(4 * np.pi * (heartRate / 60) * t + (2 / np.pi))
+            p1 = np.sin(2 * np.pi * (heartRate / 60) * t)
+            p2 = 0.63 * np.sin(4 * np.pi * (heartRate / 60) * t + (2 / np.pi))
             self.aortaPressure[i] = self.strokeVolume
             
             if self.bloodPressure[i] > self.aortaPressure[i]:
                 self.aortaPressure[i] = self.bloodPressure[i]
-
             
-            elif i > 0 and self.bloodPressure[i] != self.aortaPressure[i] and self.checkSlope(self.bloodPressure[i-1], self.bloodPressure[i]) == True:
-                for j in range(i, min(i+50, len(self.time))):
-                    print(j)
-                    p0 = self.aortaPressure[i-1]
-                    self.aortaPressure[j] = self.strokeVolume + 1#
-                    i += 1
-
-                    
-                    
+            else:
+                slope = self.checkSlope(self.bloodPressure[i-1], self.bloodPressure[i])
+                idx = self.findIndex(self.time, self.time[i-1])
                 
-                    
-                
-            
-            
+                if self.aortaPressure[idx] > self.strokeVolume:
+                    #for j in range(idx, idx+2):
+                    #print(j, self.aortaPressure[idx])
+                    self.aortaPressure[i] += 20 * (p1 + p2)
+                    #i += 1
 
 
     def plotter(self):
@@ -73,7 +74,8 @@ class Heart():
         #plt.subplot(2, 1, 1)
         plt.plot(self.time, self.bloodVolume, label='Linkes Ventrikel Volumen (ml)', color='blue')
         plt.plot(self.time, self.bloodPressure, label='Linkes Ventrikel Druck (mmHg)', color='red')
-        plt.plot(self.time, self.aortaPressure)
+        plt.plot(self.time, self.aortaPressure, label='Aorta Druck (mmHg)')
+        #plt.plot(self.time[149], self.aortaPressure[32], color='green', marker='.', label='Einzelner Punkt')
         #plt.plot(self.time, [100 for _ in range(0,len(self.time))])
         plt.xlabel('Zeit (s)')
         plt.ylabel('Werte')
@@ -86,28 +88,15 @@ class Heart():
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
 vis = 1
-heartRate = 20
+heartRate = 70
 strokeVolume = 100
 maxElasticity = 2
 edv = 110
 esv = 50
-maxTime = 10
+maxTime = 20
 dt = 0.01
 
 h = Heart(radi, vis, heartRate, strokeVolume, maxElasticity, edv, esv, maxTime, dt)
 h.ventricleSimulation(1, 200, 20000)
 h.plotter()
-"""
-for i in range(0, len(self.time)):
-            t = self.time[i]
-            elasticity = 1 + np.sin(2 * np.pi * self.heartRate * t / 60)
-        
-            if i == 0:
-                self.bloodVolume[i] = self.edv
-            
-            else:
-                dVdt = self.strokeVolume - elasticity * (self.bloodVolume[i-1] - self.esv)
-                self.bloodVolume[i] = self.bloodVolume[i-1] + dVdt * self.dt
-            
-            self.bloodPressure[i] = elasticity * (self.bloodVolume[i] - self.esv)        
-"""
+

@@ -64,7 +64,7 @@ class BloodPressure():
         return normalized_bp
 
 # Simulation des Blutdruck
-duration = 120       # Sekunden
+duration = 60       # Sekunden
 heart_rate = 10     # Schläge pro Minute
 systolic = 120      # TODO: soll noch simuliert werden mit Parametern
 diastolic = 80      # TODO: soll noch simuliert werden mit Parametern
