@@ -367,7 +367,6 @@ class BodySystem():
         veinsCom = self.parallelResistance(veinsArr)
         venaCavaCom = self.parallelResistance(venaCavaArr)
 
-        #print('1', aortaCom, 'mm^3 / Pa s')
         res = [aortaCom, arteriesCom, arteriolesCom, capillariesCom, venulesCom, veinsCom, venaCavaCom]
         return res
     
@@ -380,7 +379,7 @@ class BodySystem():
     def vesselPressure(self, vis, lens, vol, radi):
         radi /= 1000000   # µm umrechnen in m
         vol /= 1000000     # ml umrechnen in l
-        lens /= 1000 # mm umrehcnen in m
+        lens /= 1000 # mm umrechnen in m
         
         pressure = (8 * vis * lens * vol) / (np.pi * radi**4)
         return pressure * 0.00750061    # in mmHg umrechnen
@@ -422,7 +421,7 @@ print(bs.completeResistance(resis), 'Pa s / mm^3')
 
 strokeVolume = 70
 print()
-print('######   Blutdruck der verschiedenen Gefäßarten', '\n')
+print('######   Blutdruckunterschied zwischen zwei Punkten der verschiedenen Gefäßarten', '\n')
 for i in range(0,len(lens)):
     print(type[i], ': ', bs.vesselPressure(viscocity, lens[i], strokeVolume, radi[i]), 'mmHg')
 
