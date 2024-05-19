@@ -409,6 +409,8 @@ nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
 type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
 
+strokeVolume = 70
+"""
 print()
 print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
 resis = bs.vesselResistances(type, lens, radi, lumRadiF, nums)
@@ -419,11 +421,10 @@ print()
 print('######   Gesamtwiderstand', '\n')   
 print(bs.completeResistance(resis), 'Pa s / mm^3')
 
-strokeVolume = 70
 print()
 print('######   Blutdruckunterschied zwischen zwei Punkten der verschiedenen Gefäßarten', '\n')
 for i in range(0,len(lens)):
     print(type[i], ': ', bs.vesselPressure(viscocity, lens[i], strokeVolume, radi[i]), 'mmHg')
 
 plt.show()
-""""""
+"""
