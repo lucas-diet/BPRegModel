@@ -51,7 +51,7 @@ class Heart():
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_RV[i-1] - self.esv)
                 self.bloodVolume_RV[i] = self.bloodVolume_RV[i-1] + dVdt * self.dt
             
-            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) * 0.15 # ist noch keine schöne Lösung!!
+            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) * 0.15 + 18# ist noch keine schöne Lösung!!
 
     def leftVentricle(self, shift=0):
         for i in range(0, len(self.time)):
@@ -115,7 +115,7 @@ class Heart():
 
         plt.show()
 
-"""
+
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
 vis = 1
 heartRate = 70
@@ -129,4 +129,4 @@ dt = 0.01
 h = Heart(radi, vis, heartRate, strokeVolume, edv, esv, maxTime, dt)
 
 h.plotter()
-"""
+""""""
