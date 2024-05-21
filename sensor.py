@@ -17,19 +17,19 @@ class Sensors():
     def calculatePressure(self, data, sPeaks, dPeaks):
         meanSys = np.mean(data[sPeaks])
         meanDia = np.mean(data[dPeaks])
-        map = meanDia + (1/3) * (meanSys - meanDia)
 
+        map = meanDia + (1/3) * (meanSys - meanDia)
         return map
             
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
 vis = 1
-heartRate = 80
+heartRate = 60
 strokeVolume = 70
 maxElasticity = 6
 edv = 110
 esv = 70
-maxTime = 6
+maxTime = 10
 dt = 0.01
 
 h = Heart(radi, vis, heartRate, strokeVolume, edv, esv, maxTime, dt)
@@ -83,8 +83,16 @@ print('Systolischer Druck: ', np.mean(h.aortaPressure[sysA]), 'mmHg')
 print('Diastolischer Druck: ', np.mean(h.aortaPressure[diaA]), 'mmHg')
 print('Mittlerer Druck', mapA, 'mmHg')
 
+##### Peaks #####
+
 plt.plot(h.time[sysLV], h.bloodPressure_LV[sysLV], 'r.')
 plt.plot(h.time[diaLV], h.bloodPressure_LV[diaLV], 'b.')
-plt.grid(True)
 
+plt.plot(h.time[sysRV], h.bloodPressure_RV[sysRV], 'r.')
+plt.plot(h.time[diaRV], h.bloodPressure_RV[diaRV], 'b.')
+
+plt.plot(h.time[sysA], h.aortaPressure[sysA], 'r.')
+plt.plot(h.time[diaA], h.aortaPressure[diaA], 'b.')
+
+plt.grid(True)
 plt.show()

@@ -19,7 +19,6 @@ class Heart():
 
         self.time = np.arange(0, self.maxTime, dt)
         
-
         self.bloodPressure_RV = np.zeros_like(self.time)
         self.bloodVolume_RV = np.zeros_like(self.time)
 
@@ -52,6 +51,9 @@ class Heart():
         for i in range(0,len(self.time)):
             t = self.time[i]
             elasticity = 1 + np.sin(2 * np.pi * self.heartRate * (t - shift) / 60)
+
+            p1 = np.sin(2 * np.pi * (self.heartRate / 60) * t)
+            p2 = 0.63 * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
             
             if i == 0:
                 self.bloodVolume_RV[i] = self.edv
@@ -59,12 +61,15 @@ class Heart():
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_RV[i-1] - self.esv)
                 self.bloodVolume_RV[i] = self.bloodVolume_RV[i-1] + dVdt * self.dt
             
-            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) * 0.15 + 3# ist noch keine schöne Lösung!!
+            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) * 0.15 + 3 * (p1 + p2) # ist noch keine schöne Lösung!!
 
     def leftVentricle(self, shift=0):
         for i in range(0, len(self.time)):
             t = self.time[i]
             elasticity = 1 + np.sin(2 * np.pi * self.heartRate * (t - shift) / 60)
+
+            p1 = np.sin(2 * np.pi * (self.heartRate / 60) * t)
+            p2 = 0.63 * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
             
             if i == 0:
                 self.bloodVolume_LV[i] = self.edv

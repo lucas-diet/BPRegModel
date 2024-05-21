@@ -410,7 +410,7 @@ lens = [200, 150, 100, 50, 100, 150, 300] # in mm
 type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
 
 strokeVolume = 70
-"""
+
 print()
 print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
 resis = bs.vesselResistances(type, lens, radi, lumRadiF, nums)
@@ -426,5 +426,4 @@ print('######   Blutdruckunterschied zwischen zwei Punkten der verschiedenen Gef
 for i in range(0,len(lens)):
     print(type[i], ': ', bs.vesselPressure(viscocity, lens[i], strokeVolume, radi[i]), 'mmHg')
 
-plt.show()
-"""
+#plt.show()
