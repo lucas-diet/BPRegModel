@@ -25,6 +25,7 @@ class Heart():
 
         self.bloodPressure_LV = np.zeros_like(self.time)
         self.bloodVolume_LV = np.zeros_like(self.time)
+
         self.aortaPressure = np.zeros_like(self.time)
 
     def checkSlope(self, i1, i2):
@@ -40,6 +41,13 @@ class Heart():
                 break
         return idx
     
+    def normalize(self, data):
+        max_bp = np.max(data)
+        min_bp = np.min(data)
+		
+        normalized_bp = (data - min_bp) / (max_bp - min_bp)  # Auf [0, 1] normalisieren
+        normalized_bp = normalized_bp * (self.esv - self.edv) + self.edv  # Skalieren auf [diastolic, systolic]
+    
     def rightVentricle(self, shift):
         for i in range(0,len(self.time)):
             t = self.time[i]
@@ -51,7 +59,7 @@ class Heart():
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_RV[i-1] - self.esv)
                 self.bloodVolume_RV[i] = self.bloodVolume_RV[i-1] + dVdt * self.dt
             
-            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) * 0.15 + 18# ist noch keine schöne Lösung!!
+            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) * 0.15 + 3# ist noch keine schöne Lösung!!
 
     def leftVentricle(self, shift=0):
         for i in range(0, len(self.time)):
@@ -65,7 +73,7 @@ class Heart():
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_LV[i-1] - self.esv)
                 self.bloodVolume_LV[i] = self.bloodVolume_LV[i-1] + dVdt * self.dt
             
-            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv)
+            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) + 5
 
 
     def aortaPresSim(self):
@@ -128,5 +136,5 @@ dt = 0.01
 
 h = Heart(radi, vis, heartRate, strokeVolume, edv, esv, maxTime, dt)
 
-h.plotter()
+#h.plotter()
 """"""

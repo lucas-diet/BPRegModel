@@ -21,7 +21,7 @@ class BloodPressure():
         """
 
         # Zeitachse
-        t = np.linspace(0, self.duration, int(self.duration * 10))  # Abtastung mit 100 Hz
+        t = np.linspace(0, self.duration, int(self.duration * 100))  # Abtastung mit 100 Hz
 
         # Simuliere Herzfrequenz mit summierter Sinusfunktion
         p1 = systolic * np.sin(2 * np.pi * (self.heartRate / 60) * t)
@@ -64,10 +64,10 @@ duration = 60       # Sekunden
 heart_rate = 10     # Schläge pro Minute
 systolic = 120      # TODO: soll noch simuliert werden mit Parametern
 diastolic = 80      # TODO: soll noch simuliert werden mit Parametern
-'''
+
 bp_sim = BloodPressure(duration, heart_rate, systolic, diastolic)
 bp = bp_sim.simulateBP()
-
+'''
 # Plot der simulierten Blutdruckwerte
 plt.plot(np.linspace(0, duration, len(bp)), bp, label='Blutdruck (mmHg)')
 plt.xlabel('Zeit (s)')
