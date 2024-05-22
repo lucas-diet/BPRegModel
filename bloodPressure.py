@@ -58,6 +58,12 @@ class BloodPressure():
         normalized_bp = normalized_bp * (systolic - diastolic) + diastolic  # Skalieren auf [diastolic, systolic]
 		
         return normalized_bp
+    
+    def bpFunction(self, time):
+        p1 = systolic * np.sin(2 * np.pi * (self.heartRate / 60) * time)
+        p2 = 0.63 * systolic * np.sin(4 * np.pi * (self.heartRate / 60) * time + (2 / np.pi))
+        
+        return p1, p2
 
 # Simulation des Blutdruck
 duration = 60       # Sekunden
