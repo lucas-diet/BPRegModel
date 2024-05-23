@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from heart import Heart
+from bloodPressure import BloodPressure
 
 class BodySystem():
 
@@ -24,7 +25,7 @@ class BodySystem():
         self.esv = esv 
         self.pres0 = pres0 
         self.maxTime = maxTime
-        self.time = np.arange(0,maxTime, dt)
+        self.time = np.arange(0, maxTime, dt)
 
         self.aortaPressure = np.zeros_like(self.time)
         self.arteriePressure = np.zeros_like(self.time)
@@ -345,27 +346,27 @@ class BodySystem():
 
         for type in types:
             if type == 'aorta':
-                for i in range(0,nums[0]):
+                for i in range(0, nums[0]):
                     aortaRes = self.resistance(lens[0], radius[0])
                     aortaArr.append(aortaRes)
 
             elif type == 'arteries':
-                for i in range(0,nums[1]):
+                for i in range(0, nums[1]):
                     arteriesRes = self.resistance(lens[1], radius[1])
                     arteriesArr.append(arteriesRes)
 
             elif type == 'arterioles':
-                for i in range(nums[2]):
+                for i in range(0, nums[2]):
                     arteriolesRes = self.resistance(lens[2], radius[2])
                     arteriolesArr.append(arteriolesRes)
             
             elif type == 'capillaries':
-                for i in range(nums[3]):
+                for i in range(0, nums[3]):
                     capillariesRes = self.resistance(lens[3], radius[3])
                     capillariesArr.append(capillariesRes)
             
             elif type == 'venules':
-                for i in range(nums[4]):
+                for i in range(0, nums[4]):
                     venulesRes = self.resistance(lens[4], radius[4])
                     venulesArr.append(venulesRes)
 
@@ -375,7 +376,7 @@ class BodySystem():
                     veinsArr.append(veinsRes)
             
             elif type == 'venaCava':
-                for i in range(nums[6]):
+                for i in range(0, nums[6]):
                     venaCavaRes = self.resistance(lens[6], radius[6])
                     venaCavaArr.append(venaCavaRes)
         
@@ -404,6 +405,24 @@ class BodySystem():
         pressure = (8 * vis * lens * vol) / (np.pi * radi**4)
         return pressure * 0.00750061    # in mmHg umrechnen
 
+    def resisPrinter(self, type, lens, radi, lumRadiF, nums):
+        bs = BodySystem(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+
+        print()
+        print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
+        resis = bs.vesselResistances(type, lens, radi, lumRadiF, nums)
+        for i in range(0,len(resis)):
+            print(type[i], ': ', resis[i], 'Pa s / mm^3')
+
+        print()
+        print('######   Gesamtwiderstand', '\n')   
+        print(bs.completeResistance(resis), 'Pa s / mm^3')
+
+        print()
+        print('######   Blutdruckunterschied zwischen zwei Punkten der verschiedenen Gefäßarten', '\n')
+        for i in range(0,len(lens)):
+            print(type[i], ': ', bs.vesselPressure(self.viscocity, lens[i], self.strokeVolume, radi[i]), 'mmHg')
+
     def findIndex(self, arr, val):
         idx = None
         for i in range(0, len(arr)):
@@ -413,14 +432,14 @@ class BodySystem():
         return idx
     
     def aortaPresSim(self):
+        bp = BloodPressure()
         h = Heart(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         h.leftVentricle()
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1 = np.sin(2 * np.pi * (self.heartRate / 60) * t)
-            p2 = 0.63 * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
+            p1, p2  = bp.bpFunction(t, self.heartRate)
             
             self.aortaPressure[i] = self.pres0
 
@@ -434,11 +453,12 @@ class BodySystem():
                     self.aortaPressure[i] += 20 * (p1 + p2)
 
     def arteriePresSim(self):
+        bp = BloodPressure()
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1 = np.sin(2 * np.pi * (self.heartRate / 60) * t)
-            p2 = 0.63 * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
+            p1, p2  = bp.bpFunction(t, self.heartRate)
 
             self.arteriePressure[i] = self.pres0 * 0.9
 
@@ -452,11 +472,12 @@ class BodySystem():
                     self.arteriePressure[i] += 20 * (p1 + p2)
 
     def arteriolePresSim(self):
+        bp = BloodPressure()
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1 = np.sin(2 * np.pi * (self.heartRate / 60) * t)
-            p2 = 0.63 * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
+            p1, p2  = bp.bpFunction(t, self.heartRate)
 
             self.arteriolPressure[i] = self.pres0 * 0.6
 
@@ -470,11 +491,12 @@ class BodySystem():
                     self.arteriolPressure[i] += 20 * (p1 + p2)
 
     def capillarePresSim(self):
+        bp = BloodPressure()
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1 = np.sin(2 * np.pi * (self.heartRate / 60) * t)
-            p2 = 0.63 * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
+            p1, p2  = bp.bpFunction(t, self.heartRate)
 
             self.capillarePressure[i] = self.pres0 * 0.5
             
@@ -488,11 +510,12 @@ class BodySystem():
                     self.capillarePressure[i] += 20 * (p1 + p2) * 0.3
 
     def venolePresSim(self):
+        bp = BloodPressure()
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1 = np.sin(2 * np.pi * (self.heartRate / 60) * t)
-            p2 = 0.63 * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
+            p1, p2  = bp.bpFunction(t, self.heartRate)
 
             self.venolePressure[i] = self.pres0 * 0.3
             
@@ -506,11 +529,12 @@ class BodySystem():
                    self.venolePressure[i] += 20 * (p1 + p2) * 0.3
             
     def venePresSim(self):
+        bp = BloodPressure()
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1 = np.sin(2 * np.pi * (self.heartRate / 60) * t)
-            p2 = 0.63 * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
+            p1, p2  = bp.bpFunction(t, self.heartRate)
 
             self.venePressure[i] = self.pres0 * 0.16
 
@@ -524,11 +548,12 @@ class BodySystem():
                     self.venePressure[i] += 20 * (p1 + p2) * 0.3
 
     def vCavaPresSim(self):
+        bp = BloodPressure()
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1 = np.sin(2 * np.pi * (self.heartRate / 60) * t)
-            p2 = 0.63 * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
+            p1, p2  = bp.bpFunction(t, self.heartRate)
 
             self.vCavaPressure[i] = self.pres0 * 0.01
 
@@ -539,9 +564,7 @@ class BodySystem():
                 idx = self.findIndex(self.time, self.time[i-1])
 
                 if self.venePressure[idx] > self.vCavaPressure[i] * 0.01:
-                    self.vCavaPressure[i] += 10 * (p1 + p2) * 0.3 + 4
-
-            
+                    self.vCavaPressure[i] += 20 * (p1 + p2) * 0.3 + 9
 
     def vpPlotter(self):
         plt.figure(figsize=(10, 6))
@@ -604,11 +627,11 @@ nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
 type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
 
-'''
+
 print()
 print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
 resis = bs.vesselResistances(type, lens, radi, lumRadiF, nums)
-for i in range(0,len(resis)):
+for i in range(0, len(resis)):
     print(type[i], ': ', resis[i], 'Pa s / mm^3')
 
 print()
@@ -617,8 +640,8 @@ print(bs.completeResistance(resis), 'Pa s / mm^3')
 
 print()
 print('######   Blutdruckunterschied zwischen zwei Punkten der verschiedenen Gefäßarten', '\n')
-for i in range(0,len(lens)):
+for i in range(0, len(lens)):
     print(type[i], ': ', bs.vesselPressure(viscocity, lens[i], strokeVolume, radi[i]), 'mmHg')
-'''
+
 bs.vpPlotter()
 plt.show()

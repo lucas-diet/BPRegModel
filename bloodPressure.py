@@ -24,8 +24,8 @@ class BloodPressure():
         t = np.linspace(0, self.duration, int(self.duration * 100))  # Abtastung mit 100 Hz
 
         # Simuliere Herzfrequenz mit summierter Sinusfunktion
-        p1 = systolic * np.sin(2 * np.pi * (self.heartRate / 60) * t)
-        p2 = 0.63 * systolic * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
+        p1 = self.systolic * np.sin(2 * np.pi * (self.heartRate / 60) * t)
+        p2 = 0.63 * self.systolic * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
 
         heartRateSignal = p1 + p2
         
@@ -55,15 +55,26 @@ class BloodPressure():
         min_bp = np.min(mean_bp)
 		
         normalized_bp = (mean_bp - min_bp) / (max_bp - min_bp)  # Auf [0, 1] normalisieren
-        normalized_bp = normalized_bp * (systolic - diastolic) + diastolic  # Skalieren auf [diastolic, systolic]
+        normalized_bp = normalized_bp * (self.systolic - self.diastolic) + self.diastolic  # Skalieren auf [diastolic, systolic]
 		
         return normalized_bp
     
-    def bpFunction(self, time):
-        p1 = systolic * np.sin(2 * np.pi * (self.heartRate / 60) * time)
-        p2 = 0.63 * systolic * np.sin(4 * np.pi * (self.heartRate / 60) * time + (2 / np.pi))
-        
+    def bpFunction(self, t, heartRate):
+        #radi *= 0.001
+        p1 = np.sin(2 * np.pi * (heartRate / 60) * t)
+        p2 = 0.63 * np.sin(4 * np.pi * (heartRate / 60) * t + (2 / np.pi))
         return p1, p2
+    
+    def bpPlotter(self):
+        bp_sim = BloodPressure(self.duration, self.heartRate, self.systolic, self.diastolic)
+        bp = bp_sim.simulateBP()
+
+        plt.plot(np.linspace(0, self.duration, len(bp)), bp, label='Blutdruck (mmHg)')
+        plt.xlabel('Zeit (s)')
+        plt.ylabel('mmHg')
+        plt.grid(True)
+        plt.ylim(self.diastolic-5, self.systolic+5)
+        plt.show()
 
 # Simulation des Blutdruck
 duration = 60       # Sekunden
@@ -73,12 +84,7 @@ diastolic = 80      # TODO: soll noch simuliert werden mit Parametern
 
 bp_sim = BloodPressure(duration, heart_rate, systolic, diastolic)
 bp = bp_sim.simulateBP()
-'''
+
 # Plot der simulierten Blutdruckwerte
-plt.plot(np.linspace(0, duration, len(bp)), bp, label='Blutdruck (mmHg)')
-plt.xlabel('Zeit (s)')
-plt.ylabel('mmHg')
-plt.grid(True)
-plt.ylim(diastolic-5, systolic+5)
-plt.show()
-'''
+
+#bp_sim.bpPlotter()

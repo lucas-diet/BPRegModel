@@ -115,5 +115,4 @@ dt = 0.01
 
 h = Heart(radi, vis, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt)
 
-#h.plotter()
-""""""
+h.hpPlotter()
