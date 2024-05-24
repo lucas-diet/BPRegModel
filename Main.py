@@ -48,11 +48,17 @@ h = Heart(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt
 bs = BodySystem(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 #bs.vesselPlotter(lumRadiF, lims)
 #bs.resisPrinter(type, lens, radi, lumRadiF, nums)
-
 #bs.vpPlotter()
 
 ##### Sensor #####
+data = [bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
+dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
+types = ['Rechter Ventrikel', 'Linker Ventrikel', 'Aorta', 'Arterie', 'Arteriole', 'Kapillare', 'Venole', 'Vene', 'V. Cava']
 
 s = Sensor(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt)
-#s.presPlotter()
-#s.presPrinter()
+
+h.heartSimulation()
+bs.vesselSimulator()
+
+#s.presPlotter(data)
+s.presPrinter(dataC, types)

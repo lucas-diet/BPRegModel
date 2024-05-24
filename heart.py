@@ -7,7 +7,9 @@ import matplotlib.pyplot as plt
 
 class Heart():
 
-    def __init__(self, radi, vis, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt=0.01,):
+    def __init__(self, radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt=0.01,):
+        self.radi = radi
+        self.viscocity = viscocity
         self.heartRate = heartRate
         self.strokeVolume = strokeVolume
         self.dt = dt
@@ -16,9 +18,6 @@ class Heart():
         self.esv = esv
         self.pres0 = pres0
         self.maxTime = maxTime
-        self.radi = radi
-        self.vis = vis
-        #self.viscocity = BodySystem(radi, vis)
 
         self.time = np.arange(0, self.maxTime, dt)
         
@@ -95,13 +94,13 @@ class Heart():
         #plt.plot(self.time, [70 for _ in range(0,len(self.time))])
         plt.xlabel('Zeit (s)')
         plt.ylabel('Werte')
-        plt.title('Simulation des linken Ventrikels')
+        plt.title('Simulation des Herzen')
         plt.grid(True)
         plt.legend()
 
         plt.show()
 
-
+'''
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
 vis = 1
 heartRate = 70
@@ -113,6 +112,7 @@ pres0 = 70
 maxTime = 10
 dt = 0.01
 
-h = Heart(radi, vis, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt)
+#h = Heart(radi, vis, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt)
 
-h.hpPlotter()
+#h.hpPlotter()
+'''

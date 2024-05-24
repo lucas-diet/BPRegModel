@@ -35,50 +35,38 @@ class Sensor():
         map = meanDia + (1/3) * (meanSys - meanDia)
         return map
     
-    def presPlotter(self):
-        h = Heart(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime, self.dt)
-        h.heartSimulation()
+    def presPlotter(self, data):
+        #data = [data1, data2, data3, data4, data5, data6, data7]
+        #s = Sensor(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime, dt=0.01)
 
-        bs = BodySystem(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        for d in data:
+            sys, _ = self.findPeak(d)
+            _, dia = self.findPeak(d)
 
-        bs.aortaPresSim()
-        bs.arteriePresSim()
-        bs.arteriolePresSim()
-        bs.capillarePresSim()
-        bs.venolePresSim()
-        bs.venePresSim()
-        bs.vCavaPresSim()
+            plt.plot(self.time, d)
 
-        plt.plot(h.time, h.bloodPressure_RV)
-        plt.plot(h.time, h.bloodPressure_LV)
-        plt.plot(h.time, bs.aortaPressure)
-        plt.plot(h.time, bs.arteriePressure)
-        plt.plot(h.time, bs.arteriolPressure)
-        plt.plot(h.time, bs.capillarePressure)
-        plt.plot(h.time, bs.venolePressure)
-        plt.plot(h.time, bs.venePressure)
-        plt.plot(h.time, bs.vCavaPressure)
+            plt.plot(self.time[sys], d[sys], 'r.')
+            plt.plot(self.time[dia], d[dia], 'b.')
 
         plt.grid(True)
-        plt.legend()
         plt.show()
     
-    def presPrinter(self):
-        h = Heart(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime, self.dt)
-        h.heartSimulation()
-
-        bs = BodySystem(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
-
+    def presPrinter(self, data, types):
         s = Sensor(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime, dt=0.01)
+        type = iter(types)
+        for d in data:
+            print('\n', '#####  ', next(type) , '  #####', '\n')
 
-        bs.aortaPresSim()
-        bs.arteriePresSim()
-        bs.arteriolePresSim()
-        bs.capillarePresSim()
-        bs.venolePresSim()
-        bs.venePresSim()
-        bs.vCavaPresSim()
+            sys, _ = s.findPeak(d)
+            _, dia = s.findPeak(d)
 
+            map = s.calculatePressure(d, sys, dia)
+            print('Systolischer Druck: ', np.mean(d[sys]), 'mmHg')
+            print('Diastolischer Druck: ', np.mean(d[dia]), 'mmHg')
+            print('Mittlerer Druck', map, 'mmHg')
+
+
+        '''
         ##### Rechter Ventrikle #####
         print()
         print('Rechter Ventrikle')
@@ -237,8 +225,9 @@ class Sensor():
         plt.grid(True)
 
         plt.show()
+        '''
             
-
+'''
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
 viscocity = 1
 heartRate = 70
@@ -254,18 +243,7 @@ h = Heart(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt
 h.heartSimulation()
 
 bs = BodySystem(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
-
-
-bs.aortaPresSim()
-bs.arteriePresSim()
-bs.arteriolePresSim()
-bs.capillarePresSim()
-bs.venolePresSim()
-bs.venePresSim()
-bs.vCavaPresSim()
-
-#b = BloodPressure()
-#data = b.simulateBP()
+bs.vesselSimulator()
 
 plt.plot(h.time, h.bloodPressure_RV)
 plt.plot(h.time, h.bloodPressure_LV)
@@ -278,152 +256,10 @@ plt.plot(h.time, bs.venePressure)
 plt.plot(h.time, bs.vCavaPressure)
 
 s = Sensor(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
+dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
+types = ['Rechter Ventrikel', 'Linker Ventrikel', 'Aorta', 'Arterie', 'Arteriole', 'Kapillare', 'Venole', 'Vene', 'V. Cava']
+s.presPrinter(dataC, types)
 
-##### Rechter Ventrikle #####
-print()
-print('Rechter Ventrikle')
-print()
-
-sysRV, _ = s.findPeak(h.bloodPressure_RV)
-_, diaRV = s.findPeak(h.bloodPressure_RV)
-
-mapRV = s.calculatePressure(h.bloodPressure_RV, sysRV, diaRV)
-print('Systolischer Druck: ', np.mean(h.bloodPressure_RV[sysRV]), 'mmHg')
-print('Diastolischer Druck: ', np.mean(h.bloodPressure_RV[diaRV]), 'mmHg')
-print('Mittlerer Druck', mapRV, 'mmHg')
-
-##### Linker Ventrikle #####
-print()
-print('Linker Ventrikle')
-print()
-
-sysLV, _ = s.findPeak(h.bloodPressure_LV)
-_, diaLV = s.findPeak(h.bloodPressure_LV)
-
-mapLV = s.calculatePressure(h.bloodPressure_LV, sysLV, diaLV)
-print('Systolischer Druck: ', np.mean(h.bloodPressure_LV[sysLV]), 'mmHg')
-print('Diastolischer Druck: ', np.mean(h.bloodPressure_LV[diaLV]), 'mmHg')
-print('Mittlerer Druck', mapLV, 'mmHg')
-
-##### Aorta #####
-print()
-print('Aorta')
-print()
-
-sysA, _ = s.findPeak(bs.aortaPressure)
-_, diaA = s.findPeak(bs.aortaPressure)
-
-mapA = s.calculatePressure(bs.aortaPressure, sysA, diaA)
-print('Systolischer Druck: ', np.mean(bs.aortaPressure[sysA]), 'mmHg')
-print('Diastolischer Druck: ', np.mean(bs.aortaPressure[diaA]), 'mmHg')
-print('Mittlerer Druck', mapA, 'mmHg')
-
-##### Arterien #####
-print()
-print('Arterien')
-print()
-
-sysAr, _ = s.findPeak(bs.arteriePressure)
-_, diaAr = s.findPeak(bs.arteriePressure)
-
-mapAr = s.calculatePressure(bs.arteriePressure, sysAr, diaAr)
-print('Systolischer Druck: ', np.mean(bs.arteriePressure[sysAr]), 'mmHg')
-print('Diastolischer Druck: ', np.mean(bs.arteriePressure[diaAr]), 'mmHg')
-print('Mittlerer Druck', mapAr, 'mmHg')
-
-##### Arteriole #####
-print()
-print('Arteriole')
-print()
-
-sysArt, _ = s.findPeak(bs.arteriolPressure)
-_, diaArt = s.findPeak(bs.arteriolPressure)
-
-mapArt = s.calculatePressure(bs.arteriolPressure, sysArt, diaArt)
-print('Systolischer Druck: ', np.mean(bs.arteriolPressure[sysArt]), 'mmHg')
-print('Diastolischer Druck: ', np.mean(bs.arteriolPressure[diaArt]), 'mmHg')
-print('Mittlerer Druck', mapArt, 'mmHg')
-
-##### Arteriole #####
-print()
-print('Kapillare')
-print()
-
-sysC, _ = s.findPeak(bs.capillarePressure)
-_, diaC = s.findPeak(bs.capillarePressure)
-
-mapC = s.calculatePressure(bs.capillarePressure, sysC, diaC)
-print('Systolischer Druck: ', np.mean(bs.capillarePressure[sysC]), 'mmHg')
-print('Diastolischer Druck: ', np.mean(bs.capillarePressure[diaC]), 'mmHg')
-print('Mittlerer Druck', mapC, 'mmHg')
-
-##### Venole #####
-print()
-print('Venole')
-print()
-
-sysV, _ = s.findPeak(bs.venolePressure)
-_, diaV = s.findPeak(bs.venolePressure)
-
-mapV = s.calculatePressure(bs.venolePressure, sysV, diaV)
-print('Systolischer Druck: ', np.mean(bs.venolePressure[sysV]), 'mmHg')
-print('Diastolischer Druck: ', np.mean(bs.venolePressure[diaV]), 'mmHg')
-print('Mittlerer Druck', mapV, 'mmHg')
-
-##### Vene #####
-print()
-print('Vene')
-print()
-
-sysVe, _ = s.findPeak(bs.venePressure)
-_, diaVe = s.findPeak(bs.venePressure)
-
-mapVe = s.calculatePressure(bs.venePressure, sysVe, diaVe)
-print('Systolischer Druck: ', np.mean(bs.venePressure[sysVe]), 'mmHg')
-print('Diastolischer Druck: ', np.mean(bs.venePressure[diaVe]), 'mmHg')
-print('Mittlerer Druck', mapVe, 'mmHg')
-
-##### V. Cava #####
-print()
-print('V. Cava')
-print()
-
-sysVC, _ = s.findPeak(bs.vCavaPressure)
-_, diaVC = s.findPeak(bs.vCavaPressure)
-
-mapVC = s.calculatePressure(bs.vCavaPressure, sysVC, diaVC)
-print('Systolischer Druck: ', np.mean(bs.vCavaPressure[sysVC]), 'mmHg')
-print('Diastolischer Druck: ', np.mean(bs.vCavaPressure[diaVC]), 'mmHg')
-print('Mittlerer Druck', mapVC, 'mmHg')
-
-##### Peaks #####
-plt.plot(h.time[sysLV], h.bloodPressure_LV[sysLV], 'r.')
-plt.plot(h.time[diaLV], h.bloodPressure_LV[diaLV], 'b.')
-
-plt.plot(h.time[sysRV], h.bloodPressure_RV[sysRV], 'r.')
-plt.plot(h.time[diaRV], h.bloodPressure_RV[diaRV], 'b.')
-
-plt.plot(h.time[sysA], bs.aortaPressure[sysA], 'r.')
-plt.plot(h.time[diaA], bs.aortaPressure[diaA], 'b.')
-
-plt.plot(h.time[sysAr], bs.arteriePressure[sysAr], 'r.')
-plt.plot(h.time[diaAr], bs.arteriePressure[diaAr], 'b.')
-
-plt.plot(h.time[sysArt], bs.arteriolPressure[sysArt], 'r.')
-plt.plot(h.time[diaArt], bs.arteriolPressure[diaArt], 'b.')
-
-plt.plot(h.time[sysC], bs.capillarePressure[sysC], 'r.')
-plt.plot(h.time[diaC], bs.capillarePressure[diaC], 'b.')
-
-plt.plot(h.time[sysV], bs.venolePressure[sysV], 'r.')
-plt.plot(h.time[diaV], bs.venolePressure[diaV], 'b.')
-
-plt.plot(h.time[sysVe], bs.venePressure[sysVe], 'r.')
-plt.plot(h.time[diaVe], bs.venePressure[diaVe], 'b.')
-
-plt.plot(h.time[sysVC], bs.vCavaPressure[sysVC], 'r.')
-plt.plot(h.time[diaVC], bs.vCavaPressure[diaVC], 'b.')
-
-plt.grid(True)
-
-#plt.show()
+data = [bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
+#s.presPlotter(data)
+'''

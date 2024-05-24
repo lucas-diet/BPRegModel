@@ -269,6 +269,7 @@ class BodySystem():
                     
                 plt.xlim(lims[0], lims[1])
                 plt.ylim(lims[0], lims[1])
+        plt.show()
 
     def setViscocity(self, val):
         """_summary_
@@ -566,6 +567,15 @@ class BodySystem():
                 if self.venePressure[idx] > self.vCavaPressure[i] * 0.01:
                     self.vCavaPressure[i] += 20 * (p1 + p2) * 0.3 + 9
 
+    def vesselSimulator(self):
+        self.aortaPresSim()
+        self.arteriePresSim()
+        self.arteriolePresSim()
+        self.capillarePresSim()
+        self.venolePresSim()
+        self.venePresSim()
+        self.vCavaPresSim()
+
     def vpPlotter(self):
         plt.figure(figsize=(10, 6))
 
@@ -580,9 +590,6 @@ class BodySystem():
         self.venePresSim()
         self.vCavaPresSim()
 
-        #plt.plot(self.time, h.bloodPressure_RV, label='Rechter Ventrikel Druck (mmHg)')
-        #plt.plot(self.time, h.bloodPressure_LV, label='Linkes Ventrikel Druck (mmHg)')
-
         plt.plot(self.time, self.aortaPressure, label='Aorta Druck (mmHg)')
         plt.plot(self.time, self.arteriePressure, label='Arterie Druck (mmHg)')
         plt.plot(self.time, self.arteriolPressure, label='Arteriole Druck (mmHg)')
@@ -593,9 +600,10 @@ class BodySystem():
 
         plt.xlabel('Zeit (s)')
         plt.ylabel('Werte')
-        plt.title('Simulation des linken Ventrikels')
+        plt.title('Simulation des Gefäßsystem')
         plt.grid(True)
         plt.legend()
+        plt.show()
 """
 Parameter (Radien, in µm): 
     1. aorta
@@ -606,7 +614,7 @@ Parameter (Radien, in µm):
     6. veins
     7. venaCava 
 """
-
+'''
 radi = [20000, 4000, 20, 8, 20, 5000, 30000] # in µm
 
 viscocity = 1
@@ -627,7 +635,7 @@ nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
 type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
 
-
+''''''
 print()
 print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
 resis = bs.vesselResistances(type, lens, radi, lumRadiF, nums)
@@ -643,5 +651,6 @@ print('######   Blutdruckunterschied zwischen zwei Punkten der verschiedenen Gef
 for i in range(0, len(lens)):
     print(type[i], ': ', bs.vesselPressure(viscocity, lens[i], strokeVolume, radi[i]), 'mmHg')
 
-bs.vpPlotter()
-plt.show()
+#bs.vpPlotter()
+#plt.show()
+'''
