@@ -26,7 +26,10 @@ class Sensor():
         systolicPeaks, _ = find_peaks(data)
         diastolicPeaks, _ = find_peaks(-data)
 
-        return systolicPeaks, diastolicPeaks
+        filteredSystolicPeaks = systolicPeaks[0::2]  # Wähle jeden zweiten systolischen Peak
+        filteredDiastolicPeaks = diastolicPeaks[1::2]  # Wähle jeden zweiten diastolischen Peak
+
+        return filteredSystolicPeaks, filteredDiastolicPeaks
     
     def calculatePressure(self, data, sPeaks, dPeaks):
         meanSys = np.mean(data[sPeaks])

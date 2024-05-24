@@ -437,135 +437,163 @@ class BodySystem():
         h = Heart(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         h.leftVentricle()
 
+        radiusEffect = self.radi[0] * 0.001
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1 *= (1 - self.viscocity)
+            p2 *= (1 - self.viscocity)
             
             self.aortaPressure[i] = self.pres0
 
             if h.bloodPressure_LV[i] > self.aortaPressure[i]:
                 self.aortaPressure[i] = h.bloodPressure_LV[i]
 
-            else:
-                idx = self.findIndex(self.time, self.time[i-1])
+            #else:
+            #    idx = self.findIndex(self.time, self.time[i-1])
 
-                if self.aortaPressure[idx] > self.pres0:
-                    self.aortaPressure[i] += 20 * (p1 + p2)
+             #   if self.aortaPressure[idx] > self.pres0:
+            self.aortaPressure[i] += radiusEffect * (p1 + p2)
 
     def arteriePresSim(self):
         bp = BloodPressure()
 
+        radiusEffect = self.radi[1] * 0.001
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1 *= (1 - self.viscocity)
+            p2 *= (1 - self.viscocity)
 
-            self.arteriePressure[i] = self.pres0 * 0.9
+            self.arteriePressure[i] = self.pres0 * 0.95
 
-            if self.aortaPressure[i] > self.arteriePressure[i]:
-                self.arteriePressure[i] = self.aortaPressure[i] * 0.9
+            #if self.aortaPressure[i] > self.arteriePressure[i]:
+            self.arteriePressure[i] = self.aortaPressure[i] * 0.95
 
-            else:
-                idx = self.findIndex(self.time, self.time[i-1])
+            #else:
+            #    idx = self.findIndex(self.time, self.time[i-1])
 
-                if self.arteriePressure[idx] > self.pres0 * 0.9:
-                    self.arteriePressure[i] += 20 * (p1 + p2)
+            #    if self.arteriePressure[idx] > self.pres0 * 0.95:
+            self.arteriePressure[i] += radiusEffect * (p1 + p2)
 
     def arteriolePresSim(self):
         bp = BloodPressure()
 
+        radiusEffect = self.radi[2] * 0.001
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1 *= (1 - self.viscocity)
+            p2 *= (1 - self.viscocity)
 
-            self.arteriolPressure[i] = self.pres0 * 0.6
+            self.arteriolPressure[i] = self.pres0 * 0.9
 
-            if self.arteriePressure[i] > self.arteriolPressure[i]:
-                self.arteriolPressure[i] = self.arteriePressure[i] * 0.6
+            #if self.arteriePressure[i] > self.arteriolPressure[i]:
+            self.arteriolPressure[i] = self.arteriePressure[i] * 0.9
 
-            else:
-                idx = self.findIndex(self.time, self.time[i-1])
+            #else:
+            #    idx = self.findIndex(self.time, self.time[i-1])
 
-                if self.arteriolPressure[idx] > self.pres0 * 0.6:
-                    self.arteriolPressure[i] += 20 * (p1 + p2)
+            #    if self.arteriolPressure[idx] > self.pres0 * 0.6:
+            self.arteriolPressure[i] += radiusEffect * (p1 + p2)
 
     def capillarePresSim(self):
         bp = BloodPressure()
 
+        radiusEffect = self.radi[3] * 0.001
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1 *= (1 - self.viscocity)
+            p2 *= (1 - self.viscocity)
 
             self.capillarePressure[i] = self.pres0 * 0.5
             
-            if self.capillarePressure[i] > self.arteriolPressure[i]:
-                self.arteriolPressure[i] = self.capillarePressure[i] * 0.5
+            #if self.capillarePressure[i] > self.arteriolPressure[i]:
+            self.capillarePressure[i] = self.arteriolPressure[i] * 0.5
 
-            else:
-                idx = self.findIndex(self.time, self.time[i-1])
+            #else:
+            #    idx = self.findIndex(self.time, self.time[i-1])
 
-                if self.arteriolPressure[idx] > self.pres0 * 0.5:
-                    self.capillarePressure[i] += 20 * (p1 + p2) * 0.3
+             #   if self.arteriolPressure[idx] > self.pres0 * 0.5:
+            self.capillarePressure[i] += radiusEffect * (p1 + p2)
 
     def venolePresSim(self):
         bp = BloodPressure()
 
+        radiusEffect = self.radi[4] * 0.001
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1 *= (1 - self.viscocity)
+            p2 *= (1 - self.viscocity)
 
-            self.venolePressure[i] = self.pres0 * 0.3
+            self.venolePressure[i] = self.pres0 * 0.4
             
-            if self.venolePressure[i] > self.capillarePressure[i]:
-                self.capillarePressure[i] = self.venolePressure[i] * 0.3
+            #if self.venolePressure[i] > self.capillarePressure[i]:
+            self.venolePressure[i] = self.capillarePressure[i] * 0.4
             
-            else:
-                idx = self.findIndex(self.time, self.time[i-1])
+            #else:
+            #    idx = self.findIndex(self.time, self.time[i-1])
 
-                if self.capillarePressure[idx] > self.pres0 * 0.3:
-                   self.venolePressure[i] += 20 * (p1 + p2) * 0.3
+            #    if self.capillarePressure[idx] > self.pres0 * 0.25:
+            self.venolePressure[i] += radiusEffect * (p1 + p2)
             
     def venePresSim(self):
         bp = BloodPressure()
 
+        radiusEffect = self.radi[5] * 0.001
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1 *= (1 - self.viscocity)
+            p2 *= (1 - self.viscocity)
 
-            self.venePressure[i] = self.pres0 * 0.16
+            self.venePressure[i] = self.pres0 * 0.3
 
-            if self.venePressure[i] > self.venolePressure[i]:
-                self.venolePressure[i] = self.venePressure[i] * 0.16
+            #if self.venePressure[i] > self.venolePressure[i]:
+            self.venePressure[i] = self.venolePressure[i] * 0.3
 
-            else:
-                idx = self.findIndex(self.time, self.time[i-1])
+            #else:
+            #    idx = self.findIndex(self.time, self.time[i-1])
 
-                if self.venolePressure[idx] > self.pres0 * 0.16:
-                    self.venePressure[i] += 20 * (p1 + p2) * 0.3
+             #   if self.venolePressure[idx] > self.pres0 * 0.1:
+            self.venePressure[i] += radiusEffect * (p1 + p2) * 0.3
 
     def vCavaPresSim(self):
         bp = BloodPressure()
 
+        radiusEffect = self.radi[6] * 0.001
+
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1 *= (1 - self.viscocity)
+            p2 *= (1 - self.viscocity)
 
             self.vCavaPressure[i] = self.pres0 * 0.01
 
-            if self.vCavaPressure[i] > self.venePressure[i]:
-                self.venePressure[i] = self.vCavaPressure[i] * 0.01
+            #if self.vCavaPressure[i] > self.venePressure[i]:
+            self.vCavaPressure[i] = self.venePressure[i] * 0.01
 
-            else:
-                idx = self.findIndex(self.time, self.time[i-1])
+            #else:
+            #    idx = self.findIndex(self.time, self.time[i-1])
 
-                if self.venePressure[idx] > self.vCavaPressure[i] * 0.01:
-                    self.vCavaPressure[i] += 20 * (p1 + p2) * 0.3 + 9
+            #    if self.venePressure[idx] > self.vCavaPressure[i] * 0.01:
+            self.vCavaPressure[i] += radiusEffect * (p1 + p2) * 0.1 + 4
 
     def vesselSimulator(self):
         self.aortaPresSim()

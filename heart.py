@@ -49,9 +49,6 @@ class Heart():
         for i in range(0,len(self.time)):
             t = self.time[i]
             elasticity = 1 + np.sin(2 * np.pi * self.heartRate * (t - shift) / 60)
-
-            p1 = np.sin(2 * np.pi * (self.heartRate / 60) * t)
-            p2 = 0.63 * np.sin(4 * np.pi * (self.heartRate / 60) * t + (2 / np.pi))
             
             if i == 0:
                 self.bloodVolume_RV[i] = self.edv
@@ -73,7 +70,7 @@ class Heart():
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_LV[i-1] - self.esv)
                 self.bloodVolume_LV[i] = self.bloodVolume_LV[i-1] + dVdt * self.dt
             
-            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) + 5
+            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) * 0.8 + 10
     
     def heartSimulation(self):
         self.rightVentricle(shift=-0.5)
