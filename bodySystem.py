@@ -469,7 +469,7 @@ class BodySystem():
             p1 *= (1 - self.viscocity)
             p2 *= (1 - self.viscocity)
 
-            self.arteriePressure[i] = self.pres0 * 0.95
+            #self.arteriePressure[i] = self.pres0 * 0.95
 
             #if self.aortaPressure[i] > self.arteriePressure[i]:
             self.arteriePressure[i] = self.aortaPressure[i] * 0.95
@@ -492,7 +492,7 @@ class BodySystem():
             p1 *= (1 - self.viscocity)
             p2 *= (1 - self.viscocity)
 
-            self.arteriolPressure[i] = self.pres0 * 0.9
+            #self.arteriolPressure[i] = self.pres0 * 0.9
 
             #if self.arteriePressure[i] > self.arteriolPressure[i]:
             self.arteriolPressure[i] = self.arteriePressure[i] * 0.9
@@ -538,7 +538,7 @@ class BodySystem():
             p1 *= (1 - self.viscocity)
             p2 *= (1 - self.viscocity)
 
-            self.venolePressure[i] = self.pres0 * 0.4
+            #self.venolePressure[i] = self.pres0 * 0.4
             
             #if self.venolePressure[i] > self.capillarePressure[i]:
             self.venolePressure[i] = self.capillarePressure[i] * 0.4
@@ -561,7 +561,7 @@ class BodySystem():
             p1 *= (1 - self.viscocity)
             p2 *= (1 - self.viscocity)
 
-            self.venePressure[i] = self.pres0 * 0.3
+            #self.venePressure[i] = self.pres0 * 0.3
 
             #if self.venePressure[i] > self.venolePressure[i]:
             self.venePressure[i] = self.venolePressure[i] * 0.3
@@ -570,7 +570,7 @@ class BodySystem():
             #    idx = self.findIndex(self.time, self.time[i-1])
 
              #   if self.venolePressure[idx] > self.pres0 * 0.1:
-            self.venePressure[i] += radiusEffect * (p1 + p2) * 0.3
+            self.venePressure[i] += radiusEffect * (p1 + p2) * 0.3 + 1
 
     def vCavaPresSim(self):
         bp = BloodPressure()
@@ -584,7 +584,7 @@ class BodySystem():
             p1 *= (1 - self.viscocity)
             p2 *= (1 - self.viscocity)
 
-            self.vCavaPressure[i] = self.pres0 * 0.01
+            #self.vCavaPressure[i] = self.pres0 * 0.01
 
             #if self.vCavaPressure[i] > self.venePressure[i]:
             self.vCavaPressure[i] = self.venePressure[i] * 0.01
@@ -593,7 +593,7 @@ class BodySystem():
             #    idx = self.findIndex(self.time, self.time[i-1])
 
             #    if self.venePressure[idx] > self.vCavaPressure[i] * 0.01:
-            self.vCavaPressure[i] += radiusEffect * (p1 + p2) * 0.1 + 4
+            self.vCavaPressure[i] += radiusEffect * (p1 + p2) * 0.1 + 5
 
     def vesselSimulator(self):
         self.aortaPresSim()
@@ -627,7 +627,7 @@ class BodySystem():
         plt.plot(self.time, self.vCavaPressure, label='V. Cava Druck (mmHg)')
 
         plt.xlabel('Zeit (s)')
-        plt.ylabel('Werte')
+        plt.ylabel('mmHg')
         plt.title('Simulation des Gefäßsystem')
         plt.grid(True)
         plt.legend()

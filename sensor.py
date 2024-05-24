@@ -50,6 +50,8 @@ class Sensor():
             plt.plot(self.time[sys], d[sys], 'r.')
             plt.plot(self.time[dia], d[dia], 'b.')
 
+        plt.xlabel('Zeit (s)')
+        plt.ylabel('mmHg')
         plt.grid(True)
         plt.show()
     

@@ -10,12 +10,12 @@ from sensor import *
 ####################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
-viscocity = 0.5 ## Wie hoch ist der Wasseranteil? Wenn hoch niedriger Druck wenn niedrig höherer Druck
+viscocity = 0.1 ## Wie hoch ist der Wasseranteil? Wenn hoch niedriger Druck wenn niedrig höherer Druck
 heartRate = 70
 strokeVolume = 70
 maxElasticity = 2
 edv = 110
-esv = 50
+esv = 60
 pres0 = 70
 maxTime = 10
 dt = 0.01
