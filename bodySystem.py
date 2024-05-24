@@ -341,7 +341,7 @@ class BodySystem():
 
         aortaRes = arteriesRes = arteriolesRes = capillariesRes = venulesRes = veinsRes = venaCavaRes = 0
         aortaCom = arteriesCom = arteriolesCom = capillariesCom = venulesCom = veinsCom = venaCavaCom = 0
-        for i in range(0,len(radius)):
+        for i in range(0, len(radius)):
             radius[i] *= 0.001
             radius[i] *= lumiRadi[i]
 
@@ -393,8 +393,9 @@ class BodySystem():
         return res
     
     def completeResistance(self, resis):
+        resis = np.copy(resis)
         compRes = 0
-        for i in range(0,len(resis)):
+        for i in range(0, len(resis)):
             compRes += resis[i]
         return compRes
     
@@ -407,22 +408,22 @@ class BodySystem():
         return pressure * 0.00750061    # in mmHg umrechnen
 
     def resisPrinter(self, type, lens, radi, lumRadiF, nums):
-        bs = BodySystem(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        #bs = BodySystem(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        #type = np.copy(type)
+        #lens = np.copy(lens)
+        #radi = np.copy(radi)
+        #lumRadiF = np.copy(lumRadiF)
+        #nums = np.copy(nums)
 
-        print()
         print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
-        resis = bs.vesselResistances(type, lens, radi, lumRadiF, nums)
-        for i in range(0,len(resis)):
+        resis = self.vesselResistances(type, lens, radi, lumRadiF, nums)
+        for i in range(0, len(resis)):
             print(type[i], ': ', resis[i], 'Pa s / mm^3')
 
         print()
         print('######   Gesamtwiderstand', '\n')   
-        print(bs.completeResistance(resis), 'Pa s / mm^3')
-
+        print(self.completeResistance(resis), 'Pa s / mm^3')
         print()
-        print('######   Blutdruckunterschied zwischen zwei Punkten der verschiedenen Gefäßarten', '\n')
-        for i in range(0,len(lens)):
-            print(type[i], ': ', bs.vesselPressure(self.viscocity, lens[i], self.strokeVolume, radi[i]), 'mmHg')
 
     def findIndex(self, arr, val):
         idx = None
@@ -434,6 +435,7 @@ class BodySystem():
     
     def aortaPresSim(self):
         bp = BloodPressure()
+
         h = Heart(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         h.leftVentricle()
 
@@ -608,8 +610,8 @@ class BodySystem():
         plt.figure(figsize=(10, 6))
 
         h = Heart(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
-        
         h.heartSimulation()
+
         self.aortaPresSim()
         self.arteriePresSim()
         self.arteriolePresSim()
@@ -663,22 +665,22 @@ nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
 type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
 
-''''''
+
 print()
 print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
-resis = bs.vesselResistances(type, lens, radi, lumRadiF, nums)
-for i in range(0, len(resis)):
-    print(type[i], ': ', resis[i], 'Pa s / mm^3')
+#resis = bs.vesselResistances(type, lens, radi, lumRadiF, nums)
+#for i in range(0, len(resis)):
+#    pass#print(type[i], ': ', resis[i], 'Pa s / mm^3')
 
 print()
 print('######   Gesamtwiderstand', '\n')   
-print(bs.completeResistance(resis), 'Pa s / mm^3')
+#print(bs.completeResistance(resis), 'Pa s / mm^3')
 
 print()
 print('######   Blutdruckunterschied zwischen zwei Punkten der verschiedenen Gefäßarten', '\n')
-for i in range(0, len(lens)):
-    print(type[i], ': ', bs.vesselPressure(viscocity, lens[i], strokeVolume, radi[i]), 'mmHg')
+#for i in range(0, len(lens)):
+    #pass#print(type[i], ': ', bs.vesselPressure(viscocity, lens[i], strokeVolume, radi[i]), 'mmHg')
 
-#bs.vpPlotter()
-#plt.show()
+bs.vpPlotter()
+plt.show()
 '''
