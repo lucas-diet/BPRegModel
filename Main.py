@@ -44,18 +44,18 @@ bpSim = BloodPressure(duration, heart_rate, systolic, diastolic)
 ################
 
 h = Heart(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt)
-#h.hpPlotter()
+h.hpPlotter()
 
 #######################
 ##### Body System #####
 #######################
 
 lims = [-17, 17]
-lumRadiF = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
+lumFactor = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 
-bs = BodySystem(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
-#bs.vesselPlotter(lumRadiF, lims)
-#bs.resisPrinter(type, lens, radi, lumRadiF, nums)
+bs = BodySystem(radi, lumFactor, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
+#bs.vesselPlotter(lumFactor, lims)
+#bs.resisPrinter(type, lens, radi, lumFactor, nums)
 bs.vpPlotter()
 
 ##################
