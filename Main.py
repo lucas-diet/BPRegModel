@@ -1,5 +1,7 @@
 
 
+
+
 from bloodPressure import *
 from heart import * 
 from bodySystem import *
@@ -10,7 +12,7 @@ from sensor import *
 ####################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
-viscocity = 1 ## Wie hoch ist der Wasseranteil? Wenn hoch niedriger Druck wenn niedrig höherer Druck
+viscocity = 0.1 ## Wie hoch ist der Wasseranteil? Wenn hoch niedriger Druck wenn niedrig höherer Druck
 heartRate = 70
 strokeVolume = 70
 maxElasticity = 2
@@ -33,11 +35,11 @@ heart_rate = 10     # Schläge pro Minute
 systolic = 120      # TODO: soll noch simuliert werden mit Parametern
 diastolic = 80      # TODO: soll noch simuliert werden mit Parametern
 
-bp = BloodPressure(duration, heart_rate, systolic, diastolic)
-#bp.simulateBP()
+bpSim = BloodPressure(duration, heart_rate, systolic, diastolic)
+#bp = bpSim.simulateBP()
 
 # Plot der simulierten Blutdruckwerte
-#bp.bpPlotter()
+#bpSim.bpPlotter()
 
 ################
 #### Heart #####
@@ -56,7 +58,7 @@ lumFactor = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu kö
 bs = BodySystem(radi, lumFactor, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 #bs.vesselPlotter(lumFactor, lims)
 bs.resisPrinter(type, lens, nums)
-#bs.vpPlotter()
+bs.vpPlotter()
 
 ##################
 ##### Sensor #####
@@ -69,7 +71,7 @@ types = ['Rechter Ventrikel', 'Linker Ventrikel', 'Aorta', 'Arterie', 'Arteriole
 s = Sensor(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt)
 
 h.heartSimulation()
-bs.vesselSimulator(types, lens, radi, lumFactor, nums)
+bs.vesselSimulator()
 
-#s.presPlotter(data)
-#s.presPrinter(dataC, types)
+s.presPlotter(data)
+s.presPrinter(dataC, types)
