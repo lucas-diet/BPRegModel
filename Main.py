@@ -55,7 +55,7 @@ lumFactor = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu kö
 
 bs = BodySystem(radi, lumFactor, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 #bs.vesselPlotter(lumFactor, lims)
-bs.resisPrinter(type, lens, radi, lumFactor, nums)
+bs.resisPrinter(type, lens, nums)
 #bs.vpPlotter()
 
 ##################

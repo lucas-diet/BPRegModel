@@ -311,7 +311,6 @@ class BodySystem():
             pres (float): Gesamtwiderstand von parallel geschalteten Gefäßen
         """
         tmp = np.copy(arr)
-        print(tmp)
         res = 1 / np.sum(1 / tmp)
         return res
     
@@ -406,10 +405,10 @@ class BodySystem():
         pressure = (8 * vis * le * vo) / (np.pi * ra**4)
         return pressure * 0.00750061    # in mmHg umrechnen
 
-    def resisPrinter(self, ty, le, ra, lu, nu):
+    def resisPrinter(self, ty, le, nu):
         #bs = BodySystem(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
 
-        resis = self.vesselResistances(ty, le, ra, lu, nu)
+        resis = self.vesselResistances(ty, le, nu)
 
         print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
         for i in range(0, len(resis)):
