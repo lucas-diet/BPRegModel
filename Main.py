@@ -1,25 +1,23 @@
 
-
-
-
 from bloodPressure import *
 from heart import * 
 from bodySystem import *
 from sensor import *
+from brain import *
 
 ####################
 #### Parameter #####
 ####################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
-viscocity = 0.1 ## Wie hoch ist der Wasseranteil? Wenn hoch niedriger Druck wenn niedrig höherer Druck
+viscocity = 0.1 ## 0 keine Auswirkung; 1 die Amplitude der ist vollständig reduzieren. -> != 0
 heartRate = 70
 strokeVolume = 70
 maxElasticity = 2
 edv = 110
 esv = 60
 pres0 = 70
-maxTime = 10
+maxTime = 5
 dt = 0.01
 
 nums = [1, 2, 4, 16, 4, 2, 1]
@@ -30,16 +28,13 @@ type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'v
 ##### Blood Pressure ##### ---> Wie solle es ca. am Ende aussehen. Dient nur als Einstieg.
 ##########################
 
-duration = 60       # Sekunden
-heart_rate = 10     # Schläge pro Minute
-systolic = 120      # TODO: soll noch simuliert werden mit Parametern
-diastolic = 80      # TODO: soll noch simuliert werden mit Parametern
+duration = maxTime      # Sekunden
+heart_rate = 10         # Schläge pro Minute
+systolic = 120          # TODO: soll noch simuliert werden mit Parametern
+diastolic = 80          # TODO: soll noch simuliert werden mit Parametern
 
 bpSim = BloodPressure(duration, heart_rate, systolic, diastolic)
-#bp = bpSim.simulateBP()
-
-# Plot der simulierten Blutdruckwerte
-#bpSim.bpPlotter()
+#bpSim.bpPlotter()       # Plot der simulierten Blutdruckwerte
 
 ################
 #### Heart #####
@@ -57,8 +52,8 @@ lumFactor = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu kö
 
 bs = BodySystem(radi, lumFactor, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 #bs.vesselPlotter(lumFactor, lims)
-bs.resisPrinter(type, lens, nums)
-bs.vpPlotter()
+#bs.resisPrinter(type, lens, nums)
+#bs.vpPlotter(type, lens, nums)
 
 ##################
 ##### Sensor #####
@@ -71,7 +66,19 @@ types = ['Rechter Ventrikel', 'Linker Ventrikel', 'Aorta', 'Arterie', 'Arteriole
 s = Sensor(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt)
 
 h.heartSimulation()
-bs.vesselSimulator()
+bs.vesselSimulator(type, lens, nums)
 
-s.presPlotter(data)
+#s.presPlotter(data)
 s.presPrinter(dataC, types)
+
+#################
+##### Brain #####
+#################
+
+targetPres = 10
+activity = 10
+
+b = brain(targetPres, heartRate, activity, radi, lumFactor, viscocity, strokeVolume, edv, esv, pres0, maxTime)
+
+#s.brainSender(data)
+b.setPressure(data, targetPres)

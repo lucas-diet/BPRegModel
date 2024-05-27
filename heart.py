@@ -2,9 +2,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-#from bodySystem import BodySystem
-#from bloodPressure import BloodPressure
-
 class Heart():
 
     def __init__(self, radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt=0.01,):

@@ -312,6 +312,7 @@ class BodySystem():
         """
         tmp = np.copy(arr)
         res = 1 / np.sum(1 / tmp)
+
         return res
     
     def serialResistance(self, arr):
@@ -343,10 +344,6 @@ class BodySystem():
 
         aortaRes = arteriesRes = arteriolesRes = capillariesRes = venulesRes = veinsRes = venaCavaRes = 0
         aortaCom = arteriesCom = arteriolesCom = capillariesCom = venulesCom = veinsCom = venaCavaCom = 0
-        #rad = np.copy(radius)
-        #for i in range(0, len(rad)):
-        #    rad[i] *= 0.001
-        #    rad[i] *= lumFactor[i]
 
         for type in types:
             if type == 'aorta':
@@ -423,13 +420,14 @@ class BodySystem():
                 break
         return idx
     
-    def aortaPresSim(self):
+    def aortaPresSim(self, ty, le, nu):
         bp = BloodPressure()
 
         h = Heart(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         h.leftVentricle()
 
         radiusEffect = self.radi[0] * 0.001
+        resis = self.vesselResistances(ty, le, nu)[0]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -439,20 +437,17 @@ class BodySystem():
             p2 *= (1 - self.viscocity)
             
             self.aortaPressure[i] = self.pres0
-
+ 
             if h.bloodPressure_LV[i] > self.aortaPressure[i]:
                 self.aortaPressure[i] = h.bloodPressure_LV[i]
 
-            #else:
-            #    idx = self.findIndex(self.time, self.time[i-1])
+            self.aortaPressure[i] += (radiusEffect) * (p1 + p2)
 
-             #   if self.aortaPressure[idx] > self.pres0:
-            self.aortaPressure[i] += radiusEffect * (p1 + p2)
-
-    def arteriePresSim(self):
+    def arteriePresSim(self, ty, le, nu):
         bp = BloodPressure()
 
         radiusEffect = self.radi[1] * 0.001
+        resis = self.vesselResistances(ty, le, nu)[1]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -461,21 +456,14 @@ class BodySystem():
             p1 *= (1 - self.viscocity)
             p2 *= (1 - self.viscocity)
 
-            #self.arteriePressure[i] = self.pres0 * 0.95
-
-            #if self.aortaPressure[i] > self.arteriePressure[i]:
             self.arteriePressure[i] = self.aortaPressure[i] * 0.95
+            self.arteriePressure[i] += (radiusEffect) * (p1 + p2)
 
-            #else:
-            #    idx = self.findIndex(self.time, self.time[i-1])
-
-            #    if self.arteriePressure[idx] > self.pres0 * 0.95:
-            self.arteriePressure[i] += radiusEffect * (p1 + p2)
-
-    def arteriolePresSim(self):
+    def arteriolePresSim(self, ty, le, nu):
         bp = BloodPressure()
 
         radiusEffect = self.radi[2] * 0.001
+        resis = self.vesselResistances(ty, le, nu)[2]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -486,19 +474,14 @@ class BodySystem():
 
             #self.arteriolPressure[i] = self.pres0 * 0.9
 
-            #if self.arteriePressure[i] > self.arteriolPressure[i]:
             self.arteriolPressure[i] = self.arteriePressure[i] * 0.9
+            self.arteriolPressure[i] += (radiusEffect) * (p1 + p2)
 
-            #else:
-            #    idx = self.findIndex(self.time, self.time[i-1])
-
-            #    if self.arteriolPressure[idx] > self.pres0 * 0.6:
-            self.arteriolPressure[i] += radiusEffect * (p1 + p2)
-
-    def capillarePresSim(self):
+    def capillarePresSim(self, ty, le, nu):
         bp = BloodPressure()
 
         radiusEffect = self.radi[3] * 0.001
+        resis = self.vesselResistances(ty, le, nu)[3]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -507,21 +490,16 @@ class BodySystem():
             p1 *= (1 - self.viscocity)
             p2 *= (1 - self.viscocity)
 
-            self.capillarePressure[i] = self.pres0 * 0.5
+            #self.capillarePressure[i] = self.pres0 * 0.5
             
-            #if self.capillarePressure[i] > self.arteriolPressure[i]:
             self.capillarePressure[i] = self.arteriolPressure[i] * 0.5
+            self.capillarePressure[i] += (radiusEffect) * (p1 + p2)
 
-            #else:
-            #    idx = self.findIndex(self.time, self.time[i-1])
-
-             #   if self.arteriolPressure[idx] > self.pres0 * 0.5:
-            self.capillarePressure[i] += radiusEffect * (p1 + p2)
-
-    def venolePresSim(self):
+    def venolePresSim(self, ty, le, nu):
         bp = BloodPressure()
 
         radiusEffect = self.radi[4] * 0.001
+        resis = self.vesselResistances(ty, le, nu)[4]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -532,19 +510,14 @@ class BodySystem():
 
             #self.venolePressure[i] = self.pres0 * 0.4
             
-            #if self.venolePressure[i] > self.capillarePressure[i]:
             self.venolePressure[i] = self.capillarePressure[i] * 0.4
+            self.venolePressure[i] += (radiusEffect) * (p1 + p2)
             
-            #else:
-            #    idx = self.findIndex(self.time, self.time[i-1])
-
-            #    if self.capillarePressure[idx] > self.pres0 * 0.25:
-            self.venolePressure[i] += radiusEffect * (p1 + p2)
-            
-    def venePresSim(self):
+    def venePresSim(self, ty, le, nu):
         bp = BloodPressure()
 
         radiusEffect = self.radi[5] * 0.001
+        resis = self.vesselResistances(ty, le, nu)[5]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -555,19 +528,14 @@ class BodySystem():
 
             #self.venePressure[i] = self.pres0 * 0.3
 
-            #if self.venePressure[i] > self.venolePressure[i]:
-            self.venePressure[i] = self.venolePressure[i] * 0.3
+            self.venePressure[i] = self.venolePressure[i] * 0.25
+            self.venePressure[i] += (radiusEffect) * (p1 + p2) * 0.25 + 4
 
-            #else:
-            #    idx = self.findIndex(self.time, self.time[i-1])
-
-             #   if self.venolePressure[idx] > self.pres0 * 0.1:
-            self.venePressure[i] += radiusEffect * (p1 + p2) * 0.3 + 1
-
-    def vCavaPresSim(self):
+    def vCavaPresSim(self, ty, le, nu):
         bp = BloodPressure()
 
         radiusEffect = self.radi[6] * 0.001
+        resis = self.vesselResistances(ty, le, nu)[6]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -578,37 +546,25 @@ class BodySystem():
 
             #self.vCavaPressure[i] = self.pres0 * 0.01
 
-            #if self.vCavaPressure[i] > self.venePressure[i]:
             self.vCavaPressure[i] = self.venePressure[i] * 0.01
+            self.vCavaPressure[i] += (radiusEffect) * (p1 + p2) * 0.1 + 5
 
-            #else:
-            #    idx = self.findIndex(self.time, self.time[i-1])
+    def vesselSimulator(self, ty, le, nu):
+        self.aortaPresSim(ty, le, nu)
+        self.arteriePresSim(ty, le, nu)
+        self.arteriolePresSim(ty, le, nu)
+        self.capillarePresSim(ty, le, nu)
+        self.venolePresSim(ty, le, nu)
+        self.venePresSim(ty, le, nu)
+        self.vCavaPresSim(ty, le, nu)
 
-            #    if self.venePressure[idx] > self.vCavaPressure[i] * 0.01:
-            self.vCavaPressure[i] += radiusEffect * (p1 + p2) * 0.1 + 5
-
-    def vesselSimulator(self):
-        self.aortaPresSim()
-        self.arteriePresSim()
-        self.arteriolePresSim()
-        self.capillarePresSim()
-        self.venolePresSim()
-        self.venePresSim()
-        self.vCavaPresSim()
-
-    def vpPlotter(self):
+    def vpPlotter(self, ty, le, nu):
         plt.figure(figsize=(10, 6))
 
         h = Heart(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         h.heartSimulation()
 
-        self.aortaPresSim()
-        self.arteriePresSim()
-        self.arteriolePresSim()
-        self.capillarePresSim()
-        self.venolePresSim()
-        self.venePresSim()
-        self.vCavaPresSim()
+        self.vesselSimulator(ty, le, nu)
 
         plt.plot(self.time, self.aortaPressure, label='Aorta Druck (mmHg)')
         plt.plot(self.time, self.arteriePressure, label='Arterie Druck (mmHg)')
@@ -634,43 +590,3 @@ Parameter (Radien, in µm):
     6. veins
     7. venaCava 
 """
-'''
-radi = [20000, 4000, 20, 8, 20, 5000, 30000] # in µm
-
-viscocity = 1
-heartRate = 70
-strokeVolume = 70
-edv = 110
-esv = 50
-pres0 = 70
-maxTime = 10
-bs = BodySystem(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
-
-lims = [-17, 17]
-lumRadiF = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
-
-#bs.vesselPlotter(lumRadiF, lims)
-
-nums = [1, 2, 4, 16, 4, 2, 1]
-lens = [200, 150, 100, 50, 100, 150, 300] # in mm
-type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
-
-
-print()
-print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
-#resis = bs.vesselResistances(type, lens, radi, lumRadiF, nums)
-#for i in range(0, len(resis)):
-#    pass#print(type[i], ': ', resis[i], 'Pa s / mm^3')
-
-print()
-print('######   Gesamtwiderstand', '\n')   
-#print(bs.completeResistance(resis), 'Pa s / mm^3')
-
-print()
-print('######   Blutdruckunterschied zwischen zwei Punkten der verschiedenen Gefäßarten', '\n')
-#for i in range(0, len(lens)):
-    #pass#print(type[i], ': ', bs.vesselPressure(viscocity, lens[i], strokeVolume, radi[i]), 'mmHg')
-
-bs.vpPlotter()
-plt.show()
-'''

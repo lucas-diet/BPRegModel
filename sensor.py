@@ -7,7 +7,6 @@ from bloodPressure import *
 from heart import *
 from bodySystem import *
 
-
 class Sensor():
 
     def __init__(self, radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt=0.01):
@@ -36,8 +35,29 @@ class Sensor():
         meanDia = np.mean(data[dPeaks])
 
         map = meanDia + (1/3) * (meanSys - meanDia)
+
         return map
     
+    def brainSender(self, data):
+
+        maxs = []
+        mins = []
+        means = []
+
+        for d  in data:
+
+            sys, _ = self.findPeak(d)
+            _, dia = self.findPeak(d)
+            
+            self.calculatePressure(d, sys, dia)
+            map = self.calculatePressure(d, sys, dia)
+
+            maxs.append(np.mean(d[sys]))
+            mins.append(np.mean(d[dia]))
+            means.append(map)
+
+        return maxs, mins, means
+ 
     def presPlotter(self, data):
         #data = [data1, data2, data3, data4, data5, data6, data7]
 
@@ -68,41 +88,3 @@ class Sensor():
             print('Systolischer Druck: ', np.mean(d[sys]), 'mmHg')
             print('Diastolischer Druck: ', np.mean(d[dia]), 'mmHg')
             print('Mittlerer Druck', map, 'mmHg')
-
-            
-'''
-radi = [20000, 4000, 20, 8, 20, 5000, 30000]
-viscocity = 1
-heartRate = 70
-strokeVolume = 70
-maxElasticity = 6
-edv = 110
-esv = 70
-pres0 = 70
-maxTime = 10
-dt = 0.01
-
-h = Heart(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt)
-h.heartSimulation()
-
-bs = BodySystem(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
-bs.vesselSimulator()
-
-plt.plot(h.time, h.bloodPressure_RV)
-plt.plot(h.time, h.bloodPressure_LV)
-plt.plot(h.time, bs.aortaPressure)
-plt.plot(h.time, bs.arteriePressure)
-plt.plot(h.time, bs.arteriolPressure)
-plt.plot(h.time, bs.capillarePressure)
-plt.plot(h.time, bs.venolePressure)
-plt.plot(h.time, bs.venePressure)
-plt.plot(h.time, bs.vCavaPressure)
-
-s = Sensor(radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
-dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
-types = ['Rechter Ventrikel', 'Linker Ventrikel', 'Aorta', 'Arterie', 'Arteriole', 'Kapillare', 'Venole', 'Vene', 'V. Cava']
-s.presPrinter(dataC, types)
-
-data = [bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
-#s.presPlotter(data)
-'''
