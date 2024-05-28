@@ -19,17 +19,17 @@ class Liver():
         self.viscosity += inc
         self.viscosity = round(self.viscosity, 2)
         if self.viscosity < 0:
-            self.viscosity = 0
-        elif self.viscosity > 1:
-            self.viscosity = 1
+            self.viscosity = 0.1
+        elif self.viscosity >= 1:
+            self.viscosity = 0.9
 
     def decreaseViscosity(self, dec):
         self.viscosity -= dec
         self.viscosity = round(self.viscosity, 2)
         if self.viscosity < 0:
             self.viscosity = 0.1
-        elif self.viscosity > 1:
-            self.viscosity = 1
+        elif self.viscosity >= 1:
+            self.viscosity = 0.9
     
     def viscositySimulate(self, prop, interval, change):
         if prop == 'inc':
@@ -41,10 +41,5 @@ class Liver():
             for i in range(interval, len(self.time), interval):
                 self.decreaseViscosity(change)
                 print(f"Time: {self.time[i]}, Viscosity reduziert zu: {self.viscosity}")
-
-                
-
-
-
 
     
