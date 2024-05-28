@@ -1,4 +1,6 @@
 
+#TODO: Noch in das System einbinden!!
+
 from decimal import Decimal as dcm
 
 from sensor import *
@@ -32,14 +34,18 @@ class Liver():
             self.viscosity = 0.9
     
     def viscositySimulate(self, prop, interval, change):
-        if prop == 'inc':
-            for i in range(interval, len(self.time), interval):
-                self.increaseViscosity(change)
-                print(f"Time: {self.time[i]}, Viscosity erhöht zu: {self.viscosity}")
+        if interval != 0:
+            if prop == 'inc':
+                for i in range(interval, len(self.time), interval):
+                    self.increaseViscosity(change)
+                    print(f"Time: {self.time[i]}, Viscosity erhöht zu: {self.viscosity}")
 
-        elif prop == 'dec':
-            for i in range(interval, len(self.time), interval):
-                self.decreaseViscosity(change)
-                print(f"Time: {self.time[i]}, Viscosity reduziert zu: {self.viscosity}")
+            elif prop == 'dec':
+                for i in range(interval, len(self.time), interval):
+                    self.decreaseViscosity(change)
+                    print(f"Time: {self.time[i]}, Viscosity reduziert zu: {self.viscosity}")
+        
+        else:
+            pass
 
     

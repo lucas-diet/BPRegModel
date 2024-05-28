@@ -11,19 +11,17 @@ from liver import *
 ####################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
-viscosity = 0.1 ## 0 keine Auswirkung; 1 die Amplitude der ist vollständig reduzieren. -> != 0
+viscosity = 0.1                 # 0 keine Auswirkung; 1 die Amplitude ist vollständig reduzieren. -> != 0
 heartRate = 70
-strokeVolume = 70
-maxElasticity = 2
-edv = 110
-esv = 60
-pres0 = 70
+strokeVolume = 70               # Schlagvolumen 
+edv = 110                       # Enddiastolische Volumen
+esv = 60                        # Endsystolisches Volumen
+pres0 = 70                      
 maxTime = 5
-dt = 0.01
 
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
-type = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
+
 
 #####################
 ##### Blutdruck ##### ---> Wie solle es ca. am Ende aussehen. Dient nur als Einstieg.
@@ -36,13 +34,13 @@ diastolic = 80          # TODO: soll noch simuliert werden mit Parametern
 
 bpSim = BloodPressure(duration, heart_rate, systolic, diastolic)
 
-#bpSim.bpPlotter()       # Plot der simulierten Blutdruckwerte
+#bpSim.bpPlotter()      # Plot der simulierten Blutdruckwerte
 
 ###############
 #### Herz #####
 ###############
 
-h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt)
+h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 #h.hpPlotter()
 
@@ -56,8 +54,8 @@ lumFactor = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu kö
 bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 #bs.vesselPlotter(lumFactor, lims)
-#bs.resisPrinter(type, lens, nums)
-#bs.vpPlotter(type, lens, nums)
+#bs.resisPrinter(lens, nums)
+#bs.vpPlotter(lens, nums)
 
 ##################
 ##### Sensor #####
@@ -65,15 +63,14 @@ bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, p
 
 data = [bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
 dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
-types = ['Rechter Ventrikel', 'Linker Ventrikel', 'Aorta', 'Arterie', 'Arteriole', 'Kapillare', 'Venole', 'Vene', 'V. Cava']
 
-s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt)
+s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 h.heartSimulation()
-bs.vesselSimulator(type, lens, nums)
+bs.vesselSimulator(lens, nums)
 
 #s.ppPlotter(data)
-#s.presPrinter(dataC, types)
+s.presPrinter(dataC)
 
 ################
 ##### Hirn #####
@@ -84,8 +81,8 @@ activity = 10
 
 b = brain(targetPres, heartRate, activity, radi, lumFactor, viscosity, strokeVolume, edv, esv, pres0, maxTime)
 
-#s.brainSender(data)
-#b.setPressure(data, targetPres)
+s.brainSender(data)
+b.setPressure(data, targetPres)
 
 #################
 ##### Leber #####

@@ -9,18 +9,23 @@ class brain():
         self.activity = activity
 
         self.radi = radi 
-        self.lumFactor = lumFactor, 
-        self.viscosity = viscosity 
+        self.lumFactor = lumFactor 
+        self.viscosity = viscosity
         self.strokeVolume = strokeVolume 
         self.edv = edv
         self.esv = esv
         self.pres0 = pres0
         self.maxTime = maxTime
 
-
     def getPressure(self, data):
         s = Sensor(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         return s.brainSender(data)
+    
+    def increaseHeartRate(self):
+        self.heartRate += 1
+
+    def decreaseHeartRate(self):
+        self.heartRate -= 1
     
     def setPressure(self, data, targetPres):
         isPres = self.getPressure(data)
@@ -34,24 +39,4 @@ class brain():
         print(means)
 
         if self.activity == 1:
-            self.heartRate = 0
-        
-        elif self.activity == 2:
-            self.heartRate = 0
-        
-        elif self.activity == 3:
-            self.heartRate = 0
-
-        elif self.activity == 4:
-            self.heartRate = 0
-
-        elif self.activity == 5:
-            self.heartRate = 0
-
-        elif self.activity == 6:
-            self.heartRate = 0
-
-        elif self.activity == 7:
-            self.heartRate = 0
-
-        
+            pass

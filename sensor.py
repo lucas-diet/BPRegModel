@@ -75,7 +75,8 @@ class Sensor():
         plt.grid(True)
         plt.show()
     
-    def presPrinter(self, data, types):
+    def presPrinter(self, data):
+        types = ['Rechter Ventrikel', 'Linker Ventrikel', 'Aorta', 'Arterie', 'Arteriole', 'Kapillare', 'Venole', 'Vene', 'V. Cava']
         type = iter(types)
 
         for d in data:
