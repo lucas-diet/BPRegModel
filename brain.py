@@ -19,6 +19,7 @@ class brain():
 
     def getPressure(self, data):
         s = Sensor(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        
         return s.brainSender(data)
     
     def increaseHeartRate(self):
@@ -39,4 +40,4 @@ class brain():
         print(means)
 
         if self.activity == 1:
-            pass
+            pass            

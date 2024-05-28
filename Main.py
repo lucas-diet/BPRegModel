@@ -22,7 +22,6 @@ maxTime = 5
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
 
-
 #####################
 ##### Blutdruck ##### ---> Wie solle es ca. am Ende aussehen. Dient nur als Einstieg.
 #####################
@@ -32,6 +31,7 @@ heart_rate = 10         # Schläge pro Minute
 systolic = 120          # TODO: soll noch simuliert werden mit Parametern
 diastolic = 80          # TODO: soll noch simuliert werden mit Parametern
 
+## Klasse ##
 bpSim = BloodPressure(duration, heart_rate, systolic, diastolic)
 
 #bpSim.bpPlotter()      # Plot der simulierten Blutdruckwerte
@@ -40,6 +40,7 @@ bpSim = BloodPressure(duration, heart_rate, systolic, diastolic)
 #### Herz #####
 ###############
 
+## Klasse ##
 h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 #h.hpPlotter()
@@ -48,9 +49,12 @@ h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 ##### Körpersystem #####
 ########################
 
+##### Extra Parameter #####
 lims = [-17, 17]
-lumFactor = [1, 1, 1, 1, 1, 1, 1] # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
+lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
+###########################
 
+## Klasse ##
 bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 #bs.vesselPlotter(lumFactor, lims)
@@ -64,6 +68,7 @@ bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, p
 data = [bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
 dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
 
+## Klasse ##
 s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 h.heartSimulation()
@@ -79,6 +84,7 @@ s.presPrinter(dataC)
 targetPres = 10
 activity = 10
 
+## Klasse ##
 b = brain(targetPres, heartRate, activity, radi, lumFactor, viscosity, strokeVolume, edv, esv, pres0, maxTime)
 
 s.brainSender(data)
@@ -88,6 +94,7 @@ b.setPressure(data, targetPres)
 ##### Leber #####
 #################
 
+## Klasse ##
 l = Liver(viscosity, maxTime)
 
-l.viscositySimulate('inc', 10, 0.1)
+print(l.viscositySimulate('inc', 100, 0.1))

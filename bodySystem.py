@@ -2,6 +2,7 @@
 #TODO: Widerstand in die Berechnung des Blutdrucks integieren
 #TODO: Radius über die Zeit manipulieren können
 #TODO: Leber integrieren
+#TODO: Gesamtvolumen noch integieren
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -283,7 +284,6 @@ class BodySystem():
         Args:
             val (float): Viskosität in Pa s (Pascal-Sekunde)
         """
-        
         self.viscosity = val
     
     def resistance(self, lens):
@@ -304,6 +304,7 @@ class BodySystem():
         for i in range(0, len(radius)):
             radius *= self.lumFactor[i]
             res.append((8 * self.viscosity * lens) / (radius[i]**4 * np.pi))
+
         return res
 
     def parallelResistance(self, arr):
@@ -322,6 +323,7 @@ class BodySystem():
     
     def serialResistance(self, arr):
         tmp = np.copy(arr)
+
         return np.sum(tmp)
 
     def vesselResistances(self, lens, nums):
@@ -396,6 +398,7 @@ class BodySystem():
         venaCavaCom = self.parallelResistance(venaCavaArr)
 
         res = [aortaCom, arteriesCom, arteriolesCom, capillariesCom, venulesCom, veinsCom, venaCavaCom]
+        
         return res
     
     def completeResistance(self, resis):
@@ -403,6 +406,7 @@ class BodySystem():
         compRes = 0
         for i in range(0, len(resis)):
             compRes += resis[i]
+        
         return compRes
 
     def resisPrinter(self, le, nu):
@@ -424,6 +428,7 @@ class BodySystem():
             if arr[i] == val:
                 idx = i
                 break
+        
         return idx
     
     def aortaPresSim(self, le, nu):
@@ -432,6 +437,8 @@ class BodySystem():
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         h.leftVentricle()
 
+        l = Liver(self.viscosity, self.maxTime)
+
         radiusEffect = self.radi[0] * 0.001
         resis = self.vesselResistances(le, nu)[0]
 
@@ -439,6 +446,7 @@ class BodySystem():
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
+
             p1 *= (1 - self.viscosity)
             p2 *= (1 - self.viscosity)
             

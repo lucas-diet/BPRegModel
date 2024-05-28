@@ -46,6 +46,4 @@ class Liver():
                     print(f"Time: {self.time[i]}, Viscosity reduziert zu: {self.viscosity}")
         
         else:
-            pass
-
-    
+            pass 
