@@ -34,7 +34,6 @@ class Heart():
             return True
         return False
     
-    
     def normalize(self, data):
         max_bp = np.max(data)
         min_bp = np.min(data)
@@ -53,7 +52,7 @@ class Heart():
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_RV[i-1] - self.esv)
                 self.bloodVolume_RV[i] = self.bloodVolume_RV[i-1] + dVdt * self.dt
             
-            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) * 0.15 + 3 #* (p1 + p2) # ist noch keine schöne Lösung!!
+            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) * 0.15 + 3
 
     def leftVentricle(self, shift=0):
         for i in range(0, len(self.time)):
@@ -67,7 +66,7 @@ class Heart():
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_LV[i-1] - self.esv)
                 self.bloodVolume_LV[i] = self.bloodVolume_LV[i-1] + dVdt * self.dt
             
-            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) * 0.8 + 10
+            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) * 0.95 + 10
     
     def heartSimulation(self):
         self.rightVentricle(shift=-0.5)

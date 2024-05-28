@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 
 from heart import Heart
 from bloodPressure import BloodPressure
+from liver import Liver
 
 class BodySystem():
 
-    def __init__(self, radi, lumFactor, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt=0.01):
+    def __init__(self, radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt=0.01):
         self.radi = radi
 
         self.aor_rad = radi[0]      # aorta
@@ -19,7 +20,7 @@ class BodySystem():
         self.vc_rad = radi[6]       # v.cava
         
         self.lumFactor = lumFactor
-        self.viscocity = viscocity
+        self.viscosity = viscosity
         self.heartRate = heartRate
         self.strokeVolume = strokeVolume 
         self.edv = edv 
@@ -272,14 +273,14 @@ class BodySystem():
                 plt.ylim(lims[0], lims[1])
         plt.show()
 
-    def setViscocity(self, val):
+    def setViscosity(self, val):
         """_summary_
             Legt die Viskositöt fest
         Args:
             val (float): Viskosität in Pa s (Pascal-Sekunde)
         """
         
-        self.viscocity = val
+        self.viscosity = val
     
     def resistance(self, lens):
         """_summary_
@@ -298,7 +299,7 @@ class BodySystem():
 
         for i in range(0, len(radius)):
             radius *= self.lumFactor[i]
-            res.append((8 * self.viscocity * lens) / (radius[i]**4 * np.pi))
+            res.append((8 * self.viscosity * lens) / (radius[i]**4 * np.pi))
         return res
 
     def parallelResistance(self, arr):
@@ -400,7 +401,7 @@ class BodySystem():
         return compRes
 
     def resisPrinter(self, ty, le, nu):
-        #bs = BodySystem(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        #bs = BodySystem(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
 
         print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
         resis = self.vesselResistances(ty, le, nu)
@@ -423,7 +424,7 @@ class BodySystem():
     def aortaPresSim(self, ty, le, nu):
         bp = BloodPressure()
 
-        h = Heart(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         h.leftVentricle()
 
         radiusEffect = self.radi[0] * 0.001
@@ -433,8 +434,8 @@ class BodySystem():
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
-            p1 *= (1 - self.viscocity)
-            p2 *= (1 - self.viscocity)
+            p1 *= (1 - self.viscosity)
+            p2 *= (1 - self.viscosity)
             
             self.aortaPressure[i] = self.pres0
  
@@ -453,8 +454,8 @@ class BodySystem():
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
-            p1 *= (1 - self.viscocity)
-            p2 *= (1 - self.viscocity)
+            p1 *= (1 - self.viscosity)
+            p2 *= (1 - self.viscosity)
 
             self.arteriePressure[i] = self.aortaPressure[i] * 0.95
             self.arteriePressure[i] += (radiusEffect) * (p1 + p2)
@@ -469,8 +470,8 @@ class BodySystem():
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
-            p1 *= (1 - self.viscocity)
-            p2 *= (1 - self.viscocity)
+            p1 *= (1 - self.viscosity)
+            p2 *= (1 - self.viscosity)
 
             #self.arteriolPressure[i] = self.pres0 * 0.9
 
@@ -487,8 +488,8 @@ class BodySystem():
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
-            p1 *= (1 - self.viscocity)
-            p2 *= (1 - self.viscocity)
+            p1 *= (1 - self.viscosity)
+            p2 *= (1 - self.viscosity)
 
             #self.capillarePressure[i] = self.pres0 * 0.5
             
@@ -505,8 +506,8 @@ class BodySystem():
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
-            p1 *= (1 - self.viscocity)
-            p2 *= (1 - self.viscocity)
+            p1 *= (1 - self.viscosity)
+            p2 *= (1 - self.viscosity)
 
             #self.venolePressure[i] = self.pres0 * 0.4
             
@@ -523,8 +524,8 @@ class BodySystem():
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
-            p1 *= (1 - self.viscocity)
-            p2 *= (1 - self.viscocity)
+            p1 *= (1 - self.viscosity)
+            p2 *= (1 - self.viscosity)
 
             #self.venePressure[i] = self.pres0 * 0.3
 
@@ -541,8 +542,8 @@ class BodySystem():
             t = self.time[i]
 
             p1, p2  = bp.bpFunction(t, self.heartRate)
-            p1 *= (1 - self.viscocity)
-            p2 *= (1 - self.viscocity)
+            p1 *= (1 - self.viscosity)
+            p2 *= (1 - self.viscosity)
 
             #self.vCavaPressure[i] = self.pres0 * 0.01
 
@@ -561,7 +562,7 @@ class BodySystem():
     def vpPlotter(self, ty, le, nu):
         plt.figure(figsize=(10, 6))
 
-        h = Heart(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         h.heartSimulation()
 
         self.vesselSimulator(ty, le, nu)

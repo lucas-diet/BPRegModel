@@ -9,9 +9,9 @@ from bodySystem import *
 
 class Sensor():
 
-    def __init__(self, radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt=0.01):
+    def __init__(self, radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt=0.01):
         self.radi = radi
-        self.viscocity = viscocity
+        self.viscosity = viscosity
         self.heartRate = heartRate
         self.strokeVolume = strokeVolume 
         self.edv = edv 
@@ -58,7 +58,7 @@ class Sensor():
 
         return maxs, mins, means
  
-    def presPlotter(self, data):
+    def ppPlotter(self, data):
         #data = [data1, data2, data3, data4, data5, data6, data7]
 
         for d in data:

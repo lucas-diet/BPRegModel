@@ -3,14 +3,14 @@ from sensor import *
 
 class brain():
     
-    def __init__(self, targetPres, heartRate, activity, radi, lumFactor, viscocity, strokeVolume, edv, esv, pres0, maxTime):
+    def __init__(self, targetPres, heartRate, activity, radi, lumFactor, viscosity, strokeVolume, edv, esv, pres0, maxTime):
         self.targetPres = targetPres
         self.heartRate = heartRate
         self.activity = activity
 
         self.radi = radi 
         self.lumFactor = lumFactor, 
-        self.viscocity = viscocity 
+        self.viscosity = viscosity 
         self.strokeVolume = strokeVolume 
         self.edv = edv
         self.esv = esv
@@ -19,7 +19,7 @@ class brain():
 
 
     def getPressure(self, data):
-        s = Sensor(self.radi, self.viscocity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        s = Sensor(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         return s.brainSender(data)
     
     def setPressure(self, data, targetPres):
