@@ -1,6 +1,6 @@
 
-#TODO: Widerstand in die Berechnung des Blutdrucks integieren
 #TODO: Radius über die Zeit manipulieren können
+#TODO: Widerstand -> Berechnung beinhaltet Radus :: Bei veränderung von Radius minimale veränderung bei Druck.
 #TODO: Leber integrieren
 #TODO: Gesamtvolumen noch integieren
 
@@ -302,14 +302,14 @@ class BodySystem():
         radius = np.copy(self.radi) * 0.001
 
         for i in range(0, len(radius)):
-            radius *= self.lumFactor[i]
+            radius[i] *= self.lumFactor[i]
             res.append((8 * self.viscosity * lens) / (radius[i]**4 * np.pi))
 
         return res
 
     def parallelResistance(self, arr):
         """_summary_
-
+            Kopiert den INhalt des übergebenen Arrays und wendet dann die Formel für den parallelen Widerstand.
         Args:
             arr (Array, float): Beinhaltet die Gefäßwiderstände von parallel geschalteten Gefäßen
 
@@ -322,6 +322,14 @@ class BodySystem():
         return res
     
     def serialResistance(self, arr):
+        """_summary_
+            Berechnet Widerstände von Gefäßen, die hintereinander geschaltet sind.
+        Args:
+            arr (_type_): Beinhaltet 
+
+        Returns:
+            _type_: _description_
+        """
         tmp = np.copy(arr)
 
         return np.sum(tmp)
@@ -402,6 +410,14 @@ class BodySystem():
         return res
     
     def completeResistance(self, resis):
+        """_summary_
+            Berechnet den kompletten Widerstand des Körpersystem
+        Args:
+            resis (array): Beinhaltet Widerstände aller Gefäßarten
+
+        Returns:
+            comRes (float): Kompletter Widerstand 
+        """
         resis = np.copy(resis)
         compRes = 0
         for i in range(0, len(resis)):
@@ -409,7 +425,41 @@ class BodySystem():
         
         return compRes
 
+    def normalizeResistance(self, resiArr, mi, ma):
+        """_summary_
+            Soll die Widerstände normalisieren, damit die Werte nicht mehr so extrem größ sind.
+        Args:
+            resi (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        #print(np.min(resiArr))
+        #print(np.max(resiArr))
+        min_val = np.min(resiArr)
+        max_val = np.max(resiArr)
+
+        range_min = mi
+        range_max = ma
+
+        #for i in range(0, len(resiArr)):
+            #resiArr[i] *= self.lumFactor[i]
+
+        res = []
+        for val in resiArr:  
+            norm = range_min + (val - min_val) * (range_max - range_min) / (max_val - min_val)
+            #norm *= 0.5
+            res.append(norm)
+        #print(res)
+        return res
+
     def resisPrinter(self, le, nu):
+        """_summary_
+            In dieser Funktion werden die jeweiligen Funktionen aufgerufen, um die Widerstände der Gefäße auszugeben. 
+        Args:
+            le (array): Ein Array, welches die Längen der verschiedenen Gefäßarten besitzt
+            nu (arary): Ein Array, welche die Anzahl der veschiedenen Gefäßarten besitzt
+        """
         #bs = BodySystem(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         ty = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
         print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
@@ -432,6 +482,12 @@ class BodySystem():
         return idx
     
     def aortaPresSim(self, le, nu):
+        """_summary_
+
+        Args:
+            le (array): Längen der verschiedenen Gefäßarten
+            nu (array): Anzahl der verschiedenen Gefäßarten
+        """
         bp = BloodPressure()
 
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
@@ -440,128 +496,216 @@ class BodySystem():
         l = Liver(self.viscosity, self.maxTime)
 
         radiusEffect = self.radi[0] * 0.001
-        resis = self.vesselResistances(le, nu)[0]
+        radiusEffect *= self.lumFactor[0]
+        #print('r', radiusEffect)
+
+        resis = self.vesselResistances(le, nu)
+        resisEffect = self.normalizeResistance(resis, 20, 25)[0]
+        #print("Resistances:", resis)
+        #print("Normalized Resistances:", resisEffect[0])
+        
+        #r = np.log(resis) #* -1
+        #print(resis[0] + self.radi[0])
+        #r = (1 / radiusEffect**4) * self.radi[0]
+        #print(radiusEffect, r, resis)
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1, p2 = bp.bpFunction(t, self.heartRate)
+
+            '''
+            Die Viskosität wird als Faktor verwendet, der auf die Amplitude der Sinusfunktionen angewendet wird. 
+            Eine Viskosität von 0 würde keine Auswirkung haben, während eine Viskosität von 1 die Amplitude der 
+            Druckwellen vollständig reduzieren würde.
+            '''
 
             p1 *= (1 - self.viscosity)
             p2 *= (1 - self.viscosity)
             
-            self.aortaPressure[i] = self.pres0
+            self.aortaPressure[i] =  self.pres0
  
             if h.bloodPressure_LV[i] > self.aortaPressure[i]:
                 self.aortaPressure[i] = h.bloodPressure_LV[i]
 
-            self.aortaPressure[i] += (radiusEffect) * (p1 + p2)
+            self.aortaPressure[i] += resisEffect * (p1 + p2)
+            #print(f"Time {t}: Pressure Increase = {self.aortaPressure[i]}")
 
     def arteriePresSim(self, le, nu):
+        """_summary_
+
+        Args:
+            le (array): Längen der verschiedenen Gefäßarten
+            nu (array): Anzahl der verschiedenen Gefäßarten
+        """
         bp = BloodPressure()
 
         radiusEffect = self.radi[1] * 0.001
-        resis = self.vesselResistances(le, nu)[1]
+        radiusEffect *= self.lumFactor[1]
+
+        resis = self.vesselResistances(le, nu)
+        resisEffect = self.normalizeResistance(resis, 15, 20)[1]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1, p2 = bp.bpFunction(t, self.heartRate)
             p1 *= (1 - self.viscosity)
             p2 *= (1 - self.viscosity)
-
-            self.arteriePressure[i] = self.aortaPressure[i] * 0.95
-            self.arteriePressure[i] += (radiusEffect) * (p1 + p2)
+              
+            self.arteriePressure[i] = self.aortaPressure[i] * 0.85
+            self.arteriePressure[i] += (resisEffect) * (p1 + p2) * 0.3
 
     def arteriolePresSim(self, le, nu):
+        """_summary_
+
+        Args:
+            le (array): Längen der verschiedenen Gefäßarten
+            nu (array): Anzahl der verschiedenen Gefäßarten
+        """
         bp = BloodPressure()
 
         radiusEffect = self.radi[2] * 0.001
-        resis = self.vesselResistances(le, nu)[2]
+        radiusEffect *= self.lumFactor[2]
+
+        #resis = self.normalizeResistance(self.vesselResistances(le, nu))[2] * 0.1
+        #r = np.log(resis) * -1
+
+        resis = self.vesselResistances(le, nu)
+        resisEffect = self.normalizeResistance(resis, 5, 10)[2]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1, p2 = bp.bpFunction(t, self.heartRate)
             p1 *= (1 - self.viscosity)
             p2 *= (1 - self.viscosity)
 
             #self.arteriolPressure[i] = self.pres0 * 0.9
 
-            self.arteriolPressure[i] = self.arteriePressure[i] * 0.9
-            self.arteriolPressure[i] += (radiusEffect) * (p1 + p2)
+            self.arteriolPressure[i] = self.arteriePressure[i] * 0.5
+            self.arteriolPressure[i] += (resisEffect) * (p1 + p2) + 10
 
     def capillarePresSim(self, le, nu):
+        """_summary_
+
+        Args:
+            le (array): Längen der verschiedenen Gefäßarten
+            nu (array): Anzahl der verschiedenen Gefäßarten
+        """
         bp = BloodPressure()
 
         radiusEffect = self.radi[3] * 0.001
-        resis = self.vesselResistances(le, nu)[3]
+        radiusEffect *= self.lumFactor[3]
+
+        #resis = self.normalizeResistance(self.vesselResistances(le, nu))[3] * 0.1 
+        #r = np.log(resis) * -1
+
+        resis = self.vesselResistances(le, nu)
+        resisEffect = self.normalizeResistance(resis, 3, 5)[3]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1, p2 = bp.bpFunction(t, self.heartRate)
             p1 *= (1 - self.viscosity)
             p2 *= (1 - self.viscosity)
 
             #self.capillarePressure[i] = self.pres0 * 0.5
             
             self.capillarePressure[i] = self.arteriolPressure[i] * 0.5
-            self.capillarePressure[i] += (radiusEffect) * (p1 + p2)
+            self.capillarePressure[i] += (resisEffect) * (p1 + p2) + 10
 
     def venolePresSim(self, le, nu):
+        """_summary_
+
+        Args:
+            le (array): Längen der verschiedenen Gefäßarten
+            nu (array): Anzahl der verschiedenen Gefäßarten
+        """
         bp = BloodPressure()
 
         radiusEffect = self.radi[4] * 0.001
-        resis = self.vesselResistances(le, nu)[4]
+        radiusEffect *= self.lumFactor[4]
+
+        #resis = self.normalizeResistance(self.vesselResistances(le, nu))[4] * 0.01
+        #r = np.log(resis) * -1
+
+        resis = self.vesselResistances(le, nu)
+        resisEffect = self.normalizeResistance(resis, 2, 3)[4]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1, p2 = bp.bpFunction(t, self.heartRate)
             p1 *= (1 - self.viscosity)
             p2 *= (1 - self.viscosity)
 
             #self.venolePressure[i] = self.pres0 * 0.4
             
             self.venolePressure[i] = self.capillarePressure[i] * 0.4
-            self.venolePressure[i] += (radiusEffect) * (p1 + p2)
+            self.venolePressure[i] += (resisEffect) * (p1 + p2) + 5
             
     def venePresSim(self, le, nu):
+        """_summary_
+
+        Args:
+            le (array): Längen der verschiedenen Gefäßarten
+            nu (array): Anzahl der verschiedenen Gefäßarten
+        """
         bp = BloodPressure()
 
         radiusEffect = self.radi[5] * 0.001
-        resis = self.vesselResistances(le, nu)[5]
+        radiusEffect *= self.lumFactor[5]
+
+        #resis = self.normalizeResistance(self.vesselResistances(le, nu))[5] * 0.1
+        #r = np.log(resis) * -1
+
+        resis = self.vesselResistances(le, nu)
+        resisEffect = self.normalizeResistance(resis, 1, 2)[5]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1, p2 = bp.bpFunction(t, self.heartRate)
             p1 *= (1 - self.viscosity)
             p2 *= (1 - self.viscosity)
 
             #self.venePressure[i] = self.pres0 * 0.3
 
             self.venePressure[i] = self.venolePressure[i] * 0.25
-            self.venePressure[i] += (radiusEffect) * (p1 + p2) * 0.25 + 4
+            self.venePressure[i] += (resisEffect) * (p1 + p2) + 4
 
     def vCavaPresSim(self, le, nu):
+        """_summary_
+
+        Args:
+            le (array): Längen der verschiedenen Gefäßarten
+            nu (array): Anzahl der verschiedenen Gefäßarten
+        """
         bp = BloodPressure()
 
         radiusEffect = self.radi[6] * 0.001
-        resis = self.vesselResistances(le, nu)[6]
+        radiusEffect *= self.lumFactor[6]
+
+        #resis = self.normalizeResistance(self.vesselResistances(le, nu))[6] * 0.8
+        #r = np.log(resis) * -1
+        #print(resis)
+
+        resis = self.vesselResistances(le, nu)
+        resisEffect = self.normalizeResistance(resis, 0, 1)[6]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2  = bp.bpFunction(t, self.heartRate)
+            p1, p2 = bp.bpFunction(t, self.heartRate)
             p1 *= (1 - self.viscosity)
             p2 *= (1 - self.viscosity)
 
             #self.vCavaPressure[i] = self.pres0 * 0.01
 
-            self.vCavaPressure[i] = self.venePressure[i] * 0.01
-            self.vCavaPressure[i] += (radiusEffect) * (p1 + p2) * 0.1 + 5
+            self.vCavaPressure[i] = self.venePressure[i]
+            self.vCavaPressure[i] += (resisEffect) * (p1 + p2) - 4
 
     def vesselSimulator(self, le, nu):
         self.aortaPresSim(le, nu)

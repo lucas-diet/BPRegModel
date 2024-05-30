@@ -51,7 +51,7 @@ h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 ##### Extra Parameter #####
 lims = [-17, 17]
-lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
+lumFactor = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 ###########################
 
 ## Klasse ##
@@ -59,7 +59,7 @@ bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, p
 
 #bs.vesselPlotter(lumFactor, lims)
 #bs.resisPrinter(lens, nums)
-#bs.vpPlotter(lens, nums)
+bs.vpPlotter(lens, nums)
 
 ##################
 ##### Sensor #####
@@ -74,7 +74,7 @@ s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 h.heartSimulation()
 bs.vesselSimulator(lens, nums)
 
-#s.ppPlotter(data)
+s.ppPlotter(data)
 s.presPrinter(dataC)
 
 ################
@@ -90,6 +90,8 @@ b = brain(targetPres, heartRate, activity, radi, lumFactor, viscosity, strokeVol
 s.brainSender(data)
 b.setPressure(data, targetPres)
 
+maxs, mins, means = b.getPressure(data)
+
 #################
 ##### Leber #####
 #################
@@ -97,4 +99,4 @@ b.setPressure(data, targetPres)
 ## Klasse ##
 l = Liver(viscosity, maxTime)
 
-print(l.viscositySimulate('inc', 100, 0.1))
+#l.viscositySimulate('inc', 50, 0.1)

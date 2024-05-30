@@ -35,9 +35,8 @@ class brain():
         mins = isPres[1]
         means = isPres[2]
 
-        print(maxs)
-        print(mins)
-        print(means)
+        #print(maxs)
+        #print(mins)
+        #print(means)
 
-        if self.activity == 1:
-            pass            
+        

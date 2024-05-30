@@ -25,8 +25,8 @@ class Sensor():
         systolicPeaks, _ = find_peaks(data)
         diastolicPeaks, _ = find_peaks(-data)
 
-        filteredSystolicPeaks = systolicPeaks[0::2]  # Wähle jeden zweiten systolischen Peak
-        filteredDiastolicPeaks = diastolicPeaks[1::2]  # Wähle jeden zweiten diastolischen Peak
+        filteredSystolicPeaks = systolicPeaks[0::1]  # Wähle jeden zweiten systolischen Peak
+        filteredDiastolicPeaks = diastolicPeaks[0::1]  # Wähle jeden zweiten diastolischen Peak
 
         return filteredSystolicPeaks, filteredDiastolicPeaks
     
@@ -44,7 +44,7 @@ class Sensor():
         mins = []
         means = []
 
-        for d  in data:
+        for d in data:
 
             sys, _ = self.findPeak(d)
             _, dia = self.findPeak(d)
