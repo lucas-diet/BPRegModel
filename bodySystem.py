@@ -425,7 +425,7 @@ class BodySystem():
         
         return compRes
 
-    def normalizeResistance(self, resiArr, mi, ma):
+    def normalizeResistance(self, resiArr):
         """_summary_
             Soll die Widerstände normalisieren, damit die Werte nicht mehr so extrem größ sind.
         Args:
@@ -439,8 +439,8 @@ class BodySystem():
         min_val = np.min(resiArr)
         max_val = np.max(resiArr)
 
-        range_min = mi
-        range_max = ma
+        range_min = 0
+        range_max = 1
 
         #for i in range(0, len(resiArr)):
             #resiArr[i] *= self.lumFactor[i]
@@ -493,14 +493,12 @@ class BodySystem():
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         h.leftVentricle()
 
-        l = Liver(self.viscosity, self.maxTime)
-
         radiusEffect = self.radi[0] * 0.001
         radiusEffect *= self.lumFactor[0]
         #print('r', radiusEffect)
 
         resis = self.vesselResistances(le, nu)
-        resisEffect = self.normalizeResistance(resis, 20, 25)[0]
+        resisEffect = self.normalizeResistance(resis)[0] + 15
         #print("Resistances:", resis)
         #print("Normalized Resistances:", resisEffect[0])
         
@@ -544,7 +542,7 @@ class BodySystem():
         radiusEffect *= self.lumFactor[1]
 
         resis = self.vesselResistances(le, nu)
-        resisEffect = self.normalizeResistance(resis, 15, 20)[1]
+        resisEffect = self.normalizeResistance(resis)[1]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -554,7 +552,7 @@ class BodySystem():
             p2 *= (1 - self.viscosity)
               
             self.arteriePressure[i] = self.aortaPressure[i] * 0.85
-            self.arteriePressure[i] += (resisEffect) * (p1 + p2) * 0.3
+            self.arteriePressure[i] += resisEffect * (p1 + p2) * 0.3
 
     def arteriolePresSim(self, le, nu):
         """_summary_
@@ -572,7 +570,7 @@ class BodySystem():
         #r = np.log(resis) * -1
 
         resis = self.vesselResistances(le, nu)
-        resisEffect = self.normalizeResistance(resis, 5, 10)[2]
+        resisEffect = self.normalizeResistance(resis)[2]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -584,9 +582,9 @@ class BodySystem():
             #self.arteriolPressure[i] = self.pres0 * 0.9
 
             self.arteriolPressure[i] = self.arteriePressure[i] * 0.5
-            self.arteriolPressure[i] += (resisEffect) * (p1 + p2) + 10
+            self.arteriolPressure[i] += resisEffect * (p1 + p2) + 10
 
-    def capillarePresSim(self, le, nu):
+    def capillarePresSim(self, le, nu, prop, interval, change=0):
         """_summary_
 
         Args:
@@ -598,23 +596,28 @@ class BodySystem():
         radiusEffect = self.radi[3] * 0.001
         radiusEffect *= self.lumFactor[3]
 
-        #resis = self.normalizeResistance(self.vesselResistances(le, nu))[3] * 0.1 
-        #r = np.log(resis) * -1
+        l = Liver(self.viscosity, self.maxTime)
 
         resis = self.vesselResistances(le, nu)
-        resisEffect = self.normalizeResistance(resis, 3, 5)[3]
+        resisEffect = self.normalizeResistance(resis)[3]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2 = bp.bpFunction(t, self.heartRate)
-            p1 *= (1 - self.viscosity)
-            p2 *= (1 - self.viscosity)
+
+            if change != 0:
+                p1 *= (1 - l.viscositySimulate(prop, interval, change))
+                p2 *= (1 - l.viscositySimulate(prop, interval, change))
+            
+            else:
+                p1 *= (1 - self.viscosity)
+                p2 *= (1 - self.viscosity)
 
             #self.capillarePressure[i] = self.pres0 * 0.5
             
             self.capillarePressure[i] = self.arteriolPressure[i] * 0.5
-            self.capillarePressure[i] += (resisEffect) * (p1 + p2) + 10
+            self.capillarePressure[i] += resisEffect * (p1 + p2) + 10
 
     def venolePresSim(self, le, nu):
         """_summary_
@@ -632,7 +635,7 @@ class BodySystem():
         #r = np.log(resis) * -1
 
         resis = self.vesselResistances(le, nu)
-        resisEffect = self.normalizeResistance(resis, 2, 3)[4]
+        resisEffect = self.normalizeResistance(resis)[4]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -644,7 +647,7 @@ class BodySystem():
             #self.venolePressure[i] = self.pres0 * 0.4
             
             self.venolePressure[i] = self.capillarePressure[i] * 0.4
-            self.venolePressure[i] += (resisEffect) * (p1 + p2) + 5
+            self.venolePressure[i] += resisEffect * (p1 + p2) + 5
             
     def venePresSim(self, le, nu):
         """_summary_
@@ -662,7 +665,7 @@ class BodySystem():
         #r = np.log(resis) * -1
 
         resis = self.vesselResistances(le, nu)
-        resisEffect = self.normalizeResistance(resis, 1, 2)[5]
+        resisEffect = self.normalizeResistance(resis)[5]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -674,7 +677,7 @@ class BodySystem():
             #self.venePressure[i] = self.pres0 * 0.3
 
             self.venePressure[i] = self.venolePressure[i] * 0.25
-            self.venePressure[i] += (resisEffect) * (p1 + p2) + 4
+            self.venePressure[i] += resisEffect * (p1 + p2) + 4
 
     def vCavaPresSim(self, le, nu):
         """_summary_
@@ -693,7 +696,7 @@ class BodySystem():
         #print(resis)
 
         resis = self.vesselResistances(le, nu)
-        resisEffect = self.normalizeResistance(resis, 0, 1)[6]
+        resisEffect = self.normalizeResistance(resis)[6]
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -705,24 +708,24 @@ class BodySystem():
             #self.vCavaPressure[i] = self.pres0 * 0.01
 
             self.vCavaPressure[i] = self.venePressure[i]
-            self.vCavaPressure[i] += (resisEffect) * (p1 + p2) - 4
+            self.vCavaPressure[i] += resisEffect * (p1 + p2) - 4
 
-    def vesselSimulator(self, le, nu):
+    def vesselSimulator(self, le, nu, prop, interval, change):
         self.aortaPresSim(le, nu)
         self.arteriePresSim(le, nu)
         self.arteriolePresSim(le, nu)
-        self.capillarePresSim(le, nu)
+        self.capillarePresSim(le, nu, prop, interval, change)
         self.venolePresSim(le, nu)
         self.venePresSim(le, nu)
         self.vCavaPresSim(le, nu)
 
-    def vpPlotter(self, le, nu):
+    def vpPlotter(self, le, nu, prop, interval, change):
         plt.figure(figsize=(10, 6))
         
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
         h.heartSimulation()
 
-        self.vesselSimulator(le, nu)
+        self.vesselSimulator(le, nu, prop, interval, change)
 
         plt.plot(self.time, self.aortaPressure, label='Aorta Druck (mmHg)')
         plt.plot(self.time, self.arteriePressure, label='Arterie Druck (mmHg)')

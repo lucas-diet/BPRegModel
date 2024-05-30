@@ -11,7 +11,7 @@ from liver import *
 ####################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
-viscosity = 0.1                 # 0 keine Auswirkung; 1 die Amplitude ist vollständig reduzieren. -> != 0
+viscosity = 0.5                 # 0 keine Auswirkung; 1 die Amplitude ist vollständig reduzieren. -> != 0
 heartRate = 70
 strokeVolume = 70               # Schlagvolumen 
 edv = 110                       # Enddiastolische Volumen
@@ -21,6 +21,10 @@ maxTime = 5
 
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
+
+prop = 'dec'                    # 'inc' zum erhöhen ; 'dec' zum verringern
+interval = 3                    # Zeitschritte, wo verändert wird
+change = 0.1                    # Wert um den verändert wird
 
 #####################
 ##### Blutdruck ##### ---> Wie solle es ca. am Ende aussehen. Dient nur als Einstieg.
@@ -51,7 +55,7 @@ h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 ##### Extra Parameter #####
 lims = [-17, 17]
-lumFactor = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
+lumFactor = [1, 1, 1, 1, 1, 1, 0.1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 ###########################
 
 ## Klasse ##
@@ -59,7 +63,7 @@ bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, p
 
 #bs.vesselPlotter(lumFactor, lims)
 #bs.resisPrinter(lens, nums)
-bs.vpPlotter(lens, nums)
+bs.vpPlotter(lens, nums, prop, interval, change)
 
 ##################
 ##### Sensor #####
@@ -72,9 +76,9 @@ dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePr
 s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 h.heartSimulation()
-bs.vesselSimulator(lens, nums)
+bs.vesselSimulator(lens, nums, prop, interval, change)
 
-s.ppPlotter(data)
+#ås.ppPlotter(data)
 s.presPrinter(dataC)
 
 ################

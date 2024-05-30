@@ -20,7 +20,7 @@ class Liver():
     def increaseViscosity(self, inc):
         self.viscosity += inc
         self.viscosity = round(self.viscosity, 2)
-        if self.viscosity < 0:
+        if self.viscosity <= 0:
             self.viscosity = 0.1
         elif self.viscosity >= 1:
             self.viscosity = 0.9
@@ -28,7 +28,7 @@ class Liver():
     def decreaseViscosity(self, dec):
         self.viscosity -= dec
         self.viscosity = round(self.viscosity, 2)
-        if self.viscosity < 0:
+        if self.viscosity <= 0:
             self.viscosity = 0.1
         elif self.viscosity >= 1:
             self.viscosity = 0.9
@@ -38,12 +38,14 @@ class Liver():
             if prop == 'inc':
                 for i in range(interval, len(self.time), interval):
                     self.increaseViscosity(change)
-                    print(f"Time: {self.time[i]}, Viscosity erhöht zu: {self.viscosity}")
+                    print(f"Time: {self.time[i]}, Viskosität erhöht zu: {self.viscosity}")
+                    return self.viscosity
 
             elif prop == 'dec':
                 for i in range(interval, len(self.time), interval):
                     self.decreaseViscosity(change)
-                    print(f"Time: {self.time[i]}, Viscosity reduziert zu: {self.viscosity}")
+                    print(f"Time: {self.time[i]}, Viskosität reduziert zu: {self.viscosity}")
+                    return self.viscosity
         
         else:
-            pass 
+            pass
