@@ -22,7 +22,7 @@ maxTime = 5
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
 
-prop = 'dec'                    # 'inc' zum erhöhen ; 'dec' zum verringern
+prop = 'inc'                    # 'inc' zum erhöhen ; 'dec' zum verringern
 interval = 3                    # Zeitschritte, wo verändert wird
 change = 0.1                    # Wert um den verändert wird
 
