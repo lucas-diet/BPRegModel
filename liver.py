@@ -38,13 +38,13 @@ class Liver():
             if prop == 'inc':
                 for i in range(interval, len(self.time), interval):
                     self.increaseViscosity(change)
-                    print(f"Time: {self.time[i]}, Viskosität erhöht zu: {self.viscosity}")
+                    #print(f"Time: {self.time[i]}, Viskosität erhöht zu: {self.viscosity}")
                     return self.viscosity
 
             elif prop == 'dec':
                 for i in range(interval, len(self.time), interval):
                     self.decreaseViscosity(change)
-                    print(f"Time: {self.time[i]}, Viskosität reduziert zu: {self.viscosity}")
+                    #print(f"Time: {self.time[i]}, Viskosität reduziert zu: {self.viscosity}")
                     return self.viscosity
         
         else:

@@ -17,7 +17,9 @@ strokeVolume = 70               # Schlagvolumen
 edv = 110                       # Enddiastolische Volumen
 esv = 60                        # Endsystolisches Volumen
 pres0 = 70                      
-maxTime = 5
+maxTime = 10
+
+totalVolume = 200                # ml
 
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
@@ -55,11 +57,11 @@ h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 ##### Extra Parameter #####
 lims = [-17, 17]
-lumFactor = [1, 1, 1, 1, 1, 1, 0.1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
+lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 ###########################
 
 ## Klasse ##
-bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
+bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
 
 #bs.vesselPlotter(lumFactor, lims)
 #bs.resisPrinter(lens, nums)
@@ -78,7 +80,7 @@ s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 h.heartSimulation()
 bs.vesselSimulator(lens, nums, prop, interval, change)
 
-#ås.ppPlotter(data)
+#s.ppPlotter(data)
 s.presPrinter(dataC)
 
 ################
