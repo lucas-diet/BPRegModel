@@ -35,17 +35,15 @@ class Sensor():
         return map
     
     def brainSender(self, data):
-
         maxs = []
         mins = []
         means = []
 
         for d in data:
-
             sys, _ = self.findPeak(d)
             _, dia = self.findPeak(d)
             
-            self.calculatePressure(d, sys, dia)
+            #self.calculatePressure(d, sys, dia)
             map = self.calculatePressure(d, sys, dia)
 
             maxs.append(np.mean(d[sys]))
@@ -70,6 +68,10 @@ class Sensor():
         plt.ylabel('mmHg')
         plt.grid(True)
         plt.show()
+
+    def findPressureTimePoint(self, presData, timeStemp):
+        pressureTime = presData[timeStemp]
+        return pressureTime
     
     def presPrinter(self, data):
         types = ['Rechter Ventrikel', 'Linker Ventrikel', 'Aorta', 'Arterie', 'Arteriole', 'Kapillare', 'Venole', 'Vene', 'V. Cava']
@@ -85,3 +87,7 @@ class Sensor():
             print('Systolischer Druck: ', np.mean(d[sys]), 'mmHg')
             print('Diastolischer Druck: ', np.mean(d[dia]), 'mmHg')
             print('Mittlerer Druck', map, 'mmHg')
+
+    def printPressureTimePoint(self, presData, timeStemp):
+        print('\n', '#####', 'Blutdruck zu einem Zeitpunkt', '#####', '\n')
+        print(f'Blutdruck bei {self.time[timeStemp]}: ', self.findPressureTimePoint(presData, timeStemp), 'mmHg')

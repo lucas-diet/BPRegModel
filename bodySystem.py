@@ -277,14 +277,6 @@ class BodySystem():
                 plt.xlim(lims[0], lims[1])
                 plt.ylim(lims[0], lims[1])
         plt.show()
-
-    def setViscosity(self, val):
-        """_summary_
-            Legt die Viskositöt fest
-        Args:
-            val (float): Viskosität in Pa s (Pascal-Sekunde)
-        """
-        self.viscosity = val
     
     def resistance(self, lens):
         """_summary_
@@ -434,23 +426,17 @@ class BodySystem():
         Returns:
             _type_: _description_
         """
-        #print(np.min(resiArr))
-        #print(np.max(resiArr))
         min_val = np.min(resiArr)
         max_val = np.max(resiArr)
 
         range_min = 0
         range_max = 1
 
-        #for i in range(0, len(resiArr)):
-            #resiArr[i] *= self.lumFactor[i]
-
         res = []
         for val in resiArr:  
             norm = range_min + (val - min_val) * (range_max - range_min) / (max_val - min_val)
-            #norm *= 0.5
             res.append(norm)
-        #print(res)
+
         return res
 
     def resisPrinter(self, le, nu):
@@ -513,7 +499,7 @@ class BodySystem():
                 self.aortaPressure[i] = h.bloodPressure_LV[i] + volumeEffect + viskosityEffect
             
             volumeEffect = volumePressureConstant * self.totalVolume
-            self.aortaPressure[i] += resisEffect * (p1 + 1.1 * p2) + volumeEffect + viskosityEffect
+            self.aortaPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect
 
     def arteriePresSim(self, le, nu):
         """_summary_
@@ -718,13 +704,3 @@ class BodySystem():
         plt.grid(True)
         plt.legend()
         plt.show()
-"""
-Parameter (Radien, in µm): 
-    1. aorta
-    2. arteries
-    3. arterioles
-    4. capillaries
-    5. venules
-    6. veins
-    7. venaCava 
-"""

@@ -11,15 +11,15 @@ from liver import *
 ####################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
-viscosity = 50                 # Wert zwischen 0 und 100
+viscosity = 50                                 # Wert zwischen 0 und 100
 heartRate = 70
-strokeVolume = 70               # Schlagvolumen 
-edv = 110                       # Enddiastolische Volumen
-esv = 60                        # Endsystolisches Volumen
+edv = 110                                      # Enddiastolische Volumen
+esv = 60                                       # Endsystolisches Volumen
+strokeVolume = edv - esv              # Schlagvolumen
 pres0 = 70                      
 maxTime = 10
 
-totalVolume = 100                # ml
+totalVolume = 100                # in ml
 
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
@@ -75,6 +75,7 @@ bs.vpPlotter(lens, nums, prop, interval, change)
 data = [bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
 dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
 
+
 ## Klasse ##
 s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
@@ -83,6 +84,12 @@ bs.vesselSimulator(lens, nums, prop, interval, change)
 
 #s.ppPlotter(data)
 s.presPrinter(dataC)
+
+### Findet den Blutdruck zu einem bestimmten Zeitpunkt ###
+presData = data[0]
+timeStemp = 1
+
+s.printPressureTimePoint(presData, timeStemp)
 
 ################
 ##### Hirn #####
