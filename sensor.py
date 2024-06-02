@@ -3,10 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 
-from bloodPressure import *
-from heart import *
-from bodySystem import *
-
 class Sensor():
 
     def __init__(self, radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt=0.01):

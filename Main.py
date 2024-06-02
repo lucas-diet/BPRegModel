@@ -11,7 +11,7 @@ from liver import *
 ####################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]
-viscosity = 0.5                 # 0 keine Auswirkung; 1 die Amplitude ist vollständig reduzieren. -> != 0
+viscosity = 50                 # Wert zwischen 0 und 100
 heartRate = 70
 strokeVolume = 70               # Schlagvolumen 
 edv = 110                       # Enddiastolische Volumen
@@ -19,14 +19,15 @@ esv = 60                        # Endsystolisches Volumen
 pres0 = 70                      
 maxTime = 10
 
-totalVolume = 200                # ml
+totalVolume = 100                # ml
 
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300] # in mm
 
+#### Parameter für die Leber ##### 
 prop = 'inc'                    # 'inc' zum erhöhen ; 'dec' zum verringern
-interval = 3                    # Zeitschritte, wo verändert wird
-change = 0.1                    # Wert um den verändert wird
+interval = 100                    # Zeitschritte, wo verändert wird
+change = 0                      # Wert um den verändert wird, wenn 0 dann keine Veränderung
 
 #####################
 ##### Blutdruck ##### ---> Wie solle es ca. am Ende aussehen. Dient nur als Einstieg.

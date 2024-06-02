@@ -1,8 +1,6 @@
 
 #TODO: Noch in das System einbinden!!
 
-from decimal import Decimal as dcm
-
 from sensor import *
 
 class Liver():
@@ -20,18 +18,18 @@ class Liver():
     def increaseViscosity(self, inc):
         self.viscosity += inc
         self.viscosity = round(self.viscosity, 2)
-        if self.viscosity <= 0:
-            self.viscosity = 0.1
-        elif self.viscosity >= 1:
-            self.viscosity = 0.9
+        #if self.viscosity <= 0:
+        #    self.viscosity = 1
+        #elif self.viscosity >= 100:
+        #    self.viscosity = 100
 
     def decreaseViscosity(self, dec):
         self.viscosity -= dec
         self.viscosity = round(self.viscosity, 2)
-        if self.viscosity <= 0:
-            self.viscosity = 0.1
-        elif self.viscosity >= 1:
-            self.viscosity = 0.9
+        #if self.viscosity <= 0:
+        #    self.viscosity = 1
+        #elif self.viscosity >= 100:
+        #    self.viscosity = 100
     
     def viscositySimulate(self, prop, interval, change):
         if interval != 0:
