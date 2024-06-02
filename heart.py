@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 class Heart():
 
-    def __init__(self, radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt=0.01,):
+    def __init__(self, radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime, dt=0.01,):
         self.radi = radi
         self.viscocity = viscocity
         self.heartRate = heartRate
@@ -14,6 +14,7 @@ class Heart():
         self.edv = edv
         self.esv = esv
         self.pres0 = pres0
+        self.totalVolume = totalVolume
         self.maxTime = maxTime
 
         self.time = np.arange(0, self.maxTime, dt)
@@ -40,12 +41,13 @@ class Heart():
 		
         normalized_bp = (data - min_bp) / (max_bp - min_bp)  # Auf [0, 1] normalisieren
         normalized_bp = normalized_bp * (self.esv - self.edv) + self.edv  # Skalieren auf [diastolic, systolic]
-    
+
     def rightVentricle(self, shift):
+
         for i in range(0,len(self.time)):
             t = self.time[i]
             elasticity = 1 + np.sin(2 * np.pi * self.heartRate * (t - shift) / 60)
-            
+
             if i == 0:
                 self.bloodVolume_RV[i] = self.edv
             else:
@@ -55,10 +57,11 @@ class Heart():
             self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) * 0.15 + 3
 
     def leftVentricle(self, shift=0):
+
         for i in range(0, len(self.time)):
             t = self.time[i]
             elasticity = 1 + np.sin(2 * np.pi * self.heartRate * (t - shift) / 60)
-            
+
             if i == 0:
                 self.bloodVolume_LV[i] = self.edv
 
@@ -66,7 +69,7 @@ class Heart():
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_LV[i-1] - self.esv)
                 self.bloodVolume_LV[i] = self.bloodVolume_LV[i-1] + dVdt * self.dt
             
-            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) * 0.95 + 10
+            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) * 0.95 + 20
     
     def heartSimulation(self):
         self.rightVentricle(shift=-0.5)

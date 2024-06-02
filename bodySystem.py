@@ -476,7 +476,7 @@ class BodySystem():
         """
         bp = BloodPressure()
 
-        h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
         h.leftVentricle()
 
         radiusEffect = self.radi[0] * 0.001
@@ -685,7 +685,7 @@ class BodySystem():
     def vpPlotter(self, le, nu, prop, interval, change):
         plt.figure(figsize=(10, 6))
         
-        h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
         h.heartSimulation()
 
         self.vesselSimulator(le, nu, prop, interval, change)
