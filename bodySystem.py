@@ -506,7 +506,7 @@ class BodySystem():
             if h.bloodPressure_LV[i] > self.aortaPressure[i]:
                 self.aortaPressure[i] = h.bloodPressure_LV[i] + volumeEffect + viskosityEffect
             
-            self.aortaPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect
+            self.aortaPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect 
 
     def arteriePresSim(self, le, nu):
         """_summary_
@@ -538,7 +538,7 @@ class BodySystem():
             volumeEffect = volumePressureConstant * self.totalVolume
               
             self.arteriePressure[i] = self.aortaPressure[i] * 0.8
-            self.arteriePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect#* 0.3
+            self.arteriePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect #* 0.3
 
     def arteriolePresSim(self, le, nu):
         """_summary_
@@ -570,7 +570,7 @@ class BodySystem():
             p1, p2 = bp.bpFunction(t, self.heartRate)
 
             self.arteriolPressure[i] = self.arteriePressure[i] * 0.5
-            self.arteriolPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect#+ 10
+            self.arteriolPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect #+ 10
 
     def capillarePresSim(self, le, nu, prop, interval, change=0):
         """_summary_

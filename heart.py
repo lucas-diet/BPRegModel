@@ -59,7 +59,7 @@ class Heart():
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_RV[i-1] - self.esv)
                 self.bloodVolume_RV[i] = self.bloodVolume_RV[i-1] + dVdt * self.dt
             
-            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) + volumeEffect + viskosityEffect + 3
+            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) * 0.15 + volumeEffect + viskosityEffect + 3
 
     def leftVentricle(self, shift=0):
 
