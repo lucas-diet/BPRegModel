@@ -30,7 +30,7 @@ class brain():
 
     def decreaseHeartRate(self):
         """_summary_
-            Minimiert den herzschlag um 1
+            Minimiert den Herzschlag um 1
         """
         self.heartRate -= 1
     

@@ -61,7 +61,7 @@ class BloodPressure():
     
     def bpFunction(self, t, heartRate):
         """_summary_
-
+            Liefert die Grundstruktur für die Kurve des Blutdrucks.
         Args:
             t (_type_): Zeit
             heartRate (int): Herzfrequenz

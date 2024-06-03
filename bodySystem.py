@@ -769,4 +769,9 @@ class BodySystem():
         plt.show()
     
     def getPressurs(self):
+        """_summary_
+            Es werden alle Gefäßarten zurückgeliefert, mit ihren Werten.
+        Returns:
+            _type_: Alle Gefäßarten
+        """
         return self.aortaPressure, self.arteriePressure, self.arteriolPressure, self.capillarePressure, self.venolePressure, self.venePressure, self.vCavaPressure

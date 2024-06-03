@@ -40,7 +40,7 @@ diastolic = 80          # TODO: soll noch simuliert werden mit Parametern
 ## Klasse ##
 bpSim = BloodPressure(duration, heartRate, systolic, diastolic)
 
-#bpSim.bpPlotter()      # Plot der simulierten Blutdruckwerte
+#bpSim.bpPlotter()      # Ausführbare Funktion
 
 ###############
 #### Herz #####
@@ -63,9 +63,9 @@ lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpas
 ## Klasse ##
 bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
 
-#bs.vesselPlotter(lumFactor, lims)
-#bs.resisPrinter(lens, nums)
-bs.vpPlotter(lens, nums, prop, interval, change)
+#bs.vesselPlotter(lumFactor, lims)                  # Ausführbare Funktion
+#bs.resisPrinter(lens, nums)                        # Ausführbare Funktion
+bs.vpPlotter(lens, nums, prop, interval, change)    # Ausführbare Funktion
 
 ##################
 ##### Sensor #####
@@ -82,14 +82,14 @@ s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 h.heartSimulation()
 bs.vesselSimulator(lens, nums, prop, interval, change)
 
-#s.ppPlotter(data)
-s.presPrinter(dataC)
+#s.ppPlotter(data)                                  # Ausführbare Funktion
+s.presPrinter(dataC)                                # Ausführbare Funktion
 
 ### Findet den Blutdruck zu einem bestimmten Zeitpunkt ###
-presData = data[0]
+presData = data[0]                              # data[x] x = {0,1,2,3,4,5,6}
 timeStemp = 1
 
-s.printPressureTimePoint(presData, timeStemp)
+s.printPressureTimePoint(presData, timeStemp)          # Ausführbare Funktion
 
 ################
 ##### Hirn #####

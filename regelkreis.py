@@ -55,6 +55,7 @@ s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 data = [bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
 dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
 ###########################
+###########################
 
 h.heartSimulation()
 bs.vesselSimulator(lens, nums, prop, interval, change)

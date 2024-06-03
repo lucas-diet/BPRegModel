@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 
 class Heart():
 
-    def __init__(self, radi, viscocity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime, dt=0.01,):
+    def __init__(self, radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime, dt=0.01,):
         self.radi = radi
-        self.viscocity = viscocity
+        self.viscosity = viscosity
         self.heartRate = heartRate
         self.strokeVolume = strokeVolume
         self.dt = dt
@@ -44,6 +44,11 @@ class Heart():
 
     def rightVentricle(self, shift):
 
+        viskosityEffect = self.viscosity / 100
+        
+        volumePressureConstant = 0.01
+        volumeEffect = volumePressureConstant * self.totalVolume
+
         for i in range(0,len(self.time)):
             t = self.time[i]
             elasticity = 1 + np.sin(2 * np.pi * self.heartRate * (t - shift) / 60)
@@ -54,9 +59,14 @@ class Heart():
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_RV[i-1] - self.esv)
                 self.bloodVolume_RV[i] = self.bloodVolume_RV[i-1] + dVdt * self.dt
             
-            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) * 0.15 + 3
+            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) + volumeEffect + viskosityEffect + 3
 
     def leftVentricle(self, shift=0):
+
+        viskosityEffect = self.viscosity / 100
+        
+        volumePressureConstant = 0.01
+        volumeEffect = volumePressureConstant * self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -69,7 +79,7 @@ class Heart():
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_LV[i-1] - self.esv)
                 self.bloodVolume_LV[i] = self.bloodVolume_LV[i-1] + dVdt * self.dt
             
-            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) * 0.95 + 20
+            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) + volumeEffect + viskosityEffect + 10
     
     def heartSimulation(self):
         self.rightVentricle(shift=-0.5)
@@ -82,12 +92,9 @@ class Heart():
         self.heartSimulation()
 
         plt.plot(self.time, self.bloodPressure_RV, label='Rechter Ventrikel Druck (mmHg)')
-        #plt.plot(self.time, self.bloodVolume_RV, label='Rechter Ventrikel Volumen')
-
         plt.plot(self.time, self.bloodPressure_LV, label='Linkes Ventrikel Druck (mmHg)')
         plt.plot(self.time, self.bloodVolume_LV, label='Linkes Ventrikel Volumen')
         
-        #plt.plot(self.time, [70 for _ in range(0,len(self.time))])
         plt.xlabel('Zeit (s)')
         plt.ylabel('Werte')
         plt.title('Simulation des Herzen')
@@ -95,20 +102,3 @@ class Heart():
         plt.legend()
 
         plt.show()
-
-'''
-radi = [20000, 4000, 20, 8, 20, 5000, 30000]
-vis = 1
-heartRate = 70
-strokeVolume = 70
-maxElasticity = 2
-edv = 110
-esv = 50
-pres0 = 70
-maxTime = 10
-dt = 0.01
-
-#h = Heart(radi, vis, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt)
-
-#h.hpPlotter()
-'''
