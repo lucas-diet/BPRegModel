@@ -34,12 +34,11 @@ change = 0                                     # Wert um den verändert wird, we
 #####################
 
 duration = maxTime      # Sekunden
-heart_rate = 10         # Schläge pro Minute
 systolic = 120          # TODO: soll noch simuliert werden mit Parametern
 diastolic = 80          # TODO: soll noch simuliert werden mit Parametern
 
 ## Klasse ##
-bpSim = BloodPressure(duration, heart_rate, systolic, diastolic)
+bpSim = BloodPressure(duration, heartRate, systolic, diastolic)
 
 #bpSim.bpPlotter()      # Plot der simulierten Blutdruckwerte
 
@@ -58,7 +57,7 @@ h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume
 
 ##### Extra Parameter #####
 lims = [-17, 17]                            # Für den Achsenbereich, der angezeigt werden soll, wenn Radius der Gefäße geplottet wird.
-lumFactor = [0.1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
+lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 ###########################
 
 ## Klasse ##

@@ -767,3 +767,6 @@ class BodySystem():
         plt.grid(True)
         plt.legend()
         plt.show()
+    
+    def getPressurs(self):
+        return self.aortaPressure, self.arteriePressure, self.arteriolPressure, self.capillarePressure, self.venolePressure, self.venePressure, self.vCavaPressure

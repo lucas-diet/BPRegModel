@@ -23,9 +23,15 @@ class brain():
         return s.brainSender(data)
     
     def increaseHeartRate(self):
+        """_summary_
+            Erhöht den Herzschlag um 1
+        """
         self.heartRate += 1
 
     def decreaseHeartRate(self):
+        """_summary_
+            Minimiert den herzschlag um 1
+        """
         self.heartRate -= 1
     
     def setPressure(self, data, targetPres):
