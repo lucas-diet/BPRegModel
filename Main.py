@@ -11,7 +11,7 @@ from liver import *
 ####################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]   # in µm
-viscosity = 90                                 # Wert zwischen 0 und 100
+viscosity = 50                                 # Wert zwischen 0 und 100
 heartRate = 70
 edv = 110                                      # Enddiastolische Volumen
 esv = 60                                       # Endsystolisches Volumen

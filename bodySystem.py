@@ -301,7 +301,7 @@ class BodySystem():
 
     def parallelResistance(self, arr):
         """_summary_
-            Kopiert den INhalt des übergebenen Arrays und wendet dann die Formel für den parallelen Widerstand.
+            Kopiert den Inhalt des übergebenen Arrays und berechnet dann den parallelen Widerstand.
         Args:
             arr (Array, float): Beinhaltet die Gefäßwiderstände von parallel geschalteten Gefäßen
 
@@ -469,6 +469,13 @@ class BodySystem():
     
     def aortaPresSim(self, le, nu):
         """_summary_
+            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
+
+            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
+            Es wird überprüft, ob der Druck in der linken Herzkammer größer ist, in diesem Fall soll der Druck in der 
+            Aorta gleich dem Druck der linken Herzkammer sein.
+            Und zu letzt wird dann der Druck zu jedem Punkt i in self.aortaPressure[i] gespecihert.
 
         Args:
             le (array): Längen der verschiedenen Gefäßarten
@@ -488,6 +495,7 @@ class BodySystem():
         viskosityEffect = self.viscosity / 100
         
         volumePressureConstant = 0.01
+        volumeEffect = volumePressureConstant * self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -498,11 +506,15 @@ class BodySystem():
             if h.bloodPressure_LV[i] > self.aortaPressure[i]:
                 self.aortaPressure[i] = h.bloodPressure_LV[i] + volumeEffect + viskosityEffect
             
-            volumeEffect = volumePressureConstant * self.totalVolume
             self.aortaPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect
 
     def arteriePresSim(self, le, nu):
         """_summary_
+            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
+
+            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
+            Und zu letzt wird dann der Druck zu jedem Punkt i in self.arteriePressure[i] gespecihert.
 
         Args:
             le (array): Längen der verschiedenen Gefäßarten
@@ -530,7 +542,12 @@ class BodySystem():
 
     def arteriolePresSim(self, le, nu):
         """_summary_
+            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
+            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
+            Und zu letzt wird dann der Druck zu jedem Punkt i in self.arteriolPressure[i] gespeichert.
+        
         Args:
             le (array): Längen der verschiedenen Gefäßarten
             nu (array): Anzahl der verschiedenen Gefäßarten
@@ -545,22 +562,33 @@ class BodySystem():
 
         viskosityEffect = self.viscosity / 100
         volumePressureConstant = 0.01
+        volumeEffect = volumePressureConstant * self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2 = bp.bpFunction(t, self.heartRate)
-            volumeEffect = volumePressureConstant * self.totalVolume
 
             self.arteriolPressure[i] = self.arteriePressure[i] * 0.5
             self.arteriolPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect#+ 10
 
     def capillarePresSim(self, le, nu, prop, interval, change=0):
         """_summary_
+            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
+            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
+            
+            Hier wird je nach übergebenen Parametern die Viskosität noch beeinflusst. Wenn 'change' == 0, dann wird nicht vereändert
+            Wenn change != 0, dann wird verändert.
+            
+            Und zu letzt wird dann der Druck zu jedem Punkt i in self.capillarePressure[i] gespeichert.
         Args:
             le (array): Längen der verschiedenen Gefäßarten
             nu (array): Anzahl der verschiedenen Gefäßarten
+            prop (String): 'inc' zum erhöhen; 'dec' zum reduzieren
+            interval (int): Zeitpunkte wo immer eine Anpassung geschehene soll
+            change (float): Wert um den Viskosität verändert werden soll; Wenn == 0, dann geschieht keine Veränderung
         """
         bp = BloodPressure()
 
@@ -573,6 +601,7 @@ class BodySystem():
         resisEffect = self.normalizeResistance(resis)[3]
 
         volumePressureConstant = 0.01
+        volumeEffect = volumePressureConstant * self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
@@ -586,15 +615,18 @@ class BodySystem():
             else:
                 viskosityEffect = self.viscosity / 100
                 viskosityEffect = self.viscosity / 100
-
-            volumeEffect = volumePressureConstant * self.totalVolume
             
             self.capillarePressure[i] = self.arteriolPressure[i] * 0.5
             self.capillarePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect
 
     def venolePresSim(self, le, nu):
         """_summary_
+            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
+            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
+            Und zu letzt wird dann der Druck zu jedem Punkt i in self.venolePressure[i] gespeichert.
+        
         Args:
             le (array): Längen der verschiedenen Gefäßarten
             nu (array): Anzahl der verschiedenen Gefäßarten
@@ -609,19 +641,24 @@ class BodySystem():
 
         viskosityEffect = self.viscosity / 100
         volumePressureConstant = 0.01
+        volumeEffect = volumePressureConstant * self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2 = bp.bpFunction(t, self.heartRate)
-            volumeEffect = volumePressureConstant * self.totalVolume
-            
+                       
             self.venolePressure[i] = self.capillarePressure[i] * 0.4
             self.venolePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect + 5
             
     def venePresSim(self, le, nu):
         """_summary_
+            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
+            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
+            Und zu letzt wird dann der Druck zu jedem Punkt i in self.venePressure[i] gespeichert.
+        
         Args:
             le (array): Längen der verschiedenen Gefäßarten
             nu (array): Anzahl der verschiedenen Gefäßarten
@@ -636,19 +673,25 @@ class BodySystem():
 
         viskosityEffect = self.viscosity / 100
         volumePressureConstant = 0.01
+        volumeEffect = volumePressureConstant * self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2 = bp.bpFunction(t, self.heartRate)
-            volumeEffect = volumePressureConstant * self.totalVolume
+            
 
             self.venePressure[i] = self.venolePressure[i] * 0.3
             self.venePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect + 3
             
     def vCavaPresSim(self, le, nu):
         """_summary_
+            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
+            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
+            Und zu letzt wird dann der Druck zu jedem Punkt i in self.vCavaPressure[i] gespeichert.
+        
         Args:
             le (array): Längen der verschiedenen Gefäßarten
             nu (array): Anzahl der verschiedenen Gefäßarten
@@ -663,17 +706,27 @@ class BodySystem():
 
         viskosityEffect = self.viscosity / 100
         volumePressureConstant = 0.01
+        volumeEffect = volumePressureConstant * self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
             p1, p2 = bp.bpFunction(t, self.heartRate)
-            volumeEffect = volumePressureConstant * self.totalVolume
+            
 
             self.vCavaPressure[i] = self.venePressure[i] * 0.2
             self.vCavaPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect
 
     def vesselSimulator(self, le, nu, prop, interval, change):
+        """_summary_
+            Ruft einfach alle Funktionen auf, um so dann das Gefäßsystem zu simulieren.
+        Args:
+            le (array): Längen der verschiedenen Gefäßarten
+            nu (array): Anzahl der verschiedenen Gefäßarten
+            prop (String): 'inc' zum erhöhen und 'dec' zum reduzieren der Viskosität
+            interval (int): Zeitpunkte wo Viskosität verändert wird.
+            change (float):Wert um den Viskosität verändert werden soll
+        """
         self.aortaPresSim(le, nu)
         self.arteriePresSim(le, nu)
         self.arteriolePresSim(le, nu)
@@ -683,6 +736,16 @@ class BodySystem():
         self.vCavaPresSim(le, nu)
 
     def vpPlotter(self, le, nu, prop, interval, change):
+        """_summary_
+            Simuliert das Herz, um dann das Blutsystem zu simulieren. Simulation wird dann geplottet, also
+            der Druck in jedem Gefäß über die Zeit.
+        Args:
+            le (array): Längen der verschiedenen Gefäßarten
+            nu (array): Anzahl der verschiedenen Gefäßarten
+            prop (String): 'inc' zum erhöhen und 'dec' zum reduzieren der Viskosität
+            interval (int): Zeitpunkte wo Viskosität verändert wird.
+            change (float):Wert um den Viskosität verändert werden soll
+        """
         plt.figure(figsize=(10, 6))
         
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)

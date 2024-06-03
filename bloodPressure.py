@@ -60,12 +60,23 @@ class BloodPressure():
         return normalized_bp
     
     def bpFunction(self, t, heartRate):
-        #radi *= 0.001
+        """_summary_
+
+        Args:
+            t (_type_): Zeit
+            heartRate (int): Herzfrequenz
+
+        Returns:
+            _type_: Grundstrukturen der Bludruckkurve
+        """
         p1 = np.sin(2 * np.pi * (heartRate / 60) * t)
         p2 = 0.63 * np.sin(4 * np.pi * (heartRate / 60) * t + (2 / np.pi))
         return p1, p2
     
     def bpPlotter(self):
+        """_summary_
+            Plottet die basierent auf den Parametern die Grundstruktur eine Blutdruckkurve
+        """
         bp_sim = BloodPressure(self.duration, self.heartRate, self.systolic, self.diastolic)
         bp = bp_sim.simulateBP()
 
