@@ -147,3 +147,6 @@ class Sensor():
         """
         print('\n', '#####', 'Blutdruck zu einem Zeitpunkt', '#####', '\n')
         print(f'Blutdruck bei {self.time[timeStemp]}: ', self.findPressureTimePoint(presData, timeStemp), 'mmHg')
+
+    def detectHeartRate(self):
+        return self.heartRate

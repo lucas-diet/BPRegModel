@@ -1,4 +1,7 @@
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 from bloodPressure import *
 from bodySystem import * 
 from heart import *
@@ -60,13 +63,81 @@ dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePr
 h.heartSimulation()
 bs.vesselSimulator(lens, nums, prop, interval, change)
 
-#### Regelstrecke ####
+isAorta, isArterie, isArteriol, isCapillare, isVenole, isVene, isVCava = bs.getPressurs()
 
-aorta, arterie, arteriol, capillare, venole, vene, vCava = bs.getPressurs()
+isRV = h.bloodPressure_RV
+isLV = h.bloodPressure_LV
 
-#bs.vpPlotter(lens, nums, prop, interval, change)
+isPres = [isRV, isLV, isAorta, isArterie, isArteriol, isCapillare, isVenole, isVene, isVCava]
 
-#### Regelabweichung ####
+print('#####', 1)
+s.presPrinter(dataC)
+bs.vpPlotter(lens, nums, prop, interval, change)
 
-#### Untersystem ####
+
+#### Soll Größen ####
+
+soHR = [75, 100, 150, 180, 70, 10, 1]
+
+#####################
+for i in range(0, len(soHR)):
+    print('#####', i+2)
+    soBP = BloodPressure(duration, soHR[i], systolic, diastolic)
+    soH = Heart(radi, viscosity, soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
+    soBS = BodySystem(radi, lumFactor, viscosity, soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
+    soS = Sensor(radi, viscosity, soHR[i], strokeVolume, edv, esv, pres0, maxTime)
+
+    soH.heartSimulation()
+    soBS.vesselSimulator(lens, nums, prop, interval, change)
+
+
+    #### Regelstrecke ####
+
+    soAorta, soArterie, soArteriol, soCapillare, soVenole, soVene, soVCava = soBS.getPressurs()
+    soPres = [soH.bloodPressure_RV, soH.bloodPressure_LV, soAorta, soArterie, soArteriol, soCapillare, soVenole, soVene, soVCava]
+
+    #soS.presPrinter(soPres)
+
+    #### Regelabweichung ####
+
+    rwRV = soH.bloodPressure_RV - h.bloodPressure_RV
+    rwLV = soH.bloodPressure_LV - h.bloodPressure_LV
+    rwAorta = soAorta - isAorta
+    rwArterie = soArterie - isArterie
+    rwArteriol = soArteriol - isArteriol
+    rwCapillare = soCapillare - isCapillare
+    rwVenole = soVenole - isVenole
+    rwVene = soVene - isVene
+    rwVCava = soVCava - isVCava
+
+    rwPres = [rwRV, rwLV, rwAorta, rwArterie, rwArteriol, rwCapillare, rwVenole, rwVene, rwVCava]
+    rwMins = [np.min(rwRV), np.min(rwLV), np.min(rwAorta), np.min(rwArterie), np.min(rwArteriol), np.min(rwCapillare), np.min(rwVenole), np.min(rwVene), np.min(rwVCava)]
+
+    rwP = []
+
+    for i in range(0, len(rwPres)):
+        rwP.append(rwPres[i] - rwMins[i])
+
+    s.presPrinter(rwP)
+
+    
+    plt.plot(bs.time, rwAorta - rwMins[2])
+    plt.plot(bs.time, rwArterie - rwMins[3])
+    plt.plot(bs.time, rwArteriol - rwMins[4])
+    plt.plot(bs.time, rwCapillare - rwMins[5])
+    plt.plot(bs.time, rwVenole - rwMins[6])
+    plt.plot(bs.time, rwVene - rwMins[7])
+    plt.plot(bs.time, rwVCava - rwMins[8])
+    plt.grid(True)
+    plt.show()
+
+    isRV = soH.bloodPressure_RV
+    isLV = soH.bloodPressure_LV
+    isAorta = rwAorta
+    isArterie = rwArterie
+    isArteriol = rwArteriol
+    isCapillare = rwCapillare
+    isVenole = rwVenole
+    isVene = rwVene
+    isVCava = rwVCava
 
