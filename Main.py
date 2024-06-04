@@ -26,7 +26,7 @@ lens = [200, 150, 100, 50, 100, 150, 300]      # in mm
 
 #### Parameter für die Leber ##### 
 prop = 'inc'                                   # 'inc' zum erhöhen ; 'dec' zum verringern
-interval = 100                                 # Zeitschritte, wo verändert wird
+interval = 200                                 # Zeitschritte, wo verändert wird
 change = 0                                     # Wert um den verändert wird, wenn 0 dann keine Veränderung
 
 #####################

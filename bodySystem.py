@@ -756,7 +756,7 @@ class BodySystem():
         plt.plot(self.time, self.aortaPressure, label='Aorta Druck (mmHg)')
         plt.plot(self.time, self.arteriePressure, label='Arterie Druck (mmHg)')
         plt.plot(self.time, self.arteriolPressure, label='Arteriole Druck (mmHg)')
-        plt.plot(self.time, self.capillarePressure, label='Kapilare Druck (mmHg)')
+        plt.plot(self.time, self.capillarePressure, label='Kapillare Druck (mmHg)')
         plt.plot(self.time, self.venolePressure, label='Venole Druck (mmHg)')
         plt.plot(self.time, self.venePressure, label='Vene Druck (mmHg)')
         plt.plot(self.time, self.vCavaPressure, label='V. Cava Druck (mmHg)')
