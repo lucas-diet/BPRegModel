@@ -9,9 +9,9 @@ from sensor import *
 from liver import *
 
 
-####################
-#### Parameter #####
-####################
+#########################
+#### Init Parameter #####
+#########################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]   # in µm
 viscosity = 50                                 # Wert zwischen 0 und 100
@@ -53,35 +53,33 @@ h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume
 bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
 s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
-
-##### Extra Parameter für Sensor ##### (Sind fest und sollten nicht verändert werden!)
-data = [bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
-dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePressure, bs.arteriolPressure, bs.capillarePressure, bs.venolePressure, bs.venePressure, bs.vCavaPressure]
-###########################
-###########################
-
 h.heartSimulation()
 bs.vesselSimulator(lens, nums, prop, interval, change)
 
 isAorta, isArterie, isArteriol, isCapillare, isVenole, isVene, isVCava = bs.getPressurs()
-
 isRV = h.bloodPressure_RV
 isLV = h.bloodPressure_LV
 
 isPres = [isRV, isLV, isAorta, isArterie, isArteriol, isCapillare, isVenole, isVene, isVCava]
 
-print('#####', 1)
-s.presPrinter(dataC)
+s.presPrinter(isPres)
+print('\n', '#####', 1)
 bs.vpPlotter(lens, nums, prop, interval, change)
-
 
 #### Soll Größen ####
 
-soHR = [75, 100, 150, 180, 70, 10, 1]
+soHR = [80, 100, 150, 180, 70, 10]
+soRadi = []
+soLumeFactor = []
+soVis = [5, 30, 50, 55, 60, 10]
+soStrokeVolume = []
+soEDV = []
+soESV = []
+soTotalVolume = []
+
 
 #####################
 for i in range(0, len(soHR)):
-    print('#####', i+2)
     soBP = BloodPressure(duration, soHR[i], systolic, diastolic)
     soH = Heart(radi, viscosity, soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
     soBS = BodySystem(radi, lumFactor, viscosity, soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
@@ -90,18 +88,19 @@ for i in range(0, len(soHR)):
     soH.heartSimulation()
     soBS.vesselSimulator(lens, nums, prop, interval, change)
 
-
     #### Regelstrecke ####
 
     soAorta, soArterie, soArteriol, soCapillare, soVenole, soVene, soVCava = soBS.getPressurs()
-    soPres = [soH.bloodPressure_RV, soH.bloodPressure_LV, soAorta, soArterie, soArteriol, soCapillare, soVenole, soVene, soVCava]
+    soRV = soH.bloodPressure_RV
+    soLV = soH.bloodPressure_LV
+    soPres = [soRV, soLV, soAorta, soArterie, soArteriol, soCapillare, soVenole, soVene, soVCava]
 
     #soS.presPrinter(soPres)
 
     #### Regelabweichung ####
 
-    rwRV = soH.bloodPressure_RV - h.bloodPressure_RV
-    rwLV = soH.bloodPressure_LV - h.bloodPressure_LV
+    rwRV = soRV - isRV
+    rwLV = soLV - isLV
     rwAorta = soAorta - isAorta
     rwArterie = soArterie - isArterie
     rwArteriol = soArteriol - isArteriol
@@ -115,24 +114,25 @@ for i in range(0, len(soHR)):
 
     rwP = []
 
-    for i in range(0, len(rwPres)):
-        rwP.append(rwPres[i] - rwMins[i])
+    for j in range(0, len(rwPres)):
+        rwP.append(rwPres[j] - rwMins[j])
 
     s.presPrinter(rwP)
-
+    print('\n', '#####', i+2)
+    #s.ppPlotter(rwP[2::])
     
-    plt.plot(bs.time, rwAorta - rwMins[2])
-    plt.plot(bs.time, rwArterie - rwMins[3])
-    plt.plot(bs.time, rwArteriol - rwMins[4])
-    plt.plot(bs.time, rwCapillare - rwMins[5])
-    plt.plot(bs.time, rwVenole - rwMins[6])
-    plt.plot(bs.time, rwVene - rwMins[7])
-    plt.plot(bs.time, rwVCava - rwMins[8])
+    plt.plot(bs.time, rwP[2])
+    plt.plot(bs.time, rwP[3])
+    plt.plot(bs.time, rwP[4])
+    plt.plot(bs.time, rwP[5])
+    plt.plot(bs.time, rwP[6])
+    plt.plot(bs.time, rwP[7])
+    plt.plot(bs.time, rwP[8])
     plt.grid(True)
     plt.show()
 
-    isRV = soH.bloodPressure_RV
-    isLV = soH.bloodPressure_LV
+    isRV = rwRV
+    isLV = rwLV
     isAorta = rwAorta
     isArterie = rwArterie
     isArteriol = rwArteriol
