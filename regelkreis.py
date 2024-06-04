@@ -120,7 +120,8 @@ for i in range(0, len(soHR)):
     s.presPrinter(rwP)
     print('\n', '#####', i+2)
     #s.ppPlotter(rwP[2::])
-    
+    plt.figure(figsize=(10, 6), num=f'Simulationsdurchlauf {i+2}')
+    plt.title('Simulation des Gefäßsystem')
     plt.plot(bs.time, rwP[2])
     plt.plot(bs.time, rwP[3])
     plt.plot(bs.time, rwP[4])
