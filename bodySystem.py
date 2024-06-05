@@ -490,8 +490,6 @@ class BodySystem():
         radiusEffect *= self.lumFactor[0]
         radiusEffect = np.log(radiusEffect) * 0.3
 
-        print(np.log(radiusEffect))
-
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[0] + 15
 
