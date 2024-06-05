@@ -82,9 +82,9 @@ mt = []
 #####################
 for i in range(0, len(soHR)):
     soBP = BloodPressure(duration, soHR[i], systolic, diastolic)
-    soH = Heart(radi, viscosity, soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
-    soBS = BodySystem(radi, lumFactor, viscosity, soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
-    soS = Sensor(radi, viscosity, soHR[i], strokeVolume, edv, esv, pres0, maxTime)
+    soH = Heart(radi, soVis[i], soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
+    soBS = BodySystem(radi, lumFactor, soVis[i], soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
+    soS = Sensor(radi, soVis[i], soHR[i], strokeVolume, edv, esv, pres0, maxTime)
 
     soH.heartSimulation()
     soBS.vesselSimulator(lens, nums, prop, interval, change)

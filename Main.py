@@ -57,7 +57,7 @@ h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume
 
 ##### Extra Parameter #####
 lims = [-17, 17]                            # Für den Achsenbereich, der angezeigt werden soll, wenn Radius der Gefäße geplottet wird.
-lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
+lumFactor = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 ###########################
 
 ## Klasse ##
