@@ -71,7 +71,7 @@ bs.vpPlotter(lens, nums, prop, interval, change)
 soHR = [80, 100, 150, 180, 70, 10]
 soRadi = []
 soLumeFactor = []
-soVis = [5, 30, 50, 55, 60, 10]
+soVis = [5, 90, 50, 55, 60, 10]
 soStrokeVolume = []
 soEDV = []
 soESV = []
