@@ -80,9 +80,11 @@ class BloodPressure():
         bp_sim = BloodPressure(self.duration, self.heartRate, self.systolic, self.diastolic)
         bp = bp_sim.simulateBP()
 
-        plt.plot(np.linspace(0, self.duration, len(bp)), bp, label='Blutdruck (mmHg)')
+        plt.figure(figsize=(11, 7))
+        plt.plot(np.linspace(0, self.duration, len(bp)), bp, label='Blutdruck')
         plt.xlabel('Zeit (s)')
         plt.ylabel('mmHg')
         plt.grid(True)
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.08), ncol=7, prop={'size': 8.5})
         plt.ylim(self.diastolic-5, self.systolic+5)
         plt.show()

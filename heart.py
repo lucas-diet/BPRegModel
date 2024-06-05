@@ -87,18 +87,18 @@ class Heart():
 
     
     def hpPlotter(self):
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(11, 7))
         
         self.heartSimulation()
 
         plt.plot(self.time, self.bloodPressure_RV, label='Rechter Ventrikel Druck (mmHg)')
-        plt.plot(self.time, self.bloodPressure_LV, label='Linkes Ventrikel Druck (mmHg)')
-        plt.plot(self.time, self.bloodVolume_LV, label='Linkes Ventrikel Volumen')
+        plt.plot(self.time, self.bloodPressure_LV, label='Linker Ventrikel Druck (mmHg)')
+        plt.plot(self.time, self.bloodVolume_LV, label='Linker Ventrikel Volumen (ml)')
         
         plt.xlabel('Zeit (s)')
         plt.ylabel('Werte')
         plt.title('Simulation des Herzen')
         plt.grid(True)
-        plt.legend()
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.08), ncol=7, prop={'size': 8.5})
 
         plt.show()

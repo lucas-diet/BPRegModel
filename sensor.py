@@ -90,15 +90,16 @@ class Sensor():
             data (array): Ein Array, der aus den 7 Elementen besteht, wo jedes die Blutdruckwerte einer Gefäßart beseitzt. 
         """
         #data = [data1, data2, data3, data4, data5, data6, data7]
-
+        plt.figure(figsize=(11, 7))
         for d in data:
             sys, _ = self.findPeak(d)
             _, dia = self.findPeak(d)
-
+            
+            
             plt.plot(self.time, d)
 
-            plt.plot(self.time[sys], d[sys], 'r.')
-            plt.plot(self.time[dia], d[dia], 'b.')
+            plt.plot(self.time[sys], d[sys], 'r.', label='Systolischer Druck')
+            plt.plot(self.time[dia], d[dia], 'b.', label='Diastolischer Druck')
 
         plt.xlabel('Zeit (s)')
         plt.ylabel('mmHg')

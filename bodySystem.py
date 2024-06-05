@@ -752,26 +752,26 @@ class BodySystem():
             interval (int): Zeitpunkte wo Viskosität verändert wird.
             change (float):Wert um den Viskosität verändert werden soll
         """
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(11, 7))
         
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
         h.heartSimulation()
 
         self.vesselSimulator(le, nu, prop, interval, change)
 
-        plt.plot(self.time, self.aortaPressure, label='Aorta Druck (mmHg)')
-        plt.plot(self.time, self.arteriePressure, label='Arterie Druck (mmHg)')
-        plt.plot(self.time, self.arteriolPressure, label='Arteriole Druck (mmHg)')
-        plt.plot(self.time, self.capillarePressure, label='Kapillare Druck (mmHg)')
-        plt.plot(self.time, self.venolePressure, label='Venole Druck (mmHg)')
-        plt.plot(self.time, self.venePressure, label='Vene Druck (mmHg)')
-        plt.plot(self.time, self.vCavaPressure, label='V. Cava Druck (mmHg)')
+        plt.plot(self.time, self.aortaPressure, label='Aorta Druck')
+        plt.plot(self.time, self.arteriePressure, label='Arterie Druck')
+        plt.plot(self.time, self.arteriolPressure, label='Arteriole Druck')
+        plt.plot(self.time, self.capillarePressure, label='Kapillare Druck')
+        plt.plot(self.time, self.venolePressure, label='Venole Druck')
+        plt.plot(self.time, self.venePressure, label='Vene Druck')
+        plt.plot(self.time, self.vCavaPressure, label='V. Cava Druck')
 
         plt.xlabel('Zeit (s)')
         plt.ylabel('mmHg')
         plt.title('Simulation des Gefäßsystem')
         plt.grid(True)
-        plt.legend()
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.08), ncol=7, prop={'size': 8.5})
         plt.show()
     
     def getPressurs(self):
