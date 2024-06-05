@@ -61,11 +61,13 @@ bs.vpPlotter(lens, nums, prop, interval, change)
 
 #### Soll Größen ####
 
-soHR = [80, 70]
+soHR = [80, 100, 120, 150, 10]
 soLF = [[1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1]]
-soLumeFactor = []
-soVis = [5, 90]
+soVis = [5, 90, 100, 50, 20]
 #soStrokeVolume = []
 soEDV = []
 soESV = []
@@ -138,4 +140,3 @@ for i in range(0, len(soHR)):
     isVenole = rwVenole
     isVene = rwVene
     isVCava = rwVCava
-
