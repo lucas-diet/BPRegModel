@@ -32,12 +32,6 @@ prop = 'inc'                                   # 'inc' zum erhöhen ; 'dec' zum 
 interval = 100                                 # Zeitschritte, wo verändert wird
 change = 0                                     # Wert um den verändert wird, wenn 0 dann keine Veränderung
 
-##### Extra Parameter für BloodPressure #####
-duration = maxTime      # Sekunden
-systolic = 120          # TODO: soll noch simuliert werden mit Parametern
-diastolic = 80          # TODO: soll noch simuliert werden mit Parametern
-###########################
-
 ##### Extra Parameter für BodySystem #####
 lims = [-17, 17]                            # Für den Achsenbereich, der angezeigt werden soll, wenn Radius der Gefäße geplottet wird.
 lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
@@ -48,7 +42,6 @@ lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpas
 #### Klassen #####
 ##################
 
-bp = BloodPressure(duration, heartRate, systolic, diastolic)
 h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
 bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
 s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
@@ -82,7 +75,6 @@ mt = []
 
 #####################
 for i in range(0, len(soHR)):
-    soBP = BloodPressure(duration, soHR[i], systolic, diastolic)
     soH = Heart(radi, soVis[i], soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
     soBS = BodySystem(radi, soLF[i], soVis[i], soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
     soS = Sensor(radi, soVis[i], soHR[i], strokeVolume, edv, esv, pres0, maxTime)
@@ -131,6 +123,9 @@ for i in range(0, len(soHR)):
     plt.plot(bs.time, rwP[6])
     plt.plot(bs.time, rwP[7])
     plt.plot(bs.time, rwP[8])
+    
+    plt.xlabel('Zeit (s)')
+    plt.ylabel('mmHg')
     plt.grid(True)
     plt.show()
 
