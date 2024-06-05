@@ -31,12 +31,11 @@ class Liver():
         Args:
             inc (float): Wert, um den die Viskosität erhöht werden soll
         """
+        if self.viscosity > 100:
+            self.viscosity = 100
+
         self.viscosity += inc
         self.viscosity = round(self.viscosity, 2)
-        #if self.viscosity <= 0:
-        #    self.viscosity = 1
-        #elif self.viscosity >= 100:
-        #    self.viscosity = 100
 
     def decreaseViscosity(self, dec):
         """_summary_
@@ -44,12 +43,12 @@ class Liver():
         Args:
             dec (float): Wert um den reduziert werden soll
         """
+
+        if self.viscosity > 100:
+            pass
+
         self.viscosity -= dec
         self.viscosity = round(self.viscosity, 2)
-        #if self.viscosity <= 0:
-        #    self.viscosity = 1
-        #elif self.viscosity >= 100:
-        #    self.viscosity = 100
     
     def viscositySimulate(self, prop, interval, change):
         """_summary_
@@ -67,13 +66,13 @@ class Liver():
             if prop == 'inc':
                 for i in range(interval, len(self.time), interval):
                     self.increaseViscosity(change)
-                    #print(f"Time: {self.time[i]}, Viskosität erhöht zu: {self.viscosity}")
+                    print(f"Time: {self.time[i]}, Viskosität erhöht zu: {self.viscosity}")
                     return self.viscosity
 
             elif prop == 'dec':
                 for i in range(interval, len(self.time), interval):
                     self.decreaseViscosity(change)
-                    #print(f"Time: {self.time[i]}, Viskosität reduziert zu: {self.viscosity}")
+                    print(f"Time: {self.time[i]}, Viskosität reduziert zu: {self.viscosity}")
                     return self.viscosity
         
         else:

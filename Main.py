@@ -11,7 +11,7 @@ from liver import *
 ####################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]   # in µm
-viscosity = 50                                 # Wert zwischen 0 und 100
+viscosity = 10                                 # Wert zwischen 0 und 100
 heartRate = 70
 edv = 110                                      # Enddiastolische Volumen
 esv = 60                                       # Endsystolisches Volumen
@@ -26,7 +26,7 @@ lens = [200, 150, 100, 50, 100, 150, 300]      # in mm
 
 #### Parameter für die Leber ##### 
 prop = 'inc'                                   # 'inc' zum erhöhen ; 'dec' zum verringern
-interval = 200                                 # Zeitschritte, wo verändert wird
+interval = 5                                 # Zeitschritte, wo verändert wird
 change = 0                                     # Wert um den verändert wird, wenn 0 dann keine Veränderung
 
 #####################
@@ -57,7 +57,7 @@ h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume
 
 ##### Extra Parameter #####
 lims = [-17, 17]                            # Für den Achsenbereich, der angezeigt werden soll, wenn Radius der Gefäße geplottet wird.
-lumFactor = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
+lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 ###########################
 
 ## Klasse ##
@@ -91,6 +91,7 @@ timeStemp = 1
 
 s.printPressureTimePoint(presData, timeStemp)          # Ausführbare Funktion
 
+#############################################
 ################
 ##### Hirn #####
 ################

@@ -68,11 +68,12 @@ bs.vpPlotter(lens, nums, prop, interval, change)
 
 #### Soll Größen ####
 
-soHR = [80, 100, 150, 180, 70, 10]
-soRadi = []
+soHR = [80, 70]
+soLF = [[1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1]]
 soLumeFactor = []
-soVis = [5, 90, 50, 55, 60, 10]
-soStrokeVolume = []
+soVis = [5, 90]
+#soStrokeVolume = []
 soEDV = []
 soESV = []
 soTotalVolume = []
@@ -83,9 +84,9 @@ mt = []
 for i in range(0, len(soHR)):
     soBP = BloodPressure(duration, soHR[i], systolic, diastolic)
     soH = Heart(radi, soVis[i], soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
-    soBS = BodySystem(radi, lumFactor, soVis[i], soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
+    soBS = BodySystem(radi, soLF[i], soVis[i], soHR[i], strokeVolume, edv, esv, pres0, totalVolume, maxTime)
     soS = Sensor(radi, soVis[i], soHR[i], strokeVolume, edv, esv, pres0, maxTime)
-
+    
     soH.heartSimulation()
     soBS.vesselSimulator(lens, nums, prop, interval, change)
 
