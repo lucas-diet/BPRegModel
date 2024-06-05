@@ -86,16 +86,3 @@ class BloodPressure():
         plt.grid(True)
         plt.ylim(self.diastolic-5, self.systolic+5)
         plt.show()
-
-# Simulation des Blutdruck
-duration = 60       # Sekunden
-heart_rate = 10     # Schläge pro Minute
-systolic = 120      # TODO: soll noch simuliert werden mit Parametern
-diastolic = 80      # TODO: soll noch simuliert werden mit Parametern
-
-bp_sim = BloodPressure(duration, heart_rate, systolic, diastolic)
-bp = bp_sim.simulateBP()
-
-# Plot der simulierten Blutdruckwerte
-
-#bp_sim.bpPlotter()

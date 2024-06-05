@@ -20,7 +20,7 @@ edv = 110                                      # Enddiastolische Volumen
 esv = 60                                       # Endsystolisches Volumen
 strokeVolume = edv - esv                       # Schlagvolumen
 pres0 = 70                      
-maxTime = 10
+maxTime = 30
 
 totalVolume = 70                              # in ml
 
@@ -76,6 +76,7 @@ soStrokeVolume = []
 soEDV = []
 soESV = []
 soTotalVolume = []
+mt = []
 
 
 #####################
