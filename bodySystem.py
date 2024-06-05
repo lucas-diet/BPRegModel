@@ -1,6 +1,5 @@
 
 #TODO: Radius über die Zeit manipulieren können
-#TODO: Widerstand -> Berechnung beinhaltet Radus :: Bei veränderung von Radius minimale veränderung bei Druck.
 #TODO: Leber integrieren -> in die Kapillaren integiert. Soll ich diese auch in andere Gefäße intigieren?
 
 import numpy as np
