@@ -11,7 +11,7 @@ from liver import *
 ####################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]   # in µm
-viscosity = 10                                 # Wert zwischen 0 und 100
+viscosity = 10                                # Wert zwischen 0 und 100
 heartRate = 70
 edv = 110                                      # Enddiastolische Volumen
 esv = 60                                       # Endsystolisches Volumen
@@ -25,9 +25,9 @@ nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300]      # in mm
 
 #### Parameter für die Leber ##### 
-prop = 'inc'                                   # 'inc' zum erhöhen ; 'dec' zum verringern
-interval = 5                                 # Zeitschritte, wo verändert wird
-change = 0                                     # Wert um den verändert wird, wenn 0 dann keine Veränderung
+prop = 'dec'                                   # 'inc' zum erhöhen ; 'dec' zum verringern
+interval = 150                                 # Zeitschritte, wo verändert wird
+change = 1                                     # Wert um den verändert wird, wenn 0 dann keine Veränderung
 
 #####################
 ##### Blutdruck ##### ---> Wie solle es ca. am Ende aussehen. Dient nur als Einstieg.
@@ -83,13 +83,13 @@ h.heartSimulation()
 bs.vesselSimulator(lens, nums, prop, interval, change)
 
 #s.ppPlotter(data)                                  # Ausführbare Funktion
-s.presPrinter(dataC)                                # Ausführbare Funktion
+#s.presPrinter(dataC)                                # Ausführbare Funktion
 
 ### Findet den Blutdruck zu einem bestimmten Zeitpunkt ###
 presData = data[0]                              # data[x] x = {0,1,2,3,4,5,6}
 timeStemp = 1
 
-s.printPressureTimePoint(presData, timeStemp)          # Ausführbare Funktion
+#s.printPressureTimePoint(presData, timeStemp)          # Ausführbare Funktion
 
 #############################################
 ################
@@ -112,6 +112,6 @@ maxs, mins, means = b.getPressure(data)
 #################
 
 ## Klasse ##
-l = Liver(viscosity, maxTime)
+#l = Liver(viscosity, maxTime)
 
 #l.viscositySimulate('inc', 50, 0.1)

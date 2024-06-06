@@ -8,6 +8,8 @@ class Liver():
     def __init__(self, viscosity, maxTime, dt=0.01):
         self.viscosity = viscosity
         self.time = np.arange(0, maxTime, dt)
+        self.viscosity_history = []  # Liste zum Speichern der Viskositätswerte
+
 
     def getViscosity(self):
         """_summary_
@@ -31,11 +33,12 @@ class Liver():
         Args:
             inc (float): Wert, um den die Viskosität erhöht werden soll
         """
-        if self.viscosity > 100:
+        if self.viscosity + inc > 100:
             self.viscosity = 100
-
-        self.viscosity += inc
-        self.viscosity = round(self.viscosity, 2)
+        
+        else:
+            self.viscosity += inc
+            self.viscosity = round(self.viscosity, 2)
 
     def decreaseViscosity(self, dec):
         """_summary_
@@ -44,8 +47,8 @@ class Liver():
             dec (float): Wert um den reduziert werden soll
         """
 
-        if self.viscosity > 100:
-            pass
+        #if self.viscosity > 100:
+        #    pass
 
         self.viscosity -= dec
         self.viscosity = round(self.viscosity, 2)
@@ -62,18 +65,20 @@ class Liver():
         Returns:
            self.viscosity (float): Wert für die Viskostät
         """
-        if interval != 0:
-            if prop == 'inc':
-                for i in range(interval, len(self.time), interval):
+        if interval > 0:
+            num_changes = 0
+            for i in range(interval, len(self.time), interval):
+                if prop == 'inc':
                     self.increaseViscosity(change)
-                    print(f"Time: {self.time[i]}, Viskosität erhöht zu: {self.viscosity}")
-                    return self.viscosity
-
-            elif prop == 'dec':
-                for i in range(interval, len(self.time), interval):
+                    num_changes += 1
+                    #print(i, f"Time: {self.time[i]}, Viskosität reduziert zu: {self.viscosity}")
+            
+                elif prop == 'dec':
                     self.decreaseViscosity(change)
-                    print(f"Time: {self.time[i]}, Viskosität reduziert zu: {self.viscosity}")
-                    return self.viscosity
-        
-        else:
-            pass
+                    num_changes += 1
+                    #print(i, f"Time: {self.time[i]}, Viskosität reduziert zu: {self.viscosity}")
+
+                self.viscosity_history.append([self.viscosity, self.time[i]])
+            #print(f"Total number of changes: {num_changes}")
+
+            return self.viscosity
