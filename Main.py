@@ -11,7 +11,7 @@ from liver import *
 ####################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]   # in µm
-viscosity = 10                                # Wert zwischen 0 und 100
+viscosity = 5                                # Wert zwischen 0 und 100
 heartRate = 70
 edv = 110                                      # Enddiastolische Volumen
 esv = 60                                       # Endsystolisches Volumen
@@ -25,7 +25,7 @@ nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300]      # in mm
 
 #### Parameter für die Leber ##### 
-prop = 'dec'                                   # 'inc' zum erhöhen ; 'dec' zum verringern
+prop = 'inc'                                   # 'inc' zum erhöhen ; 'dec' zum verringern
 interval = 150                                 # Zeitschritte, wo verändert wird
 change = 1                                     # Wert um den verändert wird, wenn 0 dann keine Veränderung
 
@@ -59,13 +59,31 @@ h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume
 lims = [-17, 17]                            # Für den Achsenbereich, der angezeigt werden soll, wenn Radius der Gefäße geplottet wird.
 lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 ###########################
+ctHR = []
+newHR = []
+ctVis = []
+newVis = []
+ctRadius = []
+newRadius = []
+ctVol = []
+newVol = []
+
+#ctHR = [2, 4, 6]
+#newHR = [40, 90, 160]
+#ctVis = [2, 4, 6]
+#newVis = [10, 50, 100]
+#ctRadius = [2, 4, 6]
+#newRadius = [0.1, 0.1, 0.1]
+ctVol = [2, 4, 6]
+newVol = [100, 200, 300]
+
 
 ## Klasse ##
 bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
 
 #bs.vesselPlotter(lumFactor, lims)                  # Ausführbare Funktion
 #bs.resisPrinter(lens, nums)                        # Ausführbare Funktion
-bs.vpPlotter(lens, nums, prop, interval, change)    # Ausführbare Funktion
+bs.vpPlotter(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)    # Ausführbare Funktion
 
 ##################
 ##### Sensor #####
@@ -80,10 +98,10 @@ dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePr
 s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 h.heartSimulation()
-bs.vesselSimulator(lens, nums, prop, interval, change)
+bs.vesselSimulator(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
 
 #s.ppPlotter(data)                                  # Ausführbare Funktion
-#s.presPrinter(dataC)                                # Ausführbare Funktion
+s.presPrinter(dataC)                                # Ausführbare Funktion
 
 ### Findet den Blutdruck zu einem bestimmten Zeitpunkt ###
 presData = data[0]                              # data[x] x = {0,1,2,3,4,5,6}

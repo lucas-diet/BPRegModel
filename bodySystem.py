@@ -1,6 +1,5 @@
 
-#TODO: Radius über die Zeit manipulieren können
-#TODO: Leber integrieren -> in die Kapillaren integiert. Soll ich diese auch in andere Gefäße intigieren?
+#TODO: TotalVolumen noch manipulieren können in einer Simulation!
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -466,7 +465,7 @@ class BodySystem():
         
         return idx
     
-    def aortaPresSim(self, le, nu):
+    def aortaPresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
             Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
@@ -485,30 +484,61 @@ class BodySystem():
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
         h.leftVentricle()
 
-        radiusEffect =  self.radi[0] * 0.001
-        radiusEffect *= self.lumFactor[0]
-        radiusEffect = np.log(radiusEffect) * 0.3
-
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[0] + 15
 
-        viskosityEffect = self.viscosity / 100
-        
-        volumePressureConstant = 0.01
-        volumeEffect = volumePressureConstant * self.totalVolume
+        currentHeartRate = self.heartRate
+        currentViscosity = self.viscosity
+        currentRadiusFactor = self.lumFactor[0]
+        currentVolume = self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
-                         
-            p1, p2 = bp.bpFunction(t, self.heartRate)          
+
+            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
+            for j, changeHR in enumerate(ctHR):
+                if t >= changeHR:
+                    currentHeartRate = newHR[j]
+                else:
+                    break 
+
+            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
+            for j, changeVis in enumerate(ctVis):
+                if t >= changeVis:
+                    currentViscosity = newVis[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
+            for j, changeRadius in enumerate(ctRadius):
+                if t >= changeRadius:
+                    currentRadiusFactor = newRadius[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
+            for j, changeVol in enumerate(ctVol):
+                if t >= changeVol:
+                    currentVolume = newVol[j]
+                else:
+                    break
+
+            viskosityEffect = currentViscosity / 100
+            p1, p2 = bp.bpFunction(t, currentHeartRate)
+
+            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect) * 0.3
+
+            volumePressureConstant = 0.01
+            volumeEffect = volumePressureConstant * currentVolume
+            
             self.aortaPressure[i] = self.pres0
- 
             if h.bloodPressure_LV[i] > self.aortaPressure[i]:
                 self.aortaPressure[i] = h.bloodPressure_LV[i] + volumeEffect + viskosityEffect
             
             self.aortaPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect - radiusEffect
 
-    def arteriePresSim(self, le, nu):
+    def arteriePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
             Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
@@ -529,21 +559,55 @@ class BodySystem():
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[1]
 
-        viskosityEffect = self.viscosity / 100
-
-        volumePressureConstant = 0.01
-        volumeEffect = volumePressureConstant * self.totalVolume
+        currentHeartRate = self.heartRate
+        currentViscosity = self.viscosity
+        currentRadiusFactor = self.lumFactor[1]
+        currentVolume = self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2 = bp.bpFunction(t, self.heartRate)
-            
+            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
+            for j, changeHR in enumerate(ctHR):
+                if t >= changeHR:
+                    currentHeartRate = newHR[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
+            for j, changeVis in enumerate(ctVis):
+                if t >= changeVis:
+                    currentViscosity = newVis[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
+            for j, changeRadius in enumerate(ctRadius):
+                if t >= changeRadius:
+                    currentRadiusFactor = newRadius[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
+            for j, changeVol in enumerate(ctVol):
+                if t >= changeVol:
+                    currentVolume = newVol[j]
+                else:
+                    break
+
+            viskosityEffect = currentViscosity / 100
+            p1, p2 = bp.bpFunction(t, currentHeartRate)
+
+            volumePressureConstant = 0.01
+            volumeEffect = volumePressureConstant * currentVolume
+
+            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect) * 0.3
               
             self.arteriePressure[i] = self.aortaPressure[i] * 0.8
             self.arteriePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect #* 0.3
 
-    def arteriolePresSim(self, le, nu):
+    def arteriolePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
             Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
@@ -564,20 +628,55 @@ class BodySystem():
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[2]
 
-        viskosityEffect = self.viscosity / 100
-
-        volumePressureConstant = 0.01
-        volumeEffect = volumePressureConstant * self.totalVolume
+        currentHeartRate = self.heartRate
+        currentViscosity = self.viscosity
+        currentRadiusFactor = self.lumFactor[2]
+        currentVolume = self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2 = bp.bpFunction(t, self.heartRate)
+            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
+            for j, changeHR in enumerate(ctHR):
+                if t >= changeHR:
+                    currentHeartRate = newHR[j]
+                else:
+                    break 
+
+            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
+            for j, changeVis in enumerate(ctVis):
+                if t >= changeVis:
+                    currentViscosity = newVis[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
+            for j, changeRadius in enumerate(ctRadius):
+                if t >= changeRadius:
+                    currentRadiusFactor = newRadius[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
+            for j, changeVol in enumerate(ctVol):
+                if t >= changeVol:
+                    currentVolume = newVol[j]
+                else:
+                    break
+
+            viskosityEffect = currentViscosity / 100
+            p1, p2 = bp.bpFunction(t, currentHeartRate)
+
+            volumePressureConstant = 0.01
+            volumeEffect = volumePressureConstant * currentVolume
+
+            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect) * 0.3
 
             self.arteriolPressure[i] = self.arteriePressure[i] * 0.5
             self.arteriolPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect #+ 10
 
-    def capillarePresSim(self, le, nu, prop, interval, change=0):
+    def capillarePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
             Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
@@ -604,20 +703,55 @@ class BodySystem():
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[3]
 
-        viskosityEffect = self.viscosity / 100
-
-        volumePressureConstant = 0.01
-        volumeEffect = volumePressureConstant * self.totalVolume
+        currentHeartRate = self.heartRate
+        currentViscosity = self.viscosity
+        currentRadiusFactor = self.lumFactor[3]
+        currentVolume = self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2 = bp.bpFunction(t, self.heartRate)
+            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
+            for j, changeHR in enumerate(ctHR):
+                if t >= changeHR:
+                    currentHeartRate = newHR[j]
+                else:
+                    break 
+
+            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
+            for j, changeVis in enumerate(ctVis):
+                if t >= changeVis:
+                    currentViscosity = newVis[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
+            for j, changeRadius in enumerate(ctRadius):
+                if t >= changeRadius:
+                    currentRadiusFactor = newRadius[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
+            for j, changeVol in enumerate(ctVol):
+                if t >= changeVol:
+                    currentVolume = newVol[j]
+                else:
+                    break
+
+            viskosityEffect = currentViscosity / 100
+            p1, p2 = bp.bpFunction(t, currentHeartRate)
+
+            volumePressureConstant = 0.01
+            volumeEffect = volumePressureConstant * currentVolume
+
+            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect) * 0.3
             
             self.capillarePressure[i] = self.arteriolPressure[i] * 0.5
             self.capillarePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect
 
-    def venolePresSim(self, le, nu):
+    def venolePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
             Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
@@ -638,20 +772,55 @@ class BodySystem():
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[4]
 
-        viskosityEffect = self.viscosity / 100
-
-        volumePressureConstant = 0.01
-        volumeEffect = volumePressureConstant * self.totalVolume
+        currentHeartRate = self.heartRate
+        currentViscosity = self.viscosity
+        currentRadiusFactor = self.lumFactor[4]
+        currentVolume = self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2 = bp.bpFunction(t, self.heartRate)
+            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
+            for j, changeHR in enumerate(ctHR):
+                if t >= changeHR:
+                    currentHeartRate = newHR[j]
+                else:
+                    break 
+
+            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
+            for j, changeVis in enumerate(ctVis):
+                if t >= changeVis:
+                    currentViscosity = newVis[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
+            for j, changeRadius in enumerate(ctRadius):
+                if t >= changeRadius:
+                    currentRadiusFactor = newRadius[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
+            for j, changeVol in enumerate(ctVol):
+                if t >= changeVol:
+                    currentVolume = newVol[j]
+                else:
+                    break
+
+            viskosityEffect = currentViscosity / 100
+            p1, p2 = bp.bpFunction(t, currentHeartRate)
+
+            volumePressureConstant = 0.01
+            volumeEffect = volumePressureConstant * currentVolume
+
+            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect) * 0.3
                        
             self.venolePressure[i] = self.capillarePressure[i] * 0.4
             self.venolePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect + 5
             
-    def venePresSim(self, le, nu):
+    def venePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
             Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
@@ -672,21 +841,55 @@ class BodySystem():
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[5]
 
-        viskosityEffect = self.viscosity / 100
-
-        volumePressureConstant = 0.01
-        volumeEffect = volumePressureConstant * self.totalVolume
+        currentHeartRate = self.heartRate
+        currentViscosity = self.viscosity
+        currentRadiusFactor = self.lumFactor[5]
+        currentVolume = self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2 = bp.bpFunction(t, self.heartRate)
+            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
+            for j, changeHR in enumerate(ctHR):
+                if t >= changeHR:
+                    currentHeartRate = newHR[j]
+                else:
+                    break 
+
+            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
+            for j, changeVis in enumerate(ctVis):
+                if t >= changeVis:
+                    currentViscosity = newVis[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
+            for j, changeRadius in enumerate(ctRadius):
+                if t >= changeRadius:
+                    currentRadiusFactor = newRadius[j]
+                else:
+                    break
             
+            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
+            for j, changeVol in enumerate(ctVol):
+                if t >= changeVol:
+                    currentVolume = newVol[j]
+                else:
+                    break
+
+            viskosityEffect = currentViscosity / 100
+            p1, p2 = bp.bpFunction(t, currentHeartRate)
+
+            volumePressureConstant = 0.01
+            volumeEffect = volumePressureConstant * currentVolume
+
+            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect) * 0.3
 
             self.venePressure[i] = self.venolePressure[i] * 0.3
             self.venePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect + 3
             
-    def vCavaPresSim(self, le, nu):
+    def vCavaPresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
             Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
 
@@ -707,20 +910,55 @@ class BodySystem():
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[6]
 
-        viskosityEffect = self.viscosity / 100
-
-        volumePressureConstant = 0.01
-        volumeEffect = volumePressureConstant * self.totalVolume
+        currentHeartRate = self.heartRate
+        currentViscosity = self.viscosity
+        currentRadiusFactor = self.lumFactor[6]
+        currentVolume = self.totalVolume
 
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            p1, p2 = bp.bpFunction(t, self.heartRate)
+            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
+            for j, changeHR in enumerate(ctHR):
+                if t >= changeHR:
+                    currentHeartRate = newHR[j]
+                else:
+                    break 
+
+            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
+            for j, changeVis in enumerate(ctVis):
+                if t >= changeVis:
+                    currentViscosity = newVis[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
+            for j, changeRadius in enumerate(ctRadius):
+                if t >= changeRadius:
+                    currentRadiusFactor = newRadius[j]
+                else:
+                    break
+
+            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
+            for j, changeVol in enumerate(ctVol):
+                if t >= changeVol:
+                    currentVolume = newVol[j]
+                else:
+                    break
+
+            viskosityEffect = currentViscosity / 100
+            p1, p2 = bp.bpFunction(t, currentHeartRate)
+
+            volumePressureConstant = 0.01
+            volumeEffect = volumePressureConstant * currentVolume
+
+            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect) * 0.3
             
             self.vCavaPressure[i] = self.venePressure[i] * 0.2
             self.vCavaPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect - radiusEffect
 
-    def vesselSimulator(self, le, nu, prop, interval, change):
+    def vesselSimulator(self, le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol):
         """_summary_
             Ruft einfach alle Funktionen auf, um so dann das Gefäßsystem zu simulieren.
         Args:
@@ -730,15 +968,15 @@ class BodySystem():
             interval (int): Zeitpunkte wo Viskosität verändert wird.
             change (float):Wert um den Viskosität verändert werden soll
         """
-        self.aortaPresSim(le, nu)
-        self.arteriePresSim(le, nu)
-        self.arteriolePresSim(le, nu)
-        self.capillarePresSim(le, nu, prop, interval, change)
-        self.venolePresSim(le, nu)
-        self.venePresSim(le, nu)
-        self.vCavaPresSim(le, nu)
+        self.aortaPresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
+        self.arteriePresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
+        self.arteriolePresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
+        self.capillarePresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
+        self.venolePresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
+        self.venePresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
+        self.vCavaPresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
 
-    def vpPlotter(self, le, nu, prop, interval, change):
+    def vpPlotter(self, le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol):
         """_summary_
             Simuliert das Herz, um dann das Blutsystem zu simulieren. Simulation wird dann geplottet, also
             der Druck in jedem Gefäß über die Zeit.
@@ -754,7 +992,7 @@ class BodySystem():
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
         h.heartSimulation()
 
-        self.vesselSimulator(le, nu, prop, interval, change)
+        self.vesselSimulator(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
 
         plt.plot(self.time, self.aortaPressure, label='Aorta Druck')
         plt.plot(self.time, self.arteriePressure, label='Arterie Druck')
