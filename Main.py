@@ -68,14 +68,14 @@ newRadius = []
 ctVol = []
 newVol = []
 
-#ctHR = [2, 4, 6]
-#newHR = [40, 90, 160]
+ctHR = [2, 4, 6]
+newHR = [40, 90, 360]
 #ctVis = [2, 4, 6]
 #newVis = [10, 50, 100]
 #ctRadius = [2, 4, 6]
 #newRadius = [0.1, 0.1, 0.1]
-ctVol = [2, 4, 6]
-newVol = [100, 200, 300]
+#ctVol = [2, 4, 6]
+#newVol = [100, 200, 300]
 
 
 ## Klasse ##

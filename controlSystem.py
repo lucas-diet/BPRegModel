@@ -40,6 +40,19 @@ ctHR = []
 newHR = []
 ctVis = []
 newVis = []
+ctRadius = []
+newRadius = []
+ctVol = []
+newVol = []
+
+#ctHR = [2, 4, 6]
+#newHR = [40, 90, 160]
+#ctVis = [2, 4, 6]
+#newVis = [10, 50, 100]
+#ctRadius = [2, 4, 6]
+#newRadius = [0.1, 0.1, 0.1]
+ctVol = [2, 4, 6]
+newVol = [100, 200, 300]
 
 ##################
 #### Klassen #####
@@ -50,7 +63,7 @@ bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, p
 s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
 
 h.heartSimulation()
-bs.vesselSimulator(lens, nums, ctHR, newHR, ctVis, newVis)
+bs.vesselSimulator(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
 
 isAorta, isArterie, isArteriol, isCapillare, isVenole, isVene, isVCava = bs.getPressurs()
 isRV = h.bloodPressure_RV
@@ -61,7 +74,7 @@ isPres = [isRV, isLV, isAorta, isArterie, isArteriol, isCapillare, isVenole, isV
 #s.presPrinter(isPres)
 #print(heartRate, 0)
 #print('\n', '#####', 0)
-bs.vpPlotter(lens, nums, ctHR, newHR, ctVis, newVis)
+bs.vpPlotter(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
 
 #### Soll Größen ####
 
@@ -97,7 +110,7 @@ for i in range(0, len(mt)):
     soS = Sensor(radi, newVis, newHR, strokeVolume, edv, esv, pres0, maxTime)
     
     soH.heartSimulation()
-    soBS.vesselSimulator(lens, nums, ctHR, newHR, ctVis, newVis)
+    soBS.vesselSimulator(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
 
     #### Regelstrecke ####
 

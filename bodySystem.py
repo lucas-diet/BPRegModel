@@ -1,6 +1,4 @@
 
-#TODO: TotalVolumen noch manipulieren können in einer Simulation!
-
 import numpy as np
 import matplotlib.pyplot as plt
 
