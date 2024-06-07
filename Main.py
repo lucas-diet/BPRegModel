@@ -46,7 +46,12 @@ bpSim = BloodPressure(duration, heartRate, systolic, diastolic)
 #### Herz #####
 ###############
 
-## Klasse ##
+ctEDV=[2, 5, 8]
+newEDV=[100, 110, 200]
+ctESV=[2, 5, 8]
+newESV=[50, 60, 70]
+
+## Klasse ## ctEDV, newEDV, ctESV, newESV
 h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
 
 #h.hpPlotter()
@@ -68,8 +73,8 @@ newRadius = []
 ctVol = []
 newVol = []
 
-ctHR = [2, 4, 6]
-newHR = [40, 90, 360]
+#ctHR = [2, 4, 6]
+#newHR = [40, 90, 360]
 #ctVis = [2, 4, 6]
 #newVis = [10, 50, 100]
 #ctRadius = [2, 4, 6]

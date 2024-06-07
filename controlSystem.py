@@ -36,17 +36,10 @@ change = 0                                     # Wert um den verändert wird, we
 lims = [-17, 17]                            # Für den Achsenbereich, der angezeigt werden soll, wenn Radius der Gefäße geplottet wird.
 lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 ###########################
-ctHR = []
-newHR = []
-ctVis = []
-newVis = []
-ctRadius = []
-newRadius = []
-ctVol = []
-newVol = []
+ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol = [], [], [], [], [], [], [], []
 
 ctHR = [2, 4, 6]
-newHR = [40, 90, 360, 70]
+newHR = [40, 90, 360]
 #ctVis = [2, 4, 6]
 #newVis = [10, 50, 100]
 #ctRadius = [2, 4, 6]
@@ -78,7 +71,7 @@ bs.vpPlotter(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol,
 
 #### Soll Größen ####
 
-soHR = [80, 10, 20]
+soHR = [120, 10, 60]
 soLF = [[1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1]]

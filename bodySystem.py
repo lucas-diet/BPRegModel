@@ -463,6 +463,15 @@ class BodySystem():
         
         return idx
     
+    def updateParameter(self, t, changeTimes, newValues, currentValue):
+        """Aktualisiert einen Parameter basierend auf den Änderungszeiten und neuen Werten."""
+        for j, changeTime in enumerate(changeTimes):
+            if t >= changeTime:
+                currentValue = newValues[j]
+            else:
+                break
+        return currentValue
+    
     def aortaPresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
             Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
@@ -493,33 +502,10 @@ class BodySystem():
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
-            for j, changeHR in enumerate(ctHR):
-                if t >= changeHR:
-                    currentHeartRate = newHR[j]
-                else:
-                    break 
-
-            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
-            for j, changeVis in enumerate(ctVis):
-                if t >= changeVis:
-                    currentViscosity = newVis[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
-            for j, changeRadius in enumerate(ctRadius):
-                if t >= changeRadius:
-                    currentRadiusFactor = newRadius[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
-            for j, changeVol in enumerate(ctVol):
-                if t >= changeVol:
-                    currentVolume = newVol[j]
-                else:
-                    break
+            currentHeartRate = self.updateParameter(t, ctHR, newHR, currentHeartRate)
+            currentViscosity = self.updateParameter(t, ctVis, newVis, currentViscosity)
+            currentRadiusFactor = self.updateParameter(t, ctRadius, newRadius, currentRadiusFactor)
+            currentVolume = self.updateParameter(t, ctVol, newVol, currentVolume)
 
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
@@ -565,33 +551,10 @@ class BodySystem():
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
-            for j, changeHR in enumerate(ctHR):
-                if t >= changeHR:
-                    currentHeartRate = newHR[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
-            for j, changeVis in enumerate(ctVis):
-                if t >= changeVis:
-                    currentViscosity = newVis[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
-            for j, changeRadius in enumerate(ctRadius):
-                if t >= changeRadius:
-                    currentRadiusFactor = newRadius[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
-            for j, changeVol in enumerate(ctVol):
-                if t >= changeVol:
-                    currentVolume = newVol[j]
-                else:
-                    break
+            currentHeartRate = self.updateParameter(t, ctHR, newHR, currentHeartRate)
+            currentViscosity = self.updateParameter(t, ctVis, newVis, currentViscosity)
+            currentRadiusFactor = self.updateParameter(t, ctRadius, newRadius, currentRadiusFactor)
+            currentVolume = self.updateParameter(t, ctVol, newVol, currentVolume)
 
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
@@ -634,33 +597,10 @@ class BodySystem():
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
-            for j, changeHR in enumerate(ctHR):
-                if t >= changeHR:
-                    currentHeartRate = newHR[j]
-                else:
-                    break 
-
-            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
-            for j, changeVis in enumerate(ctVis):
-                if t >= changeVis:
-                    currentViscosity = newVis[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
-            for j, changeRadius in enumerate(ctRadius):
-                if t >= changeRadius:
-                    currentRadiusFactor = newRadius[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
-            for j, changeVol in enumerate(ctVol):
-                if t >= changeVol:
-                    currentVolume = newVol[j]
-                else:
-                    break
+            currentHeartRate = self.updateParameter(t, ctHR, newHR, currentHeartRate)
+            currentViscosity = self.updateParameter(t, ctVis, newVis, currentViscosity)
+            currentRadiusFactor = self.updateParameter(t, ctRadius, newRadius, currentRadiusFactor)
+            currentVolume = self.updateParameter(t, ctVol, newVol, currentVolume)
 
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
@@ -709,33 +649,10 @@ class BodySystem():
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
-            for j, changeHR in enumerate(ctHR):
-                if t >= changeHR:
-                    currentHeartRate = newHR[j]
-                else:
-                    break 
-
-            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
-            for j, changeVis in enumerate(ctVis):
-                if t >= changeVis:
-                    currentViscosity = newVis[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
-            for j, changeRadius in enumerate(ctRadius):
-                if t >= changeRadius:
-                    currentRadiusFactor = newRadius[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
-            for j, changeVol in enumerate(ctVol):
-                if t >= changeVol:
-                    currentVolume = newVol[j]
-                else:
-                    break
+            currentHeartRate = self.updateParameter(t, ctHR, newHR, currentHeartRate)
+            currentViscosity = self.updateParameter(t, ctVis, newVis, currentViscosity)
+            currentRadiusFactor = self.updateParameter(t, ctRadius, newRadius, currentRadiusFactor)
+            currentVolume = self.updateParameter(t, ctVol, newVol, currentVolume)
 
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
@@ -778,33 +695,10 @@ class BodySystem():
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
-            for j, changeHR in enumerate(ctHR):
-                if t >= changeHR:
-                    currentHeartRate = newHR[j]
-                else:
-                    break 
-
-            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
-            for j, changeVis in enumerate(ctVis):
-                if t >= changeVis:
-                    currentViscosity = newVis[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
-            for j, changeRadius in enumerate(ctRadius):
-                if t >= changeRadius:
-                    currentRadiusFactor = newRadius[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
-            for j, changeVol in enumerate(ctVol):
-                if t >= changeVol:
-                    currentVolume = newVol[j]
-                else:
-                    break
+            currentHeartRate = self.updateParameter(t, ctHR, newHR, currentHeartRate)
+            currentViscosity = self.updateParameter(t, ctVis, newVis, currentViscosity)
+            currentRadiusFactor = self.updateParameter(t, ctRadius, newRadius, currentRadiusFactor)
+            currentVolume = self.updateParameter(t, ctVol, newVol, currentVolume)
 
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
@@ -847,33 +741,10 @@ class BodySystem():
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
-            for j, changeHR in enumerate(ctHR):
-                if t >= changeHR:
-                    currentHeartRate = newHR[j]
-                else:
-                    break 
-
-            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
-            for j, changeVis in enumerate(ctVis):
-                if t >= changeVis:
-                    currentViscosity = newVis[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
-            for j, changeRadius in enumerate(ctRadius):
-                if t >= changeRadius:
-                    currentRadiusFactor = newRadius[j]
-                else:
-                    break
-            
-            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
-            for j, changeVol in enumerate(ctVol):
-                if t >= changeVol:
-                    currentVolume = newVol[j]
-                else:
-                    break
+            currentHeartRate = self.updateParameter(t, ctHR, newHR, currentHeartRate)
+            currentViscosity = self.updateParameter(t, ctVis, newVis, currentViscosity)
+            currentRadiusFactor = self.updateParameter(t, ctRadius, newRadius, currentRadiusFactor)
+            currentVolume = self.updateParameter(t, ctVol, newVol, currentVolume)
 
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
@@ -916,33 +787,10 @@ class BodySystem():
         for i in range(0, len(self.time)):
             t = self.time[i]
 
-            # Überprüfen auf Änderungen der Herzfrequenz zu diesem Zeitpunkt
-            for j, changeHR in enumerate(ctHR):
-                if t >= changeHR:
-                    currentHeartRate = newHR[j]
-                else:
-                    break 
-
-            # Überprüfen auf Änderungen der Viskosität zu diesem Zeitpunkt
-            for j, changeVis in enumerate(ctVis):
-                if t >= changeVis:
-                    currentViscosity = newVis[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Radius-Skalierungsfaktors zu diesem Zeitpunkt
-            for j, changeRadius in enumerate(ctRadius):
-                if t >= changeRadius:
-                    currentRadiusFactor = newRadius[j]
-                else:
-                    break
-
-            # Überprüfen auf Änderungen des Volumens zu diesem Zeitpunkt
-            for j, changeVol in enumerate(ctVol):
-                if t >= changeVol:
-                    currentVolume = newVol[j]
-                else:
-                    break
+            currentHeartRate = self.updateParameter(t, ctHR, newHR, currentHeartRate)
+            currentViscosity = self.updateParameter(t, ctVis, newVis, currentViscosity)
+            currentRadiusFactor = self.updateParameter(t, ctRadius, newRadius, currentRadiusFactor)
+            currentVolume = self.updateParameter(t, ctVol, newVol, currentVolume)
 
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
