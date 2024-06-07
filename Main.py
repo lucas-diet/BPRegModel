@@ -46,15 +46,10 @@ bpSim = BloodPressure(duration, heartRate, systolic, diastolic)
 #### Herz #####
 ###############
 
-ctEDV=[2, 5, 8]
-newEDV=[100, 110, 200]
-ctESV=[2, 5, 8]
-newESV=[50, 60, 70]
-
-## Klasse ## ctEDV, newEDV, ctESV, newESV
+## Klasse ##
 h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
 
-#h.hpPlotter()
+#h.hpPlotter()          # Ausführbare Funktion
 
 ########################
 ##### Körpersystem #####
@@ -77,8 +72,8 @@ newVol = []
 #newHR = [40, 90, 360]
 #ctVis = [2, 4, 6]
 #newVis = [10, 50, 100]
-#ctRadius = [2, 4, 6]
-#newRadius = [0.1, 0.1, 0.1]
+ctRadius = [2, 4, 6]
+newRadius = [0.1, 0.1, 0.1]
 #ctVol = [2, 4, 6]
 #newVol = [100, 200, 300]
 
@@ -106,7 +101,7 @@ h.heartSimulation()
 bs.vesselSimulator(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
 
 #s.ppPlotter(data)                                  # Ausführbare Funktion
-s.presPrinter(dataC)                                # Ausführbare Funktion
+#s.presPrinter(dataC)                                # Ausführbare Funktion
 
 ### Findet den Blutdruck zu einem bestimmten Zeitpunkt ###
 presData = data[0]                              # data[x] x = {0,1,2,3,4,5,6}

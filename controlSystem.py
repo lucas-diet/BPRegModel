@@ -71,18 +71,18 @@ bs.vpPlotter(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol,
 
 #### Soll Größen ####
 
-soHR = [120, 10, 60]
+soHR = [70, 70, 70]
 soLF = [[1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1]]
-soVis = [5, 90, 60]
-#soStrokeVolume = []
-soEDV = []
-soESV = []
+soVis = [5, 50, 100]
 soTV = [10, 50, 100]
-mt = [0 for _ in range(0,len(ctHR))]
+apply = 3
+mt = [0 for _ in range(0, apply)]
 
 #####################
+#   Regelkreis
+
 rwLV = []
 rwAorta = []
 rwArterie = []
@@ -91,8 +91,6 @@ rwCapillare = []
 rwVenole = []
 rwVene = []
 rwVCava = []
-
-newHR = heartRate
 
 for i in range(0, len(mt)):
     nHR = soHR[i]
@@ -105,7 +103,7 @@ for i in range(0, len(mt)):
     soS = Sensor(radi, nVis, nHR, strokeVolume, edv, esv, pres0, maxTime)
     
     soH.heartSimulation()
-    soBS.vesselSimulator(lens, nums, ctHR, soHR, ctVis, soVis, ctRadius, nLF, ctVol, soTV)
+    soBS.vesselSimulator(lens, nums, ctHR, soHR, ctVis, soVis, ctRadius, newRadius, ctVol, soTV)
 
     #### Regelstrecke ####
 

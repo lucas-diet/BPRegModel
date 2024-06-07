@@ -498,7 +498,7 @@ class BodySystem():
         currentViscosity = self.viscosity
         currentRadiusFactor = self.lumFactor[0]
         currentVolume = self.totalVolume
-
+        
         for i in range(0, len(self.time)):
             t = self.time[i]
 
@@ -506,7 +506,7 @@ class BodySystem():
             currentViscosity = self.updateParameter(t, ctVis, newVis, currentViscosity)
             currentRadiusFactor = self.updateParameter(t, ctRadius, newRadius, currentRadiusFactor)
             currentVolume = self.updateParameter(t, ctVol, newVol, currentVolume)
-
+            
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
 

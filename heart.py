@@ -41,6 +41,15 @@ class Heart():
         normalized_bp = (data - min_bp) / (max_bp - min_bp)  # Auf [0, 1] normalisieren
         normalized_bp = normalized_bp * (self.esv - self.edv) + self.edv  # Skalieren auf [diastolic, systolic]
 
+    def updateParameter(self, t, changeTimes, newValues, currentValue):
+        """Aktualisiert einen Parameter basierend auf den Änderungszeiten und neuen Werten."""
+        for j, changeTime in enumerate(changeTimes):
+            if t >= changeTime:
+                currentValue = newValues[j]
+            else:
+                break
+        return currentValue
+    
     def rightVentricle(self, shift=-0.5):
 
         viskosityEffect = self.viscosity / 100
@@ -48,7 +57,7 @@ class Heart():
         volumePressureConstant = 0.01
         volumeEffect = volumePressureConstant * self.totalVolume
 
-        for i in range(0,len(self.time)):
+        for i in range(0, len(self.time)):
             t = self.time[i]
               
             elasticity = 1 + np.sin(2 * np.pi * self.heartRate * (t - shift) / 60)
@@ -58,7 +67,7 @@ class Heart():
             else:
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_RV[i-1] - self.esv)
                 self.bloodVolume_RV[i] = self.bloodVolume_RV[i-1] + dVdt * self.dt
-            
+
             self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) * 0.15 + volumeEffect + viskosityEffect + 3
 
     def leftVentricle(self, shift=0):
@@ -77,7 +86,7 @@ class Heart():
             else:
                 dVdt = self.strokeVolume - elasticity * (self.bloodVolume_LV[i-1] - self.esv)
                 self.bloodVolume_LV[i] = self.bloodVolume_LV[i-1] + dVdt * self.dt
-            
+
             self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) + volumeEffect + viskosityEffect + 10
     
     def heartSimulation(self):
