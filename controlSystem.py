@@ -46,7 +46,7 @@ ctVol = []
 newVol = []
 
 ctHR = [2, 4, 6]
-newHR = [40, 90, 360]
+newHR = [40, 90, 360, 70]
 #ctVis = [2, 4, 6]
 #newVis = [10, 50, 100]
 #ctRadius = [2, 4, 6]
@@ -87,7 +87,7 @@ soVis = [5, 90, 60]
 soEDV = []
 soESV = []
 soTV = [10, 50, 100]
-mt = [2, 8, 2]
+mt = [0 for _ in range(0,len(ctHR))]
 
 #####################
 rwLV = []
@@ -144,7 +144,6 @@ for i in range(0, len(mt)):
 
     #s.presPrinter(rwP)
     #print('\n', '#####', i+1)
-    print(nHR)
     plt.figure(figsize=(11, 7), num=f'Simulationsdurchlauf {i+2}')
     plt.title(f'Simulation des Gefäßsystem; {soHR[i]}')
     plt.plot(bs.time, rwP[2], label='Aorta Druck')

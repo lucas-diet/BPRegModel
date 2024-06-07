@@ -10,7 +10,6 @@ class Liver():
         self.time = np.arange(0, maxTime, dt)
         self.viscosity_history = []  # Liste zum Speichern der Viskositätswerte
 
-
     def getViscosity(self):
         """_summary_
             Gibt den Wert der Viskosität zurück

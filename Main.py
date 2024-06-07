@@ -108,28 +108,3 @@ presData = data[0]                              # data[x] x = {0,1,2,3,4,5,6}
 timeStemp = 1
 
 #s.printPressureTimePoint(presData, timeStemp)          # Ausführbare Funktion
-
-#############################################
-################
-##### Hirn #####
-################
-
-targetPres = 10
-activity = 10
-
-## Klasse ##
-b = brain(targetPres, heartRate, activity, radi, lumFactor, viscosity, strokeVolume, edv, esv, pres0, maxTime)
-
-s.brainSender(data)
-b.setPressure(data, targetPres)
-
-maxs, mins, means = b.getPressure(data)
-
-#################
-##### Leber #####
-#################
-
-## Klasse ##
-#l = Liver(viscosity, maxTime)
-
-#l.viscositySimulate('inc', 50, 0.1)
