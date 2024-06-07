@@ -45,14 +45,14 @@ newRadius = []
 ctVol = []
 newVol = []
 
-#ctHR = [2, 4, 6]
-#newHR = [40, 90, 160]
+ctHR = [2, 4, 6]
+newHR = [40, 90, 360]
 #ctVis = [2, 4, 6]
 #newVis = [10, 50, 100]
 #ctRadius = [2, 4, 6]
 #newRadius = [0.1, 0.1, 0.1]
-ctVol = [2, 4, 6]
-newVol = [100, 200, 300]
+#ctVol = [2, 4, 6]
+#newVol = [100, 200, 300]
 
 ##################
 #### Klassen #####
@@ -78,15 +78,16 @@ bs.vpPlotter(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol,
 
 #### Soll Größen ####
 
-soHR = [80, 10]
+soHR = [80, 10, 20]
 soLF = [[1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1]]
-soVis = [5, 90]
+soVis = [5, 90, 60]
 #soStrokeVolume = []
 soEDV = []
 soESV = []
-soTotalVolume = []
-mt = [2, 8]
+soTV = [10, 50, 100]
+mt = [2, 8, 2]
 
 #####################
 rwLV = []
@@ -101,16 +102,17 @@ rwVCava = []
 newHR = heartRate
 
 for i in range(0, len(mt)):
-    newHR = soHR[i]
-    newVis = soVis[i]
-    print(newHR, newVis)
+    nHR = soHR[i]
+    nVis = soVis[i]
+    nLF = soLF[i]
+    nTV = soTV[i]
 
-    soH = Heart(radi, newVis, newHR, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
-    soBS = BodySystem(radi, lumFactor, newVis, newHR, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
-    soS = Sensor(radi, newVis, newHR, strokeVolume, edv, esv, pres0, maxTime)
+    soH = Heart(radi, nVis, nHR, strokeVolume, edv, esv, pres0, nTV, maxTime)
+    soBS = BodySystem(radi, nLF, nVis, nHR, strokeVolume, edv, esv, pres0, nTV, maxTime)
+    soS = Sensor(radi, nVis, nHR, strokeVolume, edv, esv, pres0, maxTime)
     
     soH.heartSimulation()
-    soBS.vesselSimulator(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
+    soBS.vesselSimulator(lens, nums, ctHR, soHR, ctVis, soVis, ctRadius, nLF, ctVol, soTV)
 
     #### Regelstrecke ####
 
@@ -142,9 +144,9 @@ for i in range(0, len(mt)):
 
     #s.presPrinter(rwP)
     #print('\n', '#####', i+1)
-
+    print(nHR)
     plt.figure(figsize=(11, 7), num=f'Simulationsdurchlauf {i+2}')
-    plt.title(f'Simulation des Gefäßsystem; {newHR}')
+    plt.title(f'Simulation des Gefäßsystem; {soHR[i]}')
     plt.plot(bs.time, rwP[2], label='Aorta Druck')
     plt.plot(bs.time, rwP[3], label='Arterie Druck')
     plt.plot(bs.time, rwP[4], label='Arteriole Druck')
@@ -168,4 +170,3 @@ for i in range(0, len(mt)):
     isVenole = rwVenole
     isVene = rwVene
     isVCava = rwVCava
-
