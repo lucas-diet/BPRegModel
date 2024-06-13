@@ -9,154 +9,109 @@ from sensor import *
 from liver import *
 
 
-#########################
-#### Init Parameter #####
-#########################
-
-radi = [20000, 4000, 20, 8, 20, 5000, 30000]   # in µm
-viscosity = 50                                 # Wert zwischen 0 und 100
-heartRate = 70
-edv = 110                                      # Enddiastolische Volumen
-esv = 60                                       # Endsystolisches Volumen
-strokeVolume = edv - esv                       # Schlagvolumen
-pres0 = 70                      
-maxTime = 10
-
-totalVolume = 70                              # in ml
-
-nums = [1, 2, 4, 16, 4, 2, 1]
-lens = [200, 150, 100, 50, 100, 150, 300]      # in mm
-
-#### Extra Parameter für Liver ##### 
-prop = 'inc'                                   # 'inc' zum erhöhen ; 'dec' zum verringern
-interval = 100                                 # Zeitschritte, wo verändert wird
-change = 0                                     # Wert um den verändert wird, wenn 0 dann keine Veränderung
-
-##### Extra Parameter für BodySystem #####
-lims = [-17, 17]                            # Für den Achsenbereich, der angezeigt werden soll, wenn Radius der Gefäße geplottet wird.
-lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
-###########################
-ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol = [], [], [], [], [], [], [], []
-
-ctHR = [2, 4, 6]
-newHR = [40, 90, 360]
-#ctVis = [2, 4, 6]
-#newVis = [10, 50, 100]
-#ctRadius = [2, 4, 6]
-#newRadius = [0.1, 0.1, 0.1]
-#ctVol = [2, 4, 6]
-#newVol = [100, 200, 300]
-
-##################
-#### Klassen #####
-##################
-
-h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
-bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
-s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
-
-h.heartSimulation()
-bs.vesselSimulator(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
-
-isAorta, isArterie, isArteriol, isCapillare, isVenole, isVene, isVCava = bs.getPressurs()
-isRV = h.bloodPressure_RV
-isLV = h.bloodPressure_LV
-
-isPres = [isRV, isLV, isAorta, isArterie, isArteriol, isCapillare, isVenole, isVene, isVCava]
-
-#s.presPrinter(isPres)
-#print(heartRate, 0)
-#print('\n', '#####', 0)
-bs.vpPlotter(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
-
-#### Soll Größen ####
-
-soHR = [70, 70, 70]
-soLF = [[1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1]]
-soVis = [5, 50, 100]
-soTV = [10, 50, 100]
-apply = 3
-mt = [0 for _ in range(0, apply)]
-
-#####################
-#   Regelkreis
-
-rwLV = []
-rwAorta = []
-rwArterie = []
-rwArteriol = []
-rwCapillare = []
-rwVenole = []
-rwVene = []
-rwVCava = []
-
-for i in range(0, len(mt)):
-    nHR = soHR[i]
-    nVis = soVis[i]
-    nLF = soLF[i]
-    nTV = soTV[i]
-
-    soH = Heart(radi, nVis, nHR, strokeVolume, edv, esv, pres0, nTV, maxTime)
-    soBS = BodySystem(radi, nLF, nVis, nHR, strokeVolume, edv, esv, pres0, nTV, maxTime)
-    soS = Sensor(radi, nVis, nHR, strokeVolume, edv, esv, pres0, maxTime)
+class Regelkreis():
     
-    soH.heartSimulation()
-    soBS.vesselSimulator(lens, nums, ctHR, soHR, ctVis, soVis, ctRadius, newRadius, ctVol, soTV)
+    def __init__(self, radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime, dt=0.01):
+        self.radi = radi        
+        self.lumFactor = lumFactor
+        self.viscosity = viscosity
+        self.heartRate = heartRate
+        self.strokeVolume = strokeVolume 
+        self.edv = edv 
+        self.esv = esv 
+        self.pres0 = pres0
+        self.totalVolume = totalVolume
+        self.maxTime = maxTime
+        self.time = np.arange(0, maxTime, dt)
 
-    #### Regelstrecke ####
+    def controlSystemPlotter(self, i, rw, hr, time):
 
-    soAorta, soArterie, soArteriol, soCapillare, soVenole, soVene, soVCava = soBS.getPressurs()
-    soRV = soH.bloodPressure_RV
-    soLV = soH.bloodPressure_LV
-    soPres = [soRV, soLV, soAorta, soArterie, soArteriol, soCapillare, soVenole, soVene, soVCava]
+        plt.figure(figsize=(11, 7), num=f'Simulationsdurchlauf {i+2}')
+        plt.title(f'Simulation des Gefäßsystem; {hr}')
+        plt.plot(time, rw[2], label='Aorta Druck')
+        plt.plot(time, rw[3], label='Arterie Druck')
+        plt.plot(time, rw[4], label='Arteriole Druck')
+        plt.plot(time, rw[5], label='Kapillare Druck')
+        plt.plot(time, rw[6], label='Venole Druck')
+        plt.plot(time, rw[7], label='Vene Druck')
+        plt.plot(time, rw[8], label='V. Cava Druck')
 
-    #soS.presPrinter(soPres)
+        plt.xlabel('Zeit (s)')
+        plt.ylabel('mmHg')
+        plt.grid(True)
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.08), ncol=7, prop={'size': 8.5})
+        plt.show()
 
-    #### Regelabweichung ####
-    rwRV = soRV - isRV
-    rwLV = soLV - isLV
-    rwAorta = soAorta - isAorta
-    rwArterie = soArterie - isArterie
-    rwArteriol = soArteriol - isArteriol
-    rwCapillare = soCapillare - isCapillare
-    rwVenole = soVenole - isVenole
-    rwVene = soVene - isVene
-    rwVCava = soVCava - isVCava
+    def controlSystem(self, currVals, soHR, soLF, soVis, soTV, runs, lens, nums):
 
-    rwPres = [rwRV, rwLV, rwAorta, rwArterie, rwArteriol, rwCapillare, rwVenole, rwVene, rwVCava]
-    rwMins = [np.min(rwRV), np.min(rwLV), np.min(rwAorta), np.min(rwArterie), np.min(rwArteriol), np.min(rwCapillare), np.min(rwVenole), np.min(rwVene), np.min(rwVCava)]
+        #currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol]
 
-    rwP = []
+        h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
+        bs = BodySystem(self.radi, self.lumFactor, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
+        s = Sensor(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
 
-    for j in range(0, len(rwPres)):
-        rwP.append(rwPres[j] - rwMins[j])
+        h.heartSimulation()
+        bs.vesselSimulator(lens, nums, currVals[0], currVals[1], currVals[2], currVals[3], currVals[4], currVals[5], currVals[6], currVals[7])
 
-    #s.presPrinter(rwP)
-    #print('\n', '#####', i+1)
-    plt.figure(figsize=(11, 7), num=f'Simulationsdurchlauf {i+2}')
-    plt.title(f'Simulation des Gefäßsystem; {soHR[i]}')
-    plt.plot(bs.time, rwP[2], label='Aorta Druck')
-    plt.plot(bs.time, rwP[3], label='Arterie Druck')
-    plt.plot(bs.time, rwP[4], label='Arteriole Druck')
-    plt.plot(bs.time, rwP[5], label='Kapillare Druck')
-    plt.plot(bs.time, rwP[6], label='Venole Druck')
-    plt.plot(bs.time, rwP[7], label='Vene Druck')
-    plt.plot(bs.time, rwP[8], label='V. Cava Druck')
+        isAorta, isArterie, isArteriol, isCapillare, isVenole, isVene, isVCava = bs.getPressurs()
+        isRV = h.bloodPressure_RV
+        isLV = h.bloodPressure_LV
 
-    plt.xlabel('Zeit (s)')
-    plt.ylabel('mmHg')
-    plt.grid(True)
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.08), ncol=7, prop={'size': 8.5})
-    plt.show()
+        isPres = [isRV, isLV, isAorta, isArterie, isArteriol, isCapillare, isVenole, isVene, isVCava]
+
+        for i in range(0, runs):
+            nHR = soHR[i]
+            nVis = soVis[i]
+            nLF = soLF[i]
+            nTV = soTV[i]
+
+            soH = Heart(self.radi, nVis, nHR, self.strokeVolume, self.edv, self.esv, self.pres0, nTV, self.maxTime)
+            soBS = BodySystem(self.radi, nLF, nVis, nHR, self.strokeVolume, self.edv, self.esv, self.pres0, nTV, self.maxTime)
+            soS = Sensor(self.radi, nVis, nHR, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+
+            #currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol]
+            
+            soH.heartSimulation()
+            soBS.vesselSimulator(lens, nums, currVals[0], soHR, currVals[2], soVis, currVals[4], currVals[5], currVals[6], soTV)
+
+            #### Regelstrecke ####
     
-    isRV = rwRV
-    isLV = rwLV
-    isAorta = rwAorta
-    isArterie = rwArterie
-    isArteriol = rwArteriol
-    isCapillare = rwCapillare
-    isVenole = rwVenole
-    isVene = rwVene
-    isVCava = rwVCava
+            soAorta, soArterie, soArteriol, soCapillare, soVenole, soVene, soVCava = soBS.getPressurs()
+            soRV = soH.bloodPressure_RV
+            soLV = soH.bloodPressure_LV
+            soPres = [soRV, soLV, soAorta, soArterie, soArteriol, soCapillare, soVenole, soVene, soVCava]
+
+            soS.presPrinter(soPres)
+
+            #### Regelabweichung ####
+            rwRV = soRV - isRV
+            rwLV = soLV - isLV
+            rwAorta = soAorta - isAorta
+            rwArterie = soArterie - isArterie
+            rwArteriol = soArteriol - isArteriol
+            rwCapillare = soCapillare - isCapillare
+            rwVenole = soVenole - isVenole
+            rwVene = soVene - isVene
+            rwVCava = soVCava - isVCava
+
+            rwPres = [rwRV, rwLV, rwAorta, rwArterie, rwArteriol, rwCapillare, rwVenole, rwVene, rwVCava]
+            rwMins = [np.min(rwRV), np.min(rwLV), np.min(rwAorta), np.min(rwArterie), np.min(rwArteriol), np.min(rwCapillare), np.min(rwVenole), np.min(rwVene), np.min(rwVCava)]
+
+            rwP = []
+
+            for j in range(0, len(rwPres)):
+                rwP.append(rwPres[j] - rwMins[j])
+
+            #s.presPrinter(rwP)
+            print('\n', '#####', i+1)
+            self.controlSystemPlotter(i, rwP, nHR, bs.time)
+            
+            isRV = rwRV
+            isLV = rwLV
+            isAorta = rwAorta
+            isArterie = rwArterie
+            isArteriol = rwArteriol
+            isCapillare = rwCapillare
+            isVenole = rwVenole
+            isVene = rwVene
+            isVCava = rwVCava
