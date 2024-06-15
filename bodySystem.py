@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 
 from heart import Heart
 from bloodPressure import BloodPressure
-from liver import Liver
 
 class BodySystem():
 
@@ -40,17 +39,17 @@ class BodySystem():
 
     def vessel(self, radius, wallThickness, lumFactor=1):
         """_summary_
-            Nimmt den Radius, wanddicke und Radius des Lumens, um Gefäße mit den entsprechenden Maßen
-            zu erzeugen.
-            lumRadi ist für die individuelle Anpassung des inneren Radius
-            Maßeinheit µm wir aber in mm umgerechnet
+                Erzeugt die Querschnittsformen eines Gefäßes basierend auf dem Radius, der Wanddicke und einem Faktor
+                für den inneren Radius.
+
         Args:
-            radius (float): Radius eines Gefäß in µm
-            wallThickness (float): Wanddicke in µm
-            lumRadi (float): Faktor, um inneren Radius zu skalieren -> > 0 und <= 1
+            radius (float): Radius des Gefäßes in Mikrometern (µm).
+            wallThickness (float): Wanddicke des Gefäßes in Mikrometern (µm).
+            lumFactor (float): Faktor zur Skalierung des inneren Radius, standardmäßig 1 (größer 0 und kleiner/gleich 1).
 
         Returns:
-            
+            tuple: x und y Koordinaten des inneren Radius, x1 und y1 Koordinaten des äußeren Radius,
+                Radius des Gefäßes in Millimetern, Wanddicke in Millimetern.
         """
         
         theta = np.linspace(0, 2*np.pi, 150)
@@ -86,35 +85,31 @@ class BodySystem():
 
     def aorta(self, wallThickness=2000, lumFactor=1):
         """_summary_
-            Nimmt die vessel-Funktion mit den Maßen für eine Aorta und erzeugt das entsprechende Gefäß.
-        Args:
-            wallThickness (float, optional): Wanddicke in µm
-            lumRadi (float, optional): Innerer Radius in µm
-        Returns:
-            x
-            y
-            x1
-            y1
-            radius
-            wallThickness 
-        """
+            Erzeugt ein Modell einer Aorta, indem die vessel-Funktion mit spezifischen Maßen aufgerufen wird.
 
+        Args:
+            wallThickness (float, optional): Wanddicke in Mikrometern (µm), standardmäßig 2000 µm.
+            lumFactor (float, optional): Faktor zur Skalierung des inneren Radius, standardmäßig 1.
+
+        Returns:
+            tuple: x und y Koordinaten des inneren Radius, x1 und y1 Koordinaten des äußeren Radius,
+                Radius der Aorta in Millimetern, Wanddicke in Millimetern.
+        """ 
+    
         x, y, x1, y1, radius, wallThickness = self.vessel(self.aor_rad, wallThickness, lumFactor)
         return x, y, x1, y1, radius, wallThickness
     
     def arteries(self, wallThickness=1000, lumFactor=1):
         """_summary_
-            Nimmt die vessel-Funktion mit den Maßen für eine Arterie und erzeugt das entsprechende Gefäß.
+        Erzeugt ein Modell einer Arterie, indem die vessel-Funktion mit spezifischen Maßen aufgerufen wird.
+
         Args:
-            wallThickness (float, optional): Wanddicke in µm
-            lumRadi (float, optional): Innerer Radius in µm
+            wallThickness (float, optional): Wanddicke in Mikrometern (µm), standardmäßig 1000 µm.
+            lumFactor (float, optional): Faktor zur Skalierung des inneren Radius, standardmäßig 1.
+
         Returns:
-            x
-            y
-            x1
-            y1
-            radius
-            wallThickness 
+            tuple: x und y Koordinaten des inneren Radius, x1 und y1 Koordinaten des äußeren Radius,
+                Radius der Arterie in Millimetern, Wanddicke in Millimetern.
         """
 
         x, y, x1, y1, radius, wallThickness = self.vessel(self.art1_rad, wallThickness, lumFactor)
@@ -122,17 +117,15 @@ class BodySystem():
 
     def arterioles(self, wallThickness=30, lumFactor=1):
         """_summary_
-            Nimmt die vessel-Funktion mit den Maßen für eine Arteriole und erzeugt das entsprechende Gefäß.
+            Erzeugt ein Modell einer Arteriole, indem die vessel-Funktion mit spezifischen Maßen aufgerufen wird.
+
         Args:
-            wallThickness (float, optional): Wanddicke in µm
-            lumRadi (float, optional): Innerer Radius in µm
+            wallThickness (float, optional): Wanddicke in Mikrometern (µm), standardmäßig 30 µm.
+            lumFactor (float, optional): Faktor zur Skalierung des inneren Radius, standardmäßig 1.
+
         Returns:
-            x
-            y
-            x1
-            y1
-            radius
-            wallThickness 
+            tuple: x und y Koordinaten des inneren Radius, x1 und y1 Koordinaten des äußeren Radius,
+                Radius der Arteriole in Millimetern, Wanddicke in Millimetern.
         """
         
         x, y, x1, y1, radius, wallThickness = self.vessel(self.art2_rad, wallThickness, lumFactor)
@@ -140,17 +133,16 @@ class BodySystem():
 
     def capillaries(self, wallThickness=1, lumFactor=1):
         """_summary_
-            Nimmt die vessel-Funktion mit den Maßen für eine Kapillare und erzeugt das entsprechende Gefäß.
+            Erzeugt ein Modell einer Kapillare, indem die vessel-Funktion mit spezifischen Maßen aufgerufen wird.
+
         Args:
-            wallThickness (float, optional): Wanddicke in µm
-            lumRadi (float, optional): Innerer Radius in µm
+            wallThickness (float, optional): Wanddicke in Mikrometern (µm), standardmäßig 1 µm.
+            lumFactor (float, optional): Faktor zur Skalierung des inneren Radius, standardmäßig 1.
+
         Returns:
-            x
-            y
-            x1
-            y1
-            radius
-            wallThickness 
+            tuple: x und y Koordinaten des inneren Radius, x1 und y1 Koordinaten des äußeren Radius,
+                Radius der Kapillare in Millimetern, Wanddicke in Millimetern.
+        
         """
         
         x, y, x1, y1, radius, wallThickness = self.vessel(self.cap_rad, wallThickness, lumFactor)
@@ -158,17 +150,15 @@ class BodySystem():
 
     def venules(self, wallThickness=2, lumFactor=1):
         """_summary_
-            Nimmt die vessel-Funktion mit den Maßen für eine Venole und erzeugt das entsprechende Gefäß.
+            Erzeugt ein Modell einer Venole, indem die vessel-Funktion mit spezifischen Maßen aufgerufen wird.
+
         Args:
-            wallThickness (float, optional): Wanddicke in µm
-            lumRadi (float, optional): Innerer Radius in µm
+            wallThickness (float, optional): Wanddicke in Mikrometern (µm), standardmäßig 2 µm.
+            lumFactor (float, optional): Faktor zur Skalierung des inneren Radius, standardmäßig 1.
+
         Returns:
-            x
-            y
-            x1
-            y1
-            radius
-            wallThickness 
+            tuple: x und y Koordinaten des inneren Radius, x1 und y1 Koordinaten des äußeren Radius,
+                Radius der Venole in Millimetern, Wanddicke in Millimetern.
         """
         
         x, y, x1, y1, radius, wallThickness = self.vessel(self.ven1_rad, wallThickness, lumFactor)
@@ -176,17 +166,15 @@ class BodySystem():
 
     def veins(self, wallThickness=500, lumFactor=1):
         """_summary_
-            Nimmt die vessel-Funktion mit den Maßen für eine Vene und erzeugt das entsprechende Gefäß.
+            Erzeugt ein Modell einer Vene, indem die vessel-Funktion mit spezifischen Maßen aufgerufen wird.
+
         Args:
-            wallThickness (float, optional): Wanddicke in µm
-            lumRadi (float, optional): Innerer Radius in µm
+            wallThickness (float, optional): Wanddicke in Mikrometern (µm), standardmäßig 500 µm.
+            lumFactor (float, optional): Faktor zur Skalierung des inneren Radius, standardmäßig 1.
+
         Returns:
-            x
-            y
-            x1
-            y1
-            radius
-            wallThickness 
+            tuple: x und y Koordinaten des inneren Radius, x1 und y1 Koordinaten des äußeren Radius,
+                Radius der Vene in Millimetern, Wanddicke in Millimetern.
         """
         
         x, y, x1, y1, radius, wallThickness = self.vessel(self.ven2_rad, wallThickness, lumFactor)
@@ -194,17 +182,15 @@ class BodySystem():
 
     def venaCava(self, wallThickness=1500, lumFactor=1):
         """_summary_
-            Nimmt die vessel-Funktion mit den Maßen für eine V.cava und erzeugt das entsprechende Gefäß.
+            Erzeugt ein Modell einer Vena cava, indem die vessel-Funktion mit spezifischen Maßen aufgerufen wird.
+
         Args:
-            wallThickness (float, optional): Wanddicke in µm
-            lumRadi (float, optional): Innerer Radius in µm
+            wallThickness (float, optional): Wanddicke in Mikrometern (µm), standardmäßig 1500 µm.
+            lumFactor (float, optional): Faktor zur Skalierung des inneren Radius, standardmäßig 1.
+
         Returns:
-            x
-            y
-            x1
-            y1
-            radius
-            wallThickness 
+            tuple: x und y Koordinaten des inneren Radius, x1 und y1 Koordinaten des äußeren Radius,
+                Radius der Vena cava in Millimetern, Wanddicke in Millimetern.
         """
         
         x, y, x1, y1, radius, wallThickness = self.vessel(self.vc_rad, wallThickness, lumFactor)
@@ -212,10 +198,15 @@ class BodySystem():
     
     def vesselPlotter(self, lumFactor, lims=[]):
         """_summary_
-            Funktion, um die Erzeugen Maße für die Gefäße zu plotten
+        Erstellt Plots für verschiedene Gefäße des Körpers.
+
         Args:
-            lims (list, optional): Ist ein Array, was zwei Werte beinhalten soll, um die 
-             Grenzen für die Gefäß-Plots zu definieren. Defaults = [].
+            lumFactor (list): Liste von Faktoren zur Skalierung der inneren Radien für die verschiedenen Gefäße.
+            lims (list, optional): Liste mit zwei Werten, um die Grenzen der Gefäß-Plots zu definieren. 
+                                Standardmäßig leer ([]).
+
+        Returns:
+            None
         """
 
         fig = plt.figure(figsize=(12,6))
@@ -276,16 +267,15 @@ class BodySystem():
     
     def resistance(self, lens):
         """_summary_
-            Helfer-Funktion
-            Berechnet den Strömungswiderstand für gegebene Werte nach Hagen-Poiseuille-Gesetz und 
-            umformung durch das Ohm'sche Gesetz
+            Berechnet den Strömungswiderstand für gegebene Längen-Werte nach dem Hagen-Poiseuille-Gesetz und dem Ohm'schen Gesetz.
+
         Args:
-            lens (Array): Längen-Werte in mm
-            radius (Array): Werte für Radi in µm
+            lens (Array): Array mit Längen-Werten der Gefäße in Millimetern.
 
         Returns:
-            res (float): Strömungswiderstand in Pa s / mm^3 
+            res (list): Liste mit den berechneten Strömungswiderständen in Pascal Sekunden pro Kubikmillimeter (Pa s / mm^3).
         """
+
         res = []
         radius = np.copy(self.radi) * 0.001
 
@@ -297,13 +287,15 @@ class BodySystem():
 
     def parallelResistance(self, arr):
         """_summary_
-            Kopiert den Inhalt des übergebenen Arrays und berechnet dann den parallelen Widerstand.
+            Berechnet den Gesamtwiderstand für parallel geschaltete Gefäße.
+
         Args:
-            arr (Array, float): Beinhaltet die Gefäßwiderstände von parallel geschalteten Gefäßen
+            arr (array-like of float): Array, das die Widerstände der parallel geschalteten Gefäße enthält.
 
         Returns:
-            pres (float): Gesamtwiderstand von parallel geschalteten Gefäßen
+            pres (float): Gesamtwiderstand der parallel geschalteten Gefäße.
         """
+
         tmp = np.copy(arr)
         res = 1 / np.sum(1 / tmp)
 
@@ -311,28 +303,29 @@ class BodySystem():
     
     def serialResistance(self, arr):
         """_summary_
-            Berechnet Widerstände von Gefäßen, die hintereinander geschaltet sind.
+            Berechnet den Gesamtwiderstand für hintereinander geschaltete Gefäße.
+
         Args:
-            arr (_type_): Beinhaltet 
+            arr (array-like of float): Array, das die Widerstände der hintereinander geschalteten Gefäße enthält.
 
         Returns:
-            _type_: _description_
+            float: Gesamtwiderstand der hintereinander geschalteten Gefäße.
         """
+
         tmp = np.copy(arr)
 
         return np.sum(tmp)
 
     def vesselResistances(self, lens, nums):
         """_summary_
+            Berechnet die Gesamtwiderstände für verschiedene Arten von Blutgefäßen basierend auf ihren Längen und Anzahlen.
 
-        Args_:
-            types: (Array, String): Mit String für jede Art von Gefäß
-            lens: (Array, float): Mit Längen-Werte für jede Art von Gefäß
-            radius: (Array, float): Array mit Werte für den Radius fpr jede Art von Gefäß
-            nums: (Array, int): Array mit Wertden für die Anzahl von jeder Art von Gefäß
+        Args:
+            lens (list of float): Liste mit Längen der verschiedenen Arten von Blutgefäßen.
+            nums (list of int): Liste mit Anzahlen der verschiedenen Arten von Blutgefäßen.
 
         Returns:
-            res (Array, float): Array, wo jeder Wert jeweils den parallelen Widerstand entspricht
+            res (list of float): Liste mit den Gesamtwiderständen für jede Art von Blutgefäß.
         """
 
         types = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
@@ -351,37 +344,37 @@ class BodySystem():
 
         for type in types:
             if type == 'aorta':
-                for i in range(0, nums[0]):
+                for _ in range(0, nums[0]):
                     aortaRes = self.resistance(lens[0])[0]
                     aortaArr.append(aortaRes)
 
             elif type == 'arteries':
-                for i in range(0, nums[1]):
+                for _ in range(0, nums[1]):
                     arteriesRes = self.resistance(lens[1])[1]
                     arteriesArr.append(arteriesRes)
 
             elif type == 'arterioles':
-                for i in range(0, nums[2]):
+                for _ in range(0, nums[2]):
                     arteriolesRes = self.resistance(lens[2])[2]
                     arteriolesArr.append(arteriolesRes)
             
             elif type == 'capillaries':
-                for i in range(0, nums[3]):
+                for _ in range(0, nums[3]):
                     capillariesRes = self.resistance(lens[3])[3]
                     capillariesArr.append(capillariesRes)
             
             elif type == 'venules':
-                for i in range(0, nums[4]):
+                for _ in range(0, nums[4]):
                     venulesRes = self.resistance(lens[4])[4]
                     venulesArr.append(venulesRes)
 
             elif type == 'veins':
-                for i in range(nums[5]):
+                for _ in range(nums[5]):
                     veinsRes = self.resistance(lens[5])[5]
                     veinsArr.append(veinsRes)
             
             elif type == 'venaCava':
-                for i in range(0, nums[6]):
+                for _ in range(0, nums[6]):
                     venaCavaRes = self.resistance(lens[6])[6]
                     venaCavaArr.append(venaCavaRes)
         
@@ -399,13 +392,15 @@ class BodySystem():
     
     def completeResistance(self, resis):
         """_summary_
-            Berechnet den kompletten Widerstand des Körpersystem
+            Berechnet den Gesamtwiderstand des Körpersystems basierend auf den Widerständen aller Gefäßarten.
+
         Args:
-            resis (array): Beinhaltet Widerstände aller Gefäßarten
+            resis (array-like): Array mit den Widerständen aller Gefäßarten.
 
         Returns:
-            comRes (float): Kompletter Widerstand 
+            float: Gesamtwiderstand des Körpersystems.
         """
+
         resis = np.copy(resis)
         compRes = 0
         for i in range(0, len(resis)):
@@ -415,13 +410,15 @@ class BodySystem():
 
     def normalizeResistance(self, resiArr):
         """_summary_
-            Soll die Widerstände normalisieren, damit die Werte nicht mehr so extrem größ sind.
+            Normalisiert die Widerstände, um die Werte auf den Bereich [0, 1] zu skalieren.
+
         Args:
-            resi (_type_): _description_
+            resiArr (array-like): Array mit den zu normalisierenden Widerstandswerten.
 
         Returns:
-            _type_: _description_
+            list: Liste mit normalisierten Widerstandswerten im Bereich [0, 1].
         """
+
         min_val = np.min(resiArr)
         max_val = np.max(resiArr)
 
@@ -437,12 +434,16 @@ class BodySystem():
 
     def resisPrinter(self, le, nu):
         """_summary_
-            In dieser Funktion werden die jeweiligen Funktionen aufgerufen, um die Widerstände der Gefäße auszugeben. 
+            Gibt die Widerstände der verschiedenen Gefäßarten und den Gesamtwiderstand des Körpersystems aus.
+
         Args:
-            le (array): Ein Array, welches die Längen der verschiedenen Gefäßarten besitzt
-            nu (arary): Ein Array, welche die Anzahl der veschiedenen Gefäßarten besitzt
+            le (array-like): Array mit den Längen der verschiedenen Gefäßarten.
+            nu (array-like): Array mit den Anzahlen der verschiedenen Gefäßarten.
+        
+            Return:
+                None
         """
-        #bs = BodySystem(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        
         ty = ['aorta', 'arteries', 'arterioles', 'capillaries', 'venules', 'veins', 'venaCava']
         print('######   Einzelwiderstände der verschiedenen Gefäßarten', '\n')
         resis = self.vesselResistances(le, nu)
@@ -453,39 +454,56 @@ class BodySystem():
         print('######   Gesamtwiderstand', '\n')   
         print('{:e}'.format(self.completeResistance(resis)), 'Pa s / mm^3')
         print()
-
-    def findIndex(self, arr, val):
-        idx = None
-        for i in range(0, len(arr)):
-            if arr[i] == val:
-                idx = i
-                break
-        
-        return idx
     
     def updateParameter(self, t, changeTimes, newValues, currentValue):
-        """Aktualisiert einen Parameter basierend auf den Änderungszeiten und neuen Werten."""
+        """_summary_
+            Aktualisiert einen Parameter basierend auf den Änderungszeiten und neuen Werten.
+
+        Args:
+            t (float): Aktuelle Zeit, zu der der Parameter aktualisiert werden soll.
+            changeTimes (list): Liste von Zeitpunkten, zu denen sich der Parameter ändern soll.
+            newValues (list): Liste von neuen Werten für den Parameter entsprechend den changeTimes.
+            currentValue: Aktueller Wert des Parameters.
+
+        Returns:
+            currentValue: Aktualisierter Wert des Parameters nach den Änderungen.
+        """
+
         for j, changeTime in enumerate(changeTimes):
             if t >= changeTime:
                 currentValue = newValues[j]
             else:
                 break
+
         return currentValue
     
     def aortaPresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
-            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
+            Simuliert den Druckverlauf in der Aorta über die Zeit unter Berücksichtigung verschiedener Parameteränderungen.
 
-            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
-            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
-            Es wird überprüft, ob der Druck in der linken Herzkammer größer ist, in diesem Fall soll der Druck in der 
-            Aorta gleich dem Druck der linken Herzkammer sein.
-            Und zu letzt wird dann der Druck zu jedem Punkt i in self.aortaPressure[i] gespecihert.
+            Zuerst werden wichtige Einflussfaktoren auf den Blutdruck festgelegt. 
+            Dann wird über die gesamte Zeit iteriert und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird die Grundstruktur der Blutdruckkurve aus der Klasse BloodPressure verwendet.
+            Es wird überprüft, ob der Druck in der linken Herzkammer größer ist. In diesem Fall wird der Druck in der Aorta gleich dem Druck der linken Herzkammer gesetzt.
+            
+            Der berechnete Druck wird in self.aortaPressure[i] gespeichert.
 
         Args:
-            le (array): Längen der verschiedenen Gefäßarten
-            nu (array): Anzahl der verschiedenen Gefäßarten
+            le (array): Längen der verschiedenen Gefäßarten.
+            nu (array): Anzahl der verschiedenen Gefäßarten.
+            ctHR (list, optional): Zeitpunkte der Herzfrequenzänderungen.
+            newHR (list, optional): Neue Werte der Herzfrequenz zu den Zeitpunkten ctHR.
+            ctVis (list, optional): Zeitpunkte der Viskositätsänderungen.
+            newVis (list, optional): Neue Werte der Viskosität zu den Zeitpunkten ctVis.
+            ctRadius (list, optional): Zeitpunkte der Radiusänderungen.
+            newRadius (list, optional): Neue Werte des Lumfaktors zu den Zeitpunkten ctRadius.
+            ctVol (list, optional): Zeitpunkte der Volumenänderungen.
+            newVol (list, optional): Neue Werte des Gesamtvolumens zu den Zeitpunkten ctVol.
+        
+        Returns:
+            None
         """
+
         bp = BloodPressure()
 
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
@@ -524,16 +542,30 @@ class BodySystem():
 
     def arteriePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
-            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
+            Simuliert den Druckverlauf in den Arterien über die Zeit unter Berücksichtigung verschiedener Parameteränderungen.
 
-            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
-            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
-            Und zu letzt wird dann der Druck zu jedem Punkt i in self.arteriePressure[i] gespecihert.
+            Zuerst werden wichtige Einflussfaktoren auf den Blutdruck festgelegt. 
+            Dann wird über die gesamte Zeit iteriert und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird die Grundstruktur der Blutdruckkurve aus der Klasse BloodPressure verwendet.
+            
+            Der berechnete Druck wird in self.arteriePressure[i] gespeichert.
 
         Args:
-            le (array): Längen der verschiedenen Gefäßarten
-            nu (array): Anzahl der verschiedenen Gefäßarten
+            le (array): Längen der verschiedenen Gefäßarten.
+            nu (array): Anzahl der verschiedenen Gefäßarten.
+            ctHR (list, optional): Zeitpunkte der Herzfrequenzänderungen.
+            newHR (list, optional): Neue Werte der Herzfrequenz zu den Zeitpunkten ctHR.
+            ctVis (list, optional): Zeitpunkte der Viskositätsänderungen.
+            newVis (list, optional): Neue Werte der Viskosität zu den Zeitpunkten ctVis.
+            ctRadius (list, optional): Zeitpunkte der Radiusänderungen.
+            newRadius (list, optional): Neue Werte des Lumfaktors zu den Zeitpunkten ctRadius.
+            ctVol (list, optional): Zeitpunkte der Volumenänderungen.
+            newVol (list, optional): Neue Werte des Gesamtvolumens zu den Zeitpunkten ctVol.
+        
+        Returns:
+            None
         """
+
         bp = BloodPressure()
 
         radiusEffect = self.radi[1] * 0.001
@@ -570,16 +602,30 @@ class BodySystem():
 
     def arteriolePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
-            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
+            Simuliert den Druckverlauf in den Arteriolen über die Zeit unter Berücksichtigung verschiedener Parameteränderungen.
 
-            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
-            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
-            Und zu letzt wird dann der Druck zu jedem Punkt i in self.arteriolPressure[i] gespeichert.
-        
+            Zuerst werden wichtige Einflussfaktoren auf den Blutdruck festgelegt. 
+            Dann wird über die gesamte Zeit iteriert und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird die Grundstruktur der Blutdruckkurve aus der Klasse BloodPressure verwendet.
+            
+            Der berechnete Druck wird in self.arteriolPressure[i] gespeichert.
+
         Args:
-            le (array): Längen der verschiedenen Gefäßarten
-            nu (array): Anzahl der verschiedenen Gefäßarten
+            le (array): Längen der verschiedenen Gefäßarten.
+            nu (array): Anzahl der verschiedenen Gefäßarten.
+            ctHR (list, optional): Zeitpunkte der Herzfrequenzänderungen.
+            newHR (list, optional): Neue Werte der Herzfrequenz zu den Zeitpunkten ctHR.
+            ctVis (list, optional): Zeitpunkte der Viskositätsänderungen.
+            newVis (list, optional): Neue Werte der Viskosität zu den Zeitpunkten ctVis.
+            ctRadius (list, optional): Zeitpunkte der Radiusänderungen.
+            newRadius (list, optional): Neue Werte des Lumfaktors zu den Zeitpunkten ctRadius.
+            ctVol (list, optional): Zeitpunkte der Volumenänderungen.
+            newVol (list, optional): Neue Werte des Gesamtvolumens zu den Zeitpunkten ctVol.
+        
+        Returns:
+            None
         """
+
         bp = BloodPressure()
 
         radiusEffect = self.radi[2] * 0.001
@@ -616,22 +662,30 @@ class BodySystem():
 
     def capillarePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
-            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
+        Simuliert den Druckverlauf in den Kapillaren über die Zeit unter Berücksichtigung verschiedener Parameteränderungen.
 
-            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
-            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
-            
-            Hier wird je nach übergebenen Parametern die Viskosität noch beeinflusst. Wenn 'change' == 0, dann wird nicht vereändert
-            Wenn change != 0, dann wird verändert.
-            
-            Und zu letzt wird dann der Druck zu jedem Punkt i in self.capillarePressure[i] gespeichert.
+        Zuerst werden wichtige Einflussfaktoren auf den Blutdruck festgelegt. 
+        Dann wird über die gesamte Zeit iteriert und der Blutdruck zu jedem Zeitpunkt berechnet.
+        Dafür wird die Grundstruktur der Blutdruckkurve aus der Klasse BloodPressure verwendet.
+        
+        Der berechnete Druck wird in self.capillarePressure[i] gespeichert.
+
         Args:
-            le (array): Längen der verschiedenen Gefäßarten
-            nu (array): Anzahl der verschiedenen Gefäßarten
-            prop (String): 'inc' zum erhöhen; 'dec' zum reduzieren
-            interval (int): Zeitpunkte wo immer eine Anpassung geschehene soll
-            change (float): Wert um den Viskosität verändert werden soll; Wenn == 0, dann geschieht keine Veränderung
+            le (array): Längen der verschiedenen Gefäßarten.
+            nu (array): Anzahl der verschiedenen Gefäßarten.
+            ctHR (list, optional): Zeitpunkte der Herzfrequenzänderungen.
+            newHR (list, optional): Neue Werte der Herzfrequenz zu den Zeitpunkten ctHR.
+            ctVis (list, optional): Zeitpunkte der Viskositätsänderungen.
+            newVis (list, optional): Neue Werte der Viskosität zu den Zeitpunkten ctVis.
+            ctRadius (list, optional): Zeitpunkte der Radiusänderungen.
+            newRadius (list, optional): Neue Werte des Lumfaktors zu den Zeitpunkten ctRadius.
+            ctVol (list, optional): Zeitpunkte der Volumenänderungen.
+            newVol (list, optional): Neue Werte des Gesamtvolumens zu den Zeitpunkten ctVol.
+        
+        Returns:
+            None
         """
+
         bp = BloodPressure()
 
         radiusEffect = self.radi[3] * 0.001
@@ -668,16 +722,30 @@ class BodySystem():
 
     def venolePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
-            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
+            Simuliert den Druckverlauf in den Venulen über die Zeit unter Berücksichtigung verschiedener Parameteränderungen.
 
-            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
-            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
-            Und zu letzt wird dann der Druck zu jedem Punkt i in self.venolePressure[i] gespeichert.
-        
+            Zuerst werden wichtige Einflussfaktoren auf den Blutdruck festgelegt. 
+            Dann wird über die gesamte Zeit iteriert und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird die Grundstruktur der Blutdruckkurve aus der Klasse BloodPressure verwendet.
+
+            Der berechnete Druck wird in self.venolePressure[i] gespeichert.
+
         Args:
-            le (array): Längen der verschiedenen Gefäßarten
-            nu (array): Anzahl der verschiedenen Gefäßarten
+            le (array): Längen der verschiedenen Gefäßarten.
+            nu (array): Anzahl der verschiedenen Gefäßarten.
+            ctHR (list, optional): Zeitpunkte der Herzfrequenzänderungen.
+            newHR (list, optional): Neue Werte der Herzfrequenz zu den Zeitpunkten ctHR.
+            ctVis (list, optional): Zeitpunkte der Viskositätsänderungen.
+            newVis (list, optional): Neue Werte der Viskosität zu den Zeitpunkten ctVis.
+            ctRadius (list, optional): Zeitpunkte der Radiusänderungen.
+            newRadius (list, optional): Neue Werte des Lumfaktors zu den Zeitpunkten ctRadius.
+            ctVol (list, optional): Zeitpunkte der Volumenänderungen.
+            newVol (list, optional): Neue Werte des Gesamtvolumens zu den Zeitpunkten ctVol.
+        
+        Returns:
+            None
         """
+        
         bp = BloodPressure()
 
         radiusEffect = self.radi[4] * 0.001
@@ -714,16 +782,30 @@ class BodySystem():
             
     def venePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
-            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
+            Simuliert den Druckverlauf in den Venen über die Zeit unter Berücksichtigung verschiedener Parameteränderungen.
 
-            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
-            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
-            Und zu letzt wird dann der Druck zu jedem Punkt i in self.venePressure[i] gespeichert.
-        
+            Zuerst werden wichtige Einflussfaktoren auf den Blutdruck festgelegt. 
+            Dann wird über die gesamte Zeit iteriert und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird die Grundstruktur der Blutdruckkurve aus der Klasse BloodPressure verwendet.
+
+            Der berechnete Druck wird in self.venePressure[i] gespeichert.
+
         Args:
-            le (array): Längen der verschiedenen Gefäßarten
-            nu (array): Anzahl der verschiedenen Gefäßarten
+            le (array): Längen der verschiedenen Gefäßarten.
+            nu (array): Anzahl der verschiedenen Gefäßarten.
+            ctHR (list, optional): Zeitpunkte der Herzfrequenzänderungen.
+            newHR (list, optional): Neue Werte der Herzfrequenz zu den Zeitpunkten ctHR.
+            ctVis (list, optional): Zeitpunkte der Viskositätsänderungen.
+            newVis (list, optional): Neue Werte der Viskosität zu den Zeitpunkten ctVis.
+            ctRadius (list, optional): Zeitpunkte der Radiusänderungen.
+            newRadius (list, optional): Neue Werte des Lumfaktors zu den Zeitpunkten ctRadius.
+            ctVol (list, optional): Zeitpunkte der Volumenänderungen.
+            newVol (list, optional): Neue Werte des Gesamtvolumens zu den Zeitpunkten ctVol.
+        
+        Returns:
+            None
         """
+        
         bp = BloodPressure()
 
         radiusEffect = self.radi[5] * 0.001
@@ -760,16 +842,30 @@ class BodySystem():
             
     def vCavaPresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
-            Zuerst werdne die wichtigen Faktoren festgelegt die den Blutdruck beeinflussen festgelegt.
+            Simuliert den Druckverlauf in der Vena Cava über die Zeit unter Berücksichtigung verschiedener Parameteränderungen.
 
-            Dann wird über die gemsante Zeit gelaufen und der Blutdruck zu jedem Zeitpunkt berechnet.
-            Dafür wird sich die Grundstruktur (x * sin(...) + y * sin(..)) der Kurve aus dem Programm bloodPressure.py geholt.
-            Und zu letzt wird dann der Druck zu jedem Punkt i in self.vCavaPressure[i] gespeichert.
-        
+            Zuerst werden wichtige Einflussfaktoren auf den Blutdruck festgelegt. 
+            Dann wird über die gesamte Zeit iteriert und der Blutdruck zu jedem Zeitpunkt berechnet.
+            Dafür wird die Grundstruktur der Blutdruckkurve aus der Klasse BloodPressure verwendet.
+
+            Der berechnete Druck wird in self.vCavaPressure[i] gespeichert.
+
         Args:
-            le (array): Längen der verschiedenen Gefäßarten
-            nu (array): Anzahl der verschiedenen Gefäßarten
+            le (array): Längen der verschiedenen Gefäßarten.
+            nu (array): Anzahl der verschiedenen Gefäßarten.
+            ctHR (list, optional): Zeitpunkte der Herzfrequenzänderungen.
+            newHR (list, optional): Neue Werte der Herzfrequenz zu den Zeitpunkten ctHR.
+            ctVis (list, optional): Zeitpunkte der Viskositätsänderungen.
+            newVis (list, optional): Neue Werte der Viskosität zu den Zeitpunkten ctVis.
+            ctRadius (list, optional): Zeitpunkte der Radiusänderungen.
+            newRadius (list, optional): Neue Werte des Lumfaktors zu den Zeitpunkten ctRadius.
+            ctVol (list, optional): Zeitpunkte der Volumenänderungen.
+            newVol (list, optional): Neue Werte des Gesamtvolumens zu den Zeitpunkten ctVol.
+        
+        Returns:
+            None
         """
+
         bp = BloodPressure()
 
         radiusEffect = self.radi[6] * 0.001
@@ -806,14 +902,25 @@ class BodySystem():
 
     def vesselSimulator(self, le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol):
         """_summary_
-            Ruft einfach alle Funktionen auf, um so dann das Gefäßsystem zu simulieren.
+            Simuliert das gesamte Gefäßsystem durch Aufruf der entsprechenden Simulationsfunktionen für Aorta, Arterie, Arteriole, Kapillare,
+                Venole, Vene und Vena Cava.
+
         Args:
-            le (array): Längen der verschiedenen Gefäßarten
-            nu (array): Anzahl der verschiedenen Gefäßarten
-            prop (String): 'inc' zum erhöhen und 'dec' zum reduzieren der Viskosität
-            interval (int): Zeitpunkte wo Viskosität verändert wird.
-            change (float):Wert um den Viskosität verändert werden soll
+            le (array): Längen der verschiedenen Gefäßarten.
+            nu (array): Anzahl der verschiedenen Gefäßarten.
+            ctHR (list): Zeitpunkte der Herzfrequenzänderungen.
+            newHR (list): Neue Werte der Herzfrequenz zu den Zeitpunkten ctHR.
+            ctVis (list): Zeitpunkte der Viskositätsänderungen.
+            newVis (list): Neue Werte der Viskosität zu den Zeitpunkten ctVis.
+            ctRadius (list): Zeitpunkte der Radiusänderungen.
+            newRadius (list): Neue Werte des Lumfaktors zu den Zeitpunkten ctRadius.
+            ctVol (list): Zeitpunkte der Volumenänderungen.
+            newVol (list): Neue Werte des Gesamtvolumens zu den Zeitpunkten ctVol.
+        
+        Returns:
+            None
         """
+        
         self.aortaPresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
         self.arteriePresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
         self.arteriolePresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
@@ -824,15 +931,24 @@ class BodySystem():
 
     def vpPlotter(self, le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol):
         """_summary_
-            Simuliert das Herz, um dann das Blutsystem zu simulieren. Simulation wird dann geplottet, also
-            der Druck in jedem Gefäß über die Zeit.
+            Simuliert das Herz und das Blutsystem über die Zeit und erstellt einen Plot der Druckwerte in verschiedenen Gefäßen.
+
         Args:
-            le (array): Längen der verschiedenen Gefäßarten
-            nu (array): Anzahl der verschiedenen Gefäßarten
-            prop (String): 'inc' zum erhöhen und 'dec' zum reduzieren der Viskosität
-            interval (int): Zeitpunkte wo Viskosität verändert wird.
-            change (float):Wert um den Viskosität verändert werden soll
+            le (array): Längen der verschiedenen Gefäßarten.
+            nu (array): Anzahl der verschiedenen Gefäßarten.
+            ctHR (list): Zeitpunkte der Herzfrequenzänderungen.
+            newHR (list): Neue Werte der Herzfrequenz zu den Zeitpunkten ctHR.
+            ctVis (list): Zeitpunkte der Viskositätsänderungen.
+            newVis (list): Neue Werte der Viskosität zu den Zeitpunkten ctVis.
+            ctRadius (list): Zeitpunkte der Radiusänderungen.
+            newRadius (list): Neue Werte des Lumfaktors zu den Zeitpunkten ctRadius.
+            ctVol (list): Zeitpunkte der Volumenänderungen.
+            newVol (list): Neue Werte des Gesamtvolumens zu den Zeitpunkten ctVol.
+        
+        Returns:
+            None
         """
+        
         plt.figure(figsize=(11, 7))
         
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
@@ -857,8 +973,14 @@ class BodySystem():
     
     def getPressurs(self):
         """_summary_
-            Es werden alle Gefäßarten zurückgeliefert, mit ihren Werten.
+            Gibt die Druckwerte aller Gefäßarten zurück.
+        
+        Args:
+            None
+
         Returns:
-            _type_: Alle Gefäßarten
+            tuple: Tupel mit den Arrays der Druckwerte für Aorta, Arterie, Arteriole, Kapillare,
+                Venole, Vene und Vena Cava.
         """
+        
         return self.aortaPressure, self.arteriePressure, self.arteriolPressure, self.capillarePressure, self.venolePressure, self.venePressure, self.vCavaPressure

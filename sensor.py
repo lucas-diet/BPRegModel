@@ -19,14 +19,16 @@ class Sensor():
 
     def findPeak(self, data):
         """_summary_
-            Nimmt die Blutdruckwerde aller Gefäßarten in einem Array und ermittelt daraus den systolischen und diastolischen Druck.
-            Da nicht jeder gefundene Peak dem systolischen oder diastolischen Druck entspricht, wird hier nochmal gefiltet.
+            Ermittelt systolische und diastolische Druckspitzen aus den Blutdruckwerten aller Gefäßarten.
+
         Args:
-            data (array): Ein Array, der aus den 7 Elementen besteht, wo jedes die Blutdruckwerte einer Gefäßart beseitzt.
+            data (array): Ein Array mit den Blutdruckwerten der 7 Gefäßarten.
 
         Returns:
-            _type_: Punkte der systolische und diastolsche Drücke.
+            filteredSystolicPeaks (array): Array mit den Punkten der systolischen Druckspitzen.
+            filteredDiastolicPeaks (array): Array mit den Punkten der diastolischen Druckspitzen.
         """
+
         systolicPeaks, _ = find_peaks(data)
         diastolicPeaks, _ = find_peaks(-data)
 
@@ -37,15 +39,17 @@ class Sensor():
     
     def calculatePressure(self, data, sPeaks, dPeaks):
         """_summary_
+            Berechnet den mittleren arteriellen Druck (MAP) aus den Blutdruckwerten einer Gefäßart.
 
         Args:
-            data (array): Ein Array, der aus den 7 Elementen besteht, wo jedes die Blutdruckwerte einer Gefäßart beseitzt.
-            sPeaks (_type_): Punkt dür den systolischer Druck
-            dPeaks (_type_): Punkt für den diastolischen Druck
+            data (array): Ein Array mit den Blutdruckwerten der Gefäßart.
+            sPeaks (array): Indizes der systolischen Druckspitzen.
+            dPeaks (array): Indizes der diastolischen Druckspitzen.
 
         Returns:
-            float : Mittlerer Durck 
+            float: Mittlerer arterieller Druck (MAP).
         """
+
         meanSys = np.mean(data[sPeaks])
         meanDia = np.mean(data[dPeaks])
 
@@ -55,17 +59,15 @@ class Sensor():
     
     def brainSender(self, data):
         """_summary_
-            Legt erstamal 3 leere Arrays an, jeweils einen für die systolischen, diastolischen und mittleren Dürcke.
-            Dann wird über datagelaufen und für jedes Element in data die Punkte für systolischen und diastolischen Druck bestimmt.
-            Dann wird  mit dem Aufruf der Funktion calculatePressure der mittlere Druck bestimmt.
+            Berechnet die systolischen, diastolischen und mittleren Druckwerte für jede Gefäßart in `data`.
 
-            Anschließen werden alle berechneten Werte in eines der angeleghten Arrays gespeichert.
         Args:
-            data (array): Ein Array, der aus den 7 Elementen besteht, wo jedes die Blutdruckwerte einer Gefäßart beseitzt.
+            data (array): Ein Array mit den Blutdruckwerten aller Gefäßarten.
 
         Returns:
-            array: 3 Arrays, die jeweils die berechneten Werte der Drücke beseitzt.
+            tuple: Drei Arrays mit den berechneten Werten für die systolischen, diastolischen und mittleren Drücke.
         """
+
         maxs = []
         mins = []
         means = []
@@ -85,9 +87,13 @@ class Sensor():
  
     def ppPlotter(self, data):
         """_summary_
-            Eine Funktion, die die Peaks im Plot für die Gefäßdrücke markeirt.
+            Plottet die Blutdruckwerte aller Gefäßarten und markiert die systolischen und diastolischen Peaks.
+
         Args:
-            data (array): Ein Array, der aus den 7 Elementen besteht, wo jedes die Blutdruckwerte einer Gefäßart beseitzt. 
+            data (array): Ein Array, das die Blutdruckwerte aller Gefäßarten enthält.
+
+        Returns:
+            None
         """
         #data = [data1, data2, data3, data4, data5, data6, data7]
         plt.figure(figsize=(11, 7))
@@ -108,23 +114,30 @@ class Sensor():
 
     def findPressureTimePoint(self, presData, timeStemp):
         """_summary_
-            Liefert den Druckwert zu einem übergebenen Zeitpunkt.
+            Gibt den Druckwert zum angegebenen Zeitpunkt zurück.
+
         Args:
-            presData (array): Ein Array mit Druckwerten zu jedem Zeitpunkt i
-            timeStemp (int): Eine festgelegter Zeitpunkt
+            presData (array): Ein Array mit Druckwerten zu jedem Zeitpunkt.
+            timeStemp (int): Ein bestimmter Zeitpunkt.
 
         Returns:
-            pressureTime (float) : Druck zum Zeitpunkt timeStemp
+            pressureTime (float): Druckwert zum Zeitpunkt timeStemp.
         """
+
         pressureTime = presData[timeStemp]
         return pressureTime
     
     def presPrinter(self, data):
         """_summary_
-            Nimmt ein Array und printet für jedes Element den systolischen, diastolsichen und mittleren Druck
+            Nimmt ein Array und gibt für jede Gefäßart den systolischen, diastolischen und mittleren Druck aus.
+
         Args:
-            data (array): Ein Array, der aus den 9 Elementen besteht, wo jedes die Blutdruckwerte einer Gefäßart beseitzt. 
+            data (array): Ein Array mit 9 Elementen, wobei jedes Element die Blutdruckwerte einer Gefäßart enthält.
+        
+        Returns:
+            None
         """
+
         types = ['Rechter Ventrikel', 'Linker Ventrikel', 'Aorta', 'Arterie', 'Arteriole', 'Kapillare', 'Venole', 'Vene', 'V. Cava']
         type = iter(types)
 
@@ -141,13 +154,15 @@ class Sensor():
 
     def printPressureTimePoint(self, presData, timeStemp):
         """_summary_
-            Ruft eine Funktion auf und printet dann den Druck zum Zeitpunkt timeStemp
+            Ruft die Funktion findPressureTimePoint auf und gibt den Druck zum Zeitpunkt timeStemp aus.
+
         Args:
-            presData (array): Ein Array mit Druckwerten zu jedem Zeitpunkt i
-            timeStemp (int): Eine festgelegter Zeitpunkt
+            presData (array): Ein Array mit Druckwerten zu jedem Zeitpunkt i.
+            timeStemp (int): Der festgelegte Zeitpunkt.
+
+        Returns:
+            None
         """
+
         print('\n', '#####', 'Blutdruck zu einem Zeitpunkt', '#####', '\n')
         print(f'Blutdruck bei {self.time[timeStemp]}: ', self.findPressureTimePoint(presData, timeStemp), 'mmHg')
-
-    def detectHeartRate(self):
-        return self.heartRate

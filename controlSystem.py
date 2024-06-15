@@ -25,7 +25,20 @@ class Regelkreis():
         self.time = np.arange(0, maxTime, dt)
 
     def controlSystemPlotter(self, i, rw, hr, time):
+        """_summary_
+            Plottet die Druckwerte verschiedener Gefäßarten über die Zeit.
 
+        Args:
+            iteration (int): Iterationsnummer der Simulation.
+            vessel_pressures (list): Liste von Druckwerten für Aorta, Arterie, Arteriole,
+                                    Kapillare, Venole, Vene und Vena Cava.
+            heart_rate (str): Herzfrequenz oder anderer relevanter Titel für den Plot.
+            time (array): Zeitpunkte, über die die Druckwerte geplottet werden sollen.
+
+        Returns:
+            None
+        """
+        
         plt.figure(figsize=(11, 7), num=f'Simulationsdurchlauf {i+2}')
         plt.title(f'Simulation des Gefäßsystem; {hr}')
         plt.plot(time, rw[2], label='Aorta Druck')
@@ -43,7 +56,22 @@ class Regelkreis():
         plt.show()
 
     def controlSystem(self, currVals, soHR, soLF, soVis, soTV, runs, lens, nums):
+        """_summary_
+            Simuliert und regelt das Gefäßsystem für mehrere Durchläufe.
 
+        Args:
+            currVals (list): Liste der aktuellen Werte für Herzfrequenz, Viskosität, Radiusfaktor und Volumen.
+            soHR (list): Liste der Herzfrequenzen für jeden Durchlauf.
+            soLF (list): Liste der Radiusfaktoren für jeden Durchlauf.
+            soVis (list): Liste der Viskositäten für jeden Durchlauf.
+            soTV (list): Liste der Volumina für jeden Durchlauf.
+            runs (int): Anzahl der Durchläufe.
+            lens (array): Längen der verschiedenen Gefäßarten.
+            nums (array): Anzahl der verschiedenen Gefäßarten.
+        
+        Returns:
+            None
+        """
         #currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol]
 
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)

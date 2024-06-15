@@ -12,25 +12,39 @@ class Liver():
 
     def getViscosity(self):
         """_summary_
-            Gibt den Wert der Viskosität zurück
+            Gibt den aktuellen Wert der Viskosität zurück.
+        
+        Args:
+            None
+        
         Returns:
-            self.viscosity (float): 
+            float: Der in self.viscosity gespeicherte Wert der Viskosität.
         """
+
         return self.viscosity
 
     def setViscosity(self, vis):
         """_summary_
-            Legt den Wert für die Viskosität fest
+            Legt den Wert für die Viskosität fest.
+    
         Args:
-            vis (float): Wert für die Viskosität
+            vis (float): Der neue Wert für die Viskosität.
+        
+        Returns:
+            None
         """
+
         self.viscosity = vis
     
     def increaseViscosity(self, inc):
         """_summary_
-            Nimmt einen Wert und erhöt die Viskostät um diesen.
+            Erhöht die Viskosität um den angegebenen Wert.
+    
         Args:
-            inc (float): Wert, um den die Viskosität erhöht werden soll
+            inc (float): Wert, um den die Viskosität erhöht werden soll.
+        
+        Returns:
+            None
         """
         if self.viscosity + inc > 100:
             self.viscosity = 100
@@ -41,9 +55,13 @@ class Liver():
 
     def decreaseViscosity(self, dec):
         """_summary_
-            Nimmt einen Wert und reduziert die Viskostät um diesen.
+            Reduziert die Viskosität um den angegebenen Wert.
+    
         Args:
-            dec (float): Wert um den reduziert werden soll
+            dec (float): Wert, um den die Viskosität reduziert werden soll.
+        
+        Returns:
+            None
         """
 
         #if self.viscosity > 100:
@@ -54,16 +72,19 @@ class Liver():
     
     def viscositySimulate(self, prop, interval, change):
         """_summary_
-            Überprüft den Wert von 'prop' und verändert dann entsprechend nach 'interval' und 'change' die 
-            Viskosität.
+            Simuliert die Veränderung der Viskosität über die Zeit.
+        
+            Überprüft den Wert von 'prop' und verändert entsprechend nach 'interval' und 'change' die Viskosität.
+        
         Args:
-            prop (String): 'inc' zum erhöhen und 'dec' zum reduzieren der Viskosität
-            interval (int): Zeitpunkte wo Viskosität verändert wird.
-            change (float):Wert um den Viskosität verändert werden soll
+            prop (String): 'inc' zum Erhöhen und 'dec' zum Reduzieren der Viskosität.
+            interval (int): Zeitintervall, in dem die Viskosität geändert wird.
+            change (float): Wert, um den die Viskosität verändert werden soll.
 
         Returns:
-           self.viscosity (float): Wert für die Viskostät
+            self.viscosity (float): Aktueller Wert der Viskosität nach den Änderungen.
         """
+        
         if interval > 0:
             num_changes = 0
             for i in range(interval, len(self.time), interval):

@@ -3,7 +3,6 @@ from bloodPressure import *
 from heart import * 
 from bodySystem import *
 from sensor import *
-from brain import *
 from liver import *
 from controlSystem import * 
 
@@ -63,8 +62,8 @@ lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpas
 ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol = [], [], [], [], [], [], [], []
 
 
-ctHR = [2, 4, 6]
-newHR = [40, 90, 360]
+#ctHR = [2, 4, 6]
+#newHR = [40, 90, 360]
 #ctVis = [2, 4, 6]
 #newVis = [10, 50, 100]
 #ctRadius = [2, 4, 6]
@@ -112,7 +111,7 @@ soHR = [71, 72, 73]
 soLF = [[1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1]]
-soVis = [5, 50, 100]
+soVis = [100, 50, 100]
 soTV = [10, 50, 100]
 apply = 3
 currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol]

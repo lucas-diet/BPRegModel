@@ -28,13 +28,18 @@ class Heart():
         self.arteriePressure = np.zeros_like(self.time)
         self.arteriolPressure = np.zeros_like(self.time)
         self.capillarePressure = np.zeros_like(self.time)
-
-    def checkSlope(self, i1, i2):
-        if i1 > i2:
-            return True
-        return False
     
     def normalize(self, data):
+        """_summary_
+            Normalisiert den Blutdruck auf den Bereich [diastolic, systolic].
+
+        Args:
+            data (np.array): Array der Blutdruckwerte, die normalisiert werden sollen.
+
+        Returns:
+            np.array: Normalisierte Blutdruckwerte im Bereich [diastolic, systolic].
+        """
+
         max_bp = np.max(data)
         min_bp = np.min(data)
 		
@@ -42,7 +47,19 @@ class Heart():
         normalized_bp = normalized_bp * (self.esv - self.edv) + self.edv  # Skalieren auf [diastolic, systolic]
 
     def updateParameter(self, t, changeTimes, newValues, currentValue):
-        """Aktualisiert einen Parameter basierend auf den Änderungszeiten und neuen Werten."""
+        """_summary_
+            Aktualisiert einen Parameter basierend auf den Änderungszeiten und neuen Werten.
+
+        Args:
+            t (float): Aktuelle Zeit.
+            changeTimes (list): Liste der Zeitpunkte, zu denen der Parameter geändert wird.
+            newValues (list): Liste der neuen Werte für den Parameter.
+            currentValue (float or int): Aktueller Wert des Parameters.
+
+        Returns:
+            float or int: Aktualisierter Wert des Parameters.
+        """
+
         for j, changeTime in enumerate(changeTimes):
             if t >= changeTime:
                 currentValue = newValues[j]
@@ -51,7 +68,16 @@ class Heart():
         return currentValue
     
     def rightVentricle(self, shift=-0.5):
+        """_summary_
+            Simuliert den rechten Ventrikel des Herzens über die Zeit.
 
+        Args:
+            shift (float, optional): Verschiebung in der Zeit für die Elastizitätsberechnung. Default ist -0.5.
+
+        Returns:
+            None
+        """
+        
         viskosityEffect = self.viscosity / 100
         
         volumePressureConstant = 0.01
@@ -71,6 +97,15 @@ class Heart():
             self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - self.esv) * 0.15 + volumeEffect + viskosityEffect + 3
 
     def leftVentricle(self, shift=0):
+        """_summary_
+            Simuliert den linken Ventrikel des Herzens über die Zeit.
+
+        Args:
+            shift (float, optional): Verschiebung in der Zeit für die Elastizitätsberechnung. Standard ist 0.
+
+        Returns:
+            None
+        """
 
         viskosityEffect = self.viscosity / 100
         
@@ -90,11 +125,30 @@ class Heart():
             self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - self.esv) + volumeEffect + viskosityEffect + 10
     
     def heartSimulation(self):
+        """_summary_
+            Simuliert das gesamte Herz, indem es die rechte und linke Herzkammer simuliert.
+
+        Args:
+            None
+        
+        Returns:
+            None
+        """
+
         self.rightVentricle()
         self.leftVentricle()
 
-    
     def hpPlotter(self):
+        """_summary_
+            Stellt eine Simulation des Herzens dar, indem es den Druck und das Volumen der linken und rechten Herzkammer im Zeitverlauf anzeigt.
+            
+        Args:
+            None
+        
+        Returns:
+            None
+        """
+        
         plt.figure(figsize=(11, 7))
         
         self.heartSimulation()

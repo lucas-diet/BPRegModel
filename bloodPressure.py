@@ -13,11 +13,12 @@ class BloodPressure():
     def simulateBP(self):
         """_summary_
             Simuliert den Blutdruck über eine bestimmte Dauer basierend auf der Herzfrequenz.
-        
+    
         Args:
+            Keine expliziten Argumente, verwendet Klassenattribute.
             
         Returns:
-            Ein Array, um den mittleren Blutdruck zu simulieren.
+            Ein Array, das den simulierten mittleren Blutdruck über die Zeit darstellt.
         """
 
         # Zeitachse
@@ -42,15 +43,16 @@ class BloodPressure():
     
     def normalizeBP(self, mean_bp):
         """_summary_
-            Normalisiert den durchschnuttlichen Blutdruck, indem im ersten Schritt auf [0,1]
+            Normalisiert den durchschnittlichen Blutdruck, indem er im ersten Schritt auf [0,1]
             skaliert wird und im zweiten Schritt auf [diastolic, systolic].
+        
         Args:
-            mean_bp: Durchschnittlicher Blutdruck 
-
+            mean_bp: Durchschnittlicher Blutdruck als Array.
+            
         Returns:
-            _type_: _description_
+            normalized_bp: Normalisierter Blutdruck als Array, skaliert auf den Bereich [diastolic, systolic].
         """
-        # Normalisiere die Blutdruckwerte
+        
         max_bp = np.max(mean_bp)
         min_bp = np.min(mean_bp)
 		
@@ -62,21 +64,31 @@ class BloodPressure():
     def bpFunction(self, t, heartRate):
         """_summary_
             Liefert die Grundstruktur für die Kurve des Blutdrucks.
+        
         Args:
-            t (_type_): Zeit
-            heartRate (int): Herzfrequenz
+            t (array-like): Zeitachse.
+            heartRate (int): Herzfrequenz in Schlägen pro Minute.
 
         Returns:
-            _type_: Grundstrukturen der Bludruckkurve
+            tuple: Zwei Arrays, die die Grundstrukturen der Blutdruckkurve repräsentieren.
         """
+        
         p1 = np.sin(2 * np.pi * (heartRate / 60) * t)
         p2 = 0.63 * np.sin(4 * np.pi * (heartRate / 60) * t + (2 / np.pi))
+        
         return p1, p2
     
     def bpPlotter(self):
         """_summary_
-            Plottet die basierent auf den Parametern die Grundstruktur eine Blutdruckkurve
+            Plottet die basierend auf den Parametern die Grundstruktur einer Blutdruckkurve.
+        
+        Args:
+            None
+        
+        Returns:
+            None
         """
+        
         bp_sim = BloodPressure(self.duration, self.heartRate, self.systolic, self.diastolic)
         bp = bp_sim.simulateBP()
 
