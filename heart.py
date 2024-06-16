@@ -23,11 +23,6 @@ class Heart():
 
         self.bloodPressure_LV = np.zeros_like(self.time)
         self.bloodVolume_LV = np.zeros_like(self.time)
-
-        self.aortaPressure = np.zeros_like(self.time)
-        self.arteriePressure = np.zeros_like(self.time)
-        self.arteriolPressure = np.zeros_like(self.time)
-        self.capillarePressure = np.zeros_like(self.time)
     
     def normalize(self, data):
         """_summary_
@@ -45,27 +40,6 @@ class Heart():
 		
         normalized_bp = (data - min_bp) / (max_bp - min_bp)  # Auf [0, 1] normalisieren
         normalized_bp = normalized_bp * (self.esv - self.edv) + self.edv  # Skalieren auf [diastolic, systolic]
-
-    def updateParameter(self, t, changeTimes, newValues, currentValue):
-        """_summary_
-            Aktualisiert einen Parameter basierend auf den Änderungszeiten und neuen Werten.
-
-        Args:
-            t (float): Aktuelle Zeit.
-            changeTimes (list): Liste der Zeitpunkte, zu denen der Parameter geändert wird.
-            newValues (list): Liste der neuen Werte für den Parameter.
-            currentValue (float or int): Aktueller Wert des Parameters.
-
-        Returns:
-            float or int: Aktualisierter Wert des Parameters.
-        """
-
-        for j, changeTime in enumerate(changeTimes):
-            if t >= changeTime:
-                currentValue = newValues[j]
-            else:
-                break
-        return currentValue
     
     def rightVentricle(self, shift=-0.5):
         """_summary_

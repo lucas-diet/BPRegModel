@@ -63,7 +63,7 @@ ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol = [], [], [], [],
 
 
 #ctHR = [2, 4, 6]
-#newHR = [40, 90, 360]
+#newHR = [40, 90, 170]
 #ctVis = [2, 4, 6]
 #newVis = [10, 50, 100]
 #ctRadius = [2, 4, 6]
@@ -107,7 +107,7 @@ timeStemp = 1
 ##### Regelkreis #####
 ######################
 
-soHR = [71, 72, 73]
+soHR = [71, 72, 72]
 soLF = [[1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1]]
