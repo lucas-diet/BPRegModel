@@ -11,7 +11,7 @@ from liver import *
 
 class Regelkreis():
     
-    def __init__(self, radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime, dt=0.01):
+    def __init__(self, radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv,  totalVolume, maxTime, pres0=70, dt=0.01):
         self.radi = radi        
         self.lumFactor = lumFactor
         self.viscosity = viscosity
@@ -74,9 +74,9 @@ class Regelkreis():
         """
         #currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol]
 
-        h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
-        bs = BodySystem(self.radi, self.lumFactor, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
-        s = Sensor(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+        h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.totalVolume, self.maxTime)
+        bs = BodySystem(self.radi, self.lumFactor, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.totalVolume, self.maxTime)
+        s = Sensor(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.maxTime)
 
         h.heartSimulation()
         bs.vesselSimulator(lens, nums, currVals[0], currVals[1], currVals[2], currVals[3], currVals[4], currVals[5], currVals[6], currVals[7])
@@ -93,9 +93,9 @@ class Regelkreis():
             nLF = soLF[i]
             nTV = soTV[i]
 
-            soH = Heart(self.radi, nVis, nHR, self.strokeVolume, self.edv, self.esv, self.pres0, nTV, self.maxTime)
-            soBS = BodySystem(self.radi, nLF, nVis, nHR, self.strokeVolume, self.edv, self.esv, self.pres0, nTV, self.maxTime)
-            soS = Sensor(self.radi, nVis, nHR, self.strokeVolume, self.edv, self.esv, self.pres0, self.maxTime)
+            soH = Heart(self.radi, nVis, nHR, self.strokeVolume, self.edv, self.esv, nTV, self.maxTime)
+            soBS = BodySystem(self.radi, nLF, nVis, nHR, self.strokeVolume, self.edv, self.esv, nTV, self.maxTime)
+            soS = Sensor(self.radi, nVis, nHR, self.strokeVolume, self.edv, self.esv, self.maxTime)
 
             #currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol]
             

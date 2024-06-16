@@ -15,8 +15,7 @@ viscosity = 5                                # Wert zwischen 0 und 100
 heartRate = 70
 edv = 110                                      # Enddiastolische Volumen
 esv = 60                                       # Endsystolisches Volumen
-strokeVolume = edv - esv                       # Schlagvolumen
-pres0 = 70                      
+strokeVolume = edv - esv                       # Schlagvolumen                     
 maxTime = 10
 
 totalVolume = 70                              # in ml
@@ -47,9 +46,9 @@ bpSim = BloodPressure(duration, heartRate, systolic, diastolic)
 ###############
 
 ## Klasse ##
-h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
+h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, totalVolume, maxTime)
 
-#h.hpPlotter()          # Ausführbare Funktion
+h.hpPlotter()          # Ausführbare Funktion
 
 ########################
 ##### Körpersystem #####
@@ -73,10 +72,10 @@ ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol = [], [], [], [],
 
 
 ## Klasse ##
-bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
+bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, totalVolume, maxTime)
 
-#bs.vesselPlotter(lumFactor, lims)                  # Ausführbare Funktion
-#bs.resisPrinter(lens, nums)                        # Ausführbare Funktion
+bs.vesselPlotter(lumFactor, lims)                  # Ausführbare Funktion
+bs.resisPrinter(lens, nums)                        # Ausführbare Funktion
 bs.vpPlotter(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)    # Ausführbare Funktion
 
 ##################
@@ -89,13 +88,13 @@ dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePr
 ###########################
 
 ## Klasse ##
-s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime)
+s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, maxTime)
 
 h.heartSimulation()
 bs.vesselSimulator(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
 
 #s.ppPlotter(data)                                  # Ausführbare Funktion
-#s.presPrinter(dataC)                                # Ausführbare Funktion
+s.presPrinter(dataC)                                # Ausführbare Funktion
 
 ### Findet den Blutdruck zu einem bestimmten Zeitpunkt ###
 presData = data[0]                              # data[x] x = {0,1,2,3,4,5,6}
@@ -116,6 +115,6 @@ soTV = [10, 50, 100]
 apply = 3
 currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol]
 
-sys = Regelkreis(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime)
+sys = Regelkreis(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, totalVolume, maxTime)
 
 sys.controlSystem(currVals, soHR, soLF, soVis, soTV, apply, lens, nums)

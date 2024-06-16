@@ -5,7 +5,7 @@ from scipy.signal import find_peaks
 
 class Sensor():
 
-    def __init__(self, radi, viscosity, heartRate, strokeVolume, edv, esv, pres0, maxTime, dt=0.01):
+    def __init__(self, radi, viscosity, heartRate, strokeVolume, edv, esv, maxTime, pres0=70, dt=0.01):
         self.radi = radi
         self.viscosity = viscosity
         self.heartRate = heartRate

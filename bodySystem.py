@@ -7,7 +7,7 @@ from bloodPressure import BloodPressure
 
 class BodySystem():
 
-    def __init__(self, radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, pres0, totalVolume, maxTime, dt=0.01):
+    def __init__(self, radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv,  totalVolume, maxTime, pres0 =70, dt=0.01):
         self.radi = radi
 
         self.aor_rad = radi[0]      # aorta
@@ -506,7 +506,7 @@ class BodySystem():
 
         bp = BloodPressure()
 
-        h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
+        h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.totalVolume, self.maxTime)
         h.leftVentricle()
 
         resis = self.vesselResistances(le, nu)
