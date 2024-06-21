@@ -7,9 +7,9 @@ from sensor import *
 from liver import *
 from controlSystem import * 
 
-####################
-#### Parameter #####
-####################
+#############################
+#### Initiale Parameter #####
+#############################
 
 radi = [20000, 4000, 20, 8, 20, 5000, 30000]   # in µm
 viscosity = 5                                # Wert zwischen 0 und 100
@@ -17,32 +17,49 @@ heartRate = 70
 edv = 110                                      # Enddiastolische Volumen
 esv = 60                                       # Endsystolisches Volumen
 strokeVolume = edv - esv                       # Schlagvolumen                     
-maxTime = 10
+maxTime = 100
 
 totalVolume = 70                              # in ml
 
 nums = [1, 2, 4, 16, 4, 2, 1]
 lens = [200, 150, 100, 50, 100, 150, 300]      # in mm
 
-#### Parameter für die Leber ##### 
-prop = 'inc'                                   # 'inc' zum erhöhen ; 'dec' zum verringern
-interval = 150                                 # Zeitschritte, wo verändert wird
-change = 1                                     # Wert um den verändert wird, wenn 0 dann keine Veränderung
+##### Extra Parameter für BodySystem #####
+lims = [-17, 17]                            # Für den Achsenbereich, der angezeigt werden soll, wenn Radius der Gefäße geplottet wird.
+lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
+##########################################
+
+###############################
+#### Dynamische Parameter #####
+###############################
 
 ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol, ctEDV, newEDV, ctESV, newESV = [], [], [], [], [], [], [], [], [], [], [], []
 
-
+# Herzfrequenz
 #ctHR = [2, 4, 60]
 #newHR = [40, 90, 170]
+
+# Viskosität
 #ctVis = [2, 4, 6]
 #newVis = [10, 50, 100]
+
+# Radius
 #ctRadius = [2, 4, 6]
 #newRadius = [0.1, 0.1, 0.1]
+
+# Gesamtvolumen
 #ctVol = [2, 4, 6]
 #newVol = [100, 200, 300]
 
+############
+# Folgende Parameter müssen alle aktiv oder inaktiv sein 
+############
+
+# Enddiastolsiches Volumen
 #ctEDV = [2, 4, 6] 
-#newEDV = [100, 200, 300] 
+#newEDV = [100, 200, 100]
+
+# Endsystolisches Volumen
 #ctESV = [2, 4, 6]
 #newESV = [20, 40, 50]
 
@@ -51,8 +68,8 @@ ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol, ctEDV, newEDV, c
 #####################
 
 duration = maxTime      # Sekunden
-systolic = 120          # TODO: soll noch simuliert werden mit Parametern
-diastolic = 80          # TODO: soll noch simuliert werden mit Parametern
+systolic = 120
+diastolic = 80       
 
 ## Klasse ##
 bpSim = BloodPressure(duration, heartRate, systolic, diastolic)
@@ -66,18 +83,11 @@ bpSim = BloodPressure(duration, heartRate, systolic, diastolic)
 ## Klasse ##
 h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, totalVolume, maxTime)
 
-h.hpPlotter(ctEDV, newEDV, ctESV, newESV)          # Ausführbare Funktion
+#h.hpPlotter(ctEDV, newEDV, ctESV, newESV)          # Ausführbare Funktion
 
 ########################
 ##### Körpersystem #####
 ########################
-
-##### Extra Parameter #####
-lims = [-17, 17]                            # Für den Achsenbereich, der angezeigt werden soll, wenn Radius der Gefäße geplottet wird.
-lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
-###########################
-
-
 
 ## Klasse ##
 bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, totalVolume, maxTime)
@@ -127,4 +137,4 @@ currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol, ctED
 
 sys = Regelkreis(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, totalVolume, maxTime)
 
-sys.controlSystem(currVals, soHR, soLF, soVis, soTV, soEDV, soESV, apply, lens, nums)
+#sys.controlSystem(currVals, soHR, soLF, soVis, soTV, soEDV, soESV, apply, lens, nums)

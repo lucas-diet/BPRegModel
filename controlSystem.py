@@ -38,7 +38,7 @@ class Regelkreis():
             None
         """
         
-        plt.figure(figsize=(11, 7), num=f'Simulationsdurchlauf {i+2}')
+        plt.figure(figsize=(11, 7), num=f'Simulationsdurchlauf {i+1}')
         plt.title(f'Simulation des Gefäßsystem; {hr} bpm')
         plt.plot(time, rw[2], label='Aorta Druck')
         plt.plot(time, rw[3], label='Arterie Druck')
@@ -133,7 +133,7 @@ class Regelkreis():
             for j in range(0, len(rwPres)):
                 rwP.append(rwPres[j] - rwMins[j])
 
-            #s.presPrinter(rwP)
+            s.presPrinter(rwP)
             print('\n', '#####', i+1)
             self.controlSystemPlotter(i, rwP, nHR, bs.time)
             

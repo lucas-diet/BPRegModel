@@ -93,7 +93,6 @@ class Heart():
             currentEDV = self.updateParameter(t, ctEDV, newEDV, currentEDV)
             currentESV = self.updateParameter(t, ctESV, newESV, currentESV)
             currSV = currentEDV - currentESV
-            print(t, currentEDV, currentESV, currSV)
               
             elasticity = 1 + np.sin(2 * np.pi * self.heartRate * (t - shift) / 60)
 
