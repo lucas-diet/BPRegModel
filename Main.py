@@ -1,4 +1,5 @@
 
+
 from bloodPressure import *
 from heart import * 
 from bodySystem import *
@@ -28,6 +29,23 @@ prop = 'inc'                                   # 'inc' zum erhöhen ; 'dec' zum 
 interval = 150                                 # Zeitschritte, wo verändert wird
 change = 1                                     # Wert um den verändert wird, wenn 0 dann keine Veränderung
 
+ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol, ctEDV, newEDV, ctESV, newESV = [], [], [], [], [], [], [], [], [], [], [], []
+
+
+#ctHR = [2, 4, 60]
+#newHR = [40, 90, 170]
+#ctVis = [2, 4, 6]
+#newVis = [10, 50, 100]
+#ctRadius = [2, 4, 6]
+#newRadius = [0.1, 0.1, 0.1]
+#ctVol = [2, 4, 6]
+#newVol = [100, 200, 300]
+
+#ctEDV = [2, 4, 6] 
+#newEDV = [100, 200, 300] 
+#ctESV = [2, 4, 6]
+#newESV = [20, 40, 50]
+
 #####################
 ##### Blutdruck ##### ---> Wie solle es ca. am Ende aussehen. Dient nur als Einstieg.
 #####################
@@ -48,7 +66,7 @@ bpSim = BloodPressure(duration, heartRate, systolic, diastolic)
 ## Klasse ##
 h = Heart(radi, viscosity, heartRate, strokeVolume, edv, esv, totalVolume, maxTime)
 
-h.hpPlotter()          # Ausführbare Funktion
+h.hpPlotter(ctEDV, newEDV, ctESV, newESV)          # Ausführbare Funktion
 
 ########################
 ##### Körpersystem #####
@@ -58,25 +76,15 @@ h.hpPlotter()          # Ausführbare Funktion
 lims = [-17, 17]                            # Für den Achsenbereich, der angezeigt werden soll, wenn Radius der Gefäße geplottet wird.
 lumFactor = [1, 1, 1, 1, 1, 1, 1]           # array, um den inneren Radius anpassen zu können -> ein Faktor zu skalieren
 ###########################
-ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol = [], [], [], [], [], [], [], []
 
-
-#ctHR = [2, 4, 6]
-#newHR = [40, 90, 170]
-#ctVis = [2, 4, 6]
-#newVis = [10, 50, 100]
-#ctRadius = [2, 4, 6]
-#newRadius = [0.1, 0.1, 0.1]
-#ctVol = [2, 4, 6]
-#newVol = [100, 200, 300]
 
 
 ## Klasse ##
 bs = BodySystem(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, totalVolume, maxTime)
 
-bs.vesselPlotter(lumFactor, lims)                  # Ausführbare Funktion
-bs.resisPrinter(lens, nums)                        # Ausführbare Funktion
-bs.vpPlotter(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)    # Ausführbare Funktion
+#bs.vesselPlotter(lumFactor, lims)                  # Ausführbare Funktion
+#bs.resisPrinter(lens, nums)                        # Ausführbare Funktion
+#bs.vpPlotter(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol, ctEDV, newEDV, ctESV, newESV)    # Ausführbare Funktion
 
 ##################
 ##### Sensor #####
@@ -90,11 +98,11 @@ dataC = [h.bloodPressure_RV, h.bloodPressure_LV,  bs.aortaPressure, bs.arteriePr
 ## Klasse ##
 s = Sensor(radi, viscosity, heartRate, strokeVolume, edv, esv, maxTime)
 
-h.heartSimulation()
+h.heartSimulation(ctEDV, newEDV, ctESV, newESV)
 bs.vesselSimulator(lens, nums, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
 
 #s.ppPlotter(data)                                  # Ausführbare Funktion
-s.presPrinter(dataC)                                # Ausführbare Funktion
+#s.presPrinter(dataC)                                # Ausführbare Funktion
 
 ### Findet den Blutdruck zu einem bestimmten Zeitpunkt ###
 presData = data[0]                              # data[x] x = {0,1,2,3,4,5,6}
@@ -106,15 +114,17 @@ timeStemp = 1
 ##### Regelkreis #####
 ######################
 
-soHR = [71, 72, 72]
+soHR = [71, 72, 73]
 soLF = [[1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1]]
-soVis = [100, 50, 100]
-soTV = [10, 50, 100]
+soVis = [50, 50, 50]
+soTV = [70, 70, 70]
+soEDV = [110, 110, 110]
+soESV = [60, 60, 60]
 apply = 3
-currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol]
+currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol, ctEDV, newEDV, ctESV, newESV, ctEDV, newEDV, ctESV, newESV]
 
 sys = Regelkreis(radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv, totalVolume, maxTime)
 
-sys.controlSystem(currVals, soHR, soLF, soVis, soTV, apply, lens, nums)
+sys.controlSystem(currVals, soHR, soLF, soVis, soTV, soEDV, soESV, apply, lens, nums)

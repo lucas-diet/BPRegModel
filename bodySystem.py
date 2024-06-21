@@ -39,7 +39,7 @@ class BodySystem():
 
     def vessel(self, radius, wallThickness, lumFactor=1):
         """_summary_
-                Erzeugt die Querschnittsformen eines Gefäßes basierend auf dem Radius, der Wanddicke und einem Faktor
+            Erzeugt die Querschnittsformen eines Gefäßes basierend auf dem Radius, der Wanddicke und einem Faktor
                 für den inneren Radius.
 
         Args:
@@ -929,7 +929,7 @@ class BodySystem():
         self.venePresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
         self.vCavaPresSim(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
 
-    def vpPlotter(self, le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol):
+    def vpPlotter(self, le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol, ctEDV, newEDV, ctESV, newESV):
         """_summary_
             Simuliert das Herz und das Blutsystem über die Zeit und erstellt einen Plot der Druckwerte in verschiedenen Gefäßen.
 
@@ -952,7 +952,7 @@ class BodySystem():
         plt.figure(figsize=(11, 7))
         
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.pres0, self.totalVolume, self.maxTime)
-        h.heartSimulation()
+        h.heartSimulation(ctEDV, newEDV, ctESV, newESV)
 
         self.vesselSimulator(le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol)
 

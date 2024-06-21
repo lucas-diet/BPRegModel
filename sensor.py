@@ -57,34 +57,6 @@ class Sensor():
 
         return map
     
-    def brainSender(self, data):
-        """_summary_
-            Berechnet die systolischen, diastolischen und mittleren Druckwerte für jede Gefäßart in `data`.
-
-        Args:
-            data (array): Ein Array mit den Blutdruckwerten aller Gefäßarten.
-
-        Returns:
-            tuple: Drei Arrays mit den berechneten Werten für die systolischen, diastolischen und mittleren Drücke.
-        """
-
-        maxs = []
-        mins = []
-        means = []
-
-        for d in data:
-            sys, _ = self.findPeak(d)
-            _, dia = self.findPeak(d)
-            
-            #self.calculatePressure(d, sys, dia)
-            map = self.calculatePressure(d, sys, dia)
-
-            maxs.append(np.mean(d[sys]))
-            mins.append(np.mean(d[dia]))
-            means.append(map)
-
-        return maxs, mins, means
- 
     def ppPlotter(self, data):
         """_summary_
             Plottet die Blutdruckwerte aller Gefäßarten und markiert die systolischen und diastolischen Peaks.
@@ -100,7 +72,6 @@ class Sensor():
         for d in data:
             sys, _ = self.findPeak(d)
             _, dia = self.findPeak(d)
-            
             
             plt.plot(self.time, d)
 

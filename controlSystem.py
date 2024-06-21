@@ -8,7 +8,6 @@ from heart import *
 from sensor import *
 from liver import *
 
-
 class Regelkreis():
     
     def __init__(self, radi, lumFactor, viscosity, heartRate, strokeVolume, edv, esv,  totalVolume, maxTime, pres0=70, dt=0.01):
@@ -40,7 +39,7 @@ class Regelkreis():
         """
         
         plt.figure(figsize=(11, 7), num=f'Simulationsdurchlauf {i+2}')
-        plt.title(f'Simulation des Gefäßsystem; {hr}')
+        plt.title(f'Simulation des Gefäßsystem; {hr} bpm')
         plt.plot(time, rw[2], label='Aorta Druck')
         plt.plot(time, rw[3], label='Arterie Druck')
         plt.plot(time, rw[4], label='Arteriole Druck')
@@ -55,7 +54,7 @@ class Regelkreis():
         plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.08), ncol=7, prop={'size': 8.5})
         plt.show()
 
-    def controlSystem(self, currVals, soHR, soLF, soVis, soTV, runs, lens, nums):
+    def controlSystem(self, currVals, soHR, soLF, soVis, soTV, soEDV, soESV, runs, lens, nums):
         """_summary_
             Simuliert und regelt das Gefäßsystem für mehrere Durchläufe.
 
@@ -72,13 +71,13 @@ class Regelkreis():
         Returns:
             None
         """
-        #currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol]
+        #currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol, ctEDV, newEDV, ctESV, newESV]
 
         h = Heart(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.totalVolume, self.maxTime)
         bs = BodySystem(self.radi, self.lumFactor, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.totalVolume, self.maxTime)
         s = Sensor(self.radi, self.viscosity, self.heartRate, self.strokeVolume, self.edv, self.esv, self.maxTime)
 
-        h.heartSimulation()
+        h.heartSimulation(currVals[8], currVals[9], currVals[10], currVals[11])
         bs.vesselSimulator(lens, nums, currVals[0], currVals[1], currVals[2], currVals[3], currVals[4], currVals[5], currVals[6], currVals[7])
 
         isAorta, isArterie, isArteriol, isCapillare, isVenole, isVene, isVCava = bs.getPressurs()
@@ -92,14 +91,16 @@ class Regelkreis():
             nVis = soVis[i]
             nLF = soLF[i]
             nTV = soTV[i]
+            nEDV = soEDV[i]
+            nESV = soESV[i]
 
-            soH = Heart(self.radi, nVis, nHR, self.strokeVolume, self.edv, self.esv, nTV, self.maxTime)
-            soBS = BodySystem(self.radi, nLF, nVis, nHR, self.strokeVolume, self.edv, self.esv, nTV, self.maxTime)
-            soS = Sensor(self.radi, nVis, nHR, self.strokeVolume, self.edv, self.esv, self.maxTime)
+            soH = Heart(self.radi, nVis, nHR, self.strokeVolume, nEDV, nESV, nTV, self.maxTime)
+            soBS = BodySystem(self.radi, nLF, nVis, nHR, self.strokeVolume, nEDV, nESV, nTV, self.maxTime)
+            soS = Sensor(self.radi, nVis, nHR, self.strokeVolume, nEDV, nESV, self.maxTime)
 
-            #currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol]
+            #currVals = [ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol, ctEDV, newEDV, ctESV, newESV]
             
-            soH.heartSimulation()
+            soH.heartSimulation(currVals[8], soESV, currVals[10], soEDV)
             soBS.vesselSimulator(lens, nums, currVals[0], soHR, currVals[2], soVis, currVals[4], currVals[5], currVals[6], soTV)
 
             #### Regelstrecke ####
