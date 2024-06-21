@@ -944,6 +944,10 @@ class BodySystem():
             newRadius (list): Neue Werte des Lumfaktors zu den Zeitpunkten ctRadius.
             ctVol (list): Zeitpunkte der Volumenänderungen.
             newVol (list): Neue Werte des Gesamtvolumens zu den Zeitpunkten ctVol.
+            ctEDV (list): Zeitpunkte der EDV-Änderung.
+            newEDV (list): Neue Werte des EDV zu den Zeitpunkten ctEDV.
+            ctESV (list): Zeitpunkte der ESV-Änderung.
+            newESV (list): Neue Werte des ESV zu den Zeitpunkten ctESV.
         
         Returns:
             None

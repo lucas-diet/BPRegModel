@@ -64,6 +64,8 @@ class Regelkreis():
             soLF (list): Liste der Radiusfaktoren für jeden Durchlauf.
             soVis (list): Liste der Viskositäten für jeden Durchlauf.
             soTV (list): Liste der Volumina für jeden Durchlauf.
+            soEDV (list): Liste der EDV-Werte für jeden Durchlauf. 
+            soESV (list): Liste der ESV-Werte für jeden Durchlauf.
             runs (int): Anzahl der Durchläufe.
             lens (array): Längen der verschiedenen Gefäßarten.
             nums (array): Anzahl der verschiedenen Gefäßarten.

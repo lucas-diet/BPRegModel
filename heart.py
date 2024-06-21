@@ -69,6 +69,10 @@ class Heart():
 
         Args:
             shift (float, optional): Verschiebung in der Zeit für die Elastizitätsberechnung. Default ist -0.5.
+            ctEDV (list): Zeitpunkte der EDV-Änderung.
+            newEDV (list): Neue Werte des EDV zu den Zeitpunkten ctEDV.
+            ctESV (list): Zeitpunkte der ESV-Änderung.
+            newESV (list): Neue Werte des ESV zu den Zeitpunkten ctESV.
 
         Returns:
             None
@@ -107,6 +111,10 @@ class Heart():
 
         Args:
             shift (float, optional): Verschiebung in der Zeit für die Elastizitätsberechnung. Standard ist 0.
+            ctEDV (list): Zeitpunkte der EDV-Änderung.
+            newEDV (list): Neue Werte des EDV zu den Zeitpunkten ctEDV.
+            ctESV (list): Zeitpunkte der ESV-Änderung.
+            newESV (list): Neue Werte des ESV zu den Zeitpunkten ctESV.
 
         Returns:
             None
@@ -143,7 +151,10 @@ class Heart():
             Simuliert das gesamte Herz, indem es die rechte und linke Herzkammer simuliert.
 
         Args:
-            None
+            ctEDV (list): Zeitpunkte der EDV-Änderung.
+            newEDV (list): Neue Werte des EDV zu den Zeitpunkten ctEDV.
+            ctESV (list): Zeitpunkte der ESV-Änderung.
+            newESV (list): Neue Werte des ESV zu den Zeitpunkten ctESV.
         
         Returns:
             None
@@ -157,7 +168,10 @@ class Heart():
             Stellt eine Simulation des Herzens dar, indem es den Druck und das Volumen der linken und rechten Herzkammer im Zeitverlauf anzeigt.
             
         Args:
-            None
+            ctEDV (list): Zeitpunkte der EDV-Änderung.
+            newEDV (list): Neue Werte des EDV zu den Zeitpunkten ctEDV.
+            ctESV (list): Zeitpunkte der ESV-Änderung.
+            newESV (list): Neue Werte des ESV zu den Zeitpunkten ctESV.
         
         Returns:
             None
