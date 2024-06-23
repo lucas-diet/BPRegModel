@@ -188,6 +188,6 @@ class Heart():
         plt.ylabel('Werte')
         plt.title('Simulation des Herzen')
         plt.grid(True)
-        plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.08), ncol=7, prop={'size': 8.5})
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.08), ncol=7, prop={'size': 9.5})
 
         plt.show()
