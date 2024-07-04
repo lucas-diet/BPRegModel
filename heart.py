@@ -80,7 +80,7 @@ class Heart():
         
         viskosityEffect = self.viscosity / 100
         
-        volumePressureConstant = 0.01
+        volumePressureConstant = 0.001
         volumeEffect = volumePressureConstant * self.totalVolume
 
         currentEDV = self.edv
@@ -102,7 +102,7 @@ class Heart():
                 dVdt = currSV - elasticity * (self.bloodVolume_RV[i-1] - currentESV)
                 self.bloodVolume_RV[i] = self.bloodVolume_RV[i-1] + dVdt * self.dt
 
-            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - currentESV) * 0.15 + volumeEffect + viskosityEffect + 3
+            self.bloodPressure_RV[i] = elasticity * (self.bloodVolume_RV[i] - currentESV) * 0.15 + volumeEffect + viskosityEffect #- 2
 
     def leftVentricle(self, ctEDV=[], newEDV=[], ctESV=[], newESV=[], shift=0):
         """_summary_
@@ -121,7 +121,7 @@ class Heart():
 
         viskosityEffect = self.viscosity / 100
         
-        volumePressureConstant = 0.01
+        volumePressureConstant = 0.001
         volumeEffect = volumePressureConstant * self.totalVolume
 
         currentEDV = self.edv
@@ -143,7 +143,7 @@ class Heart():
                 dVdt = currSV - elasticity * (self.bloodVolume_LV[i-1] - currentESV)
                 self.bloodVolume_LV[i] = self.bloodVolume_LV[i-1] + dVdt * self.dt
 
-            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - currentESV) + volumeEffect + viskosityEffect + 10
+            self.bloodPressure_LV[i] = elasticity * (self.bloodVolume_LV[i] - currentESV) + volumeEffect + viskosityEffect #- 2
     
     def heartSimulation(self, ctEDV, newEDV, ctESV, newESV):
         """_summary_

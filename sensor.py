@@ -122,6 +122,7 @@ class Sensor():
             print('Systolischer Druck: ', np.mean(d[sys]), 'mmHg')
             print('Diastolischer Druck: ', np.mean(d[dia]), 'mmHg')
             print('Mittlerer Druck', map, 'mmHg')
+        print()
 
     def printPressureTimePoint(self, presData, timeStemp):
         """_summary_

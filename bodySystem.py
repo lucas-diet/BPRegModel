@@ -529,16 +529,16 @@ class BodySystem():
             p1, p2 = bp.bpFunction(t, currentHeartRate)
 
             radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
-            radiusEffect = np.log(radiusEffect) * 0.3
+            radiusEffect = np.log(radiusEffect)
 
-            volumePressureConstant = 0.01
+            volumePressureConstant = 0.001
             volumeEffect = volumePressureConstant * currentVolume
             
             self.aortaPressure[i] = self.pres0
             if h.bloodPressure_LV[i] > self.aortaPressure[i]:
-                self.aortaPressure[i] = h.bloodPressure_LV[i] + volumeEffect + viskosityEffect
+                self.aortaPressure[i] = h.bloodPressure_LV[i] + volumeEffect + viskosityEffect - radiusEffect * 0.8
             
-            self.aortaPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect - radiusEffect
+            self.aortaPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect - radiusEffect #- 15 #- 5
 
     def arteriePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
@@ -568,10 +568,6 @@ class BodySystem():
 
         bp = BloodPressure()
 
-        radiusEffect = self.radi[1] * 0.001
-        radiusEffect *= self.lumFactor[1]
-        radiusEffect = np.log(radiusEffect) * 0.3
-
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[1]
 
@@ -591,14 +587,14 @@ class BodySystem():
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
 
-            volumePressureConstant = 0.01
+            volumePressureConstant = 0.001
             volumeEffect = volumePressureConstant * currentVolume
 
-            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
-            radiusEffect = np.log(radiusEffect) * 0.3
+            radiusEffect = self.radi[1] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect)
               
-            self.arteriePressure[i] = self.aortaPressure[i] * 0.8
-            self.arteriePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect #* 0.3
+            self.arteriePressure[i] = self.aortaPressure[i] * 0.7#* 0.8
+            self.arteriePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect - radiusEffect #* 0.3
 
     def arteriolePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
@@ -628,10 +624,6 @@ class BodySystem():
 
         bp = BloodPressure()
 
-        radiusEffect = self.radi[2] * 0.001
-        radiusEffect *= self.lumFactor[2]
-        radiusEffect = np.log(radiusEffect) * 0.3
-
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[2]
 
@@ -651,14 +643,14 @@ class BodySystem():
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
 
-            volumePressureConstant = 0.01
+            volumePressureConstant = 0.001
             volumeEffect = volumePressureConstant * currentVolume
 
-            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
-            radiusEffect = np.log(radiusEffect) * 0.3
+            radiusEffect = self.radi[2] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect)
 
-            self.arteriolPressure[i] = self.arteriePressure[i] * 0.5
-            self.arteriolPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect #+ 10
+            self.arteriolPressure[i] = self.arteriePressure[i] * 0.6 #* 0.5
+            self.arteriolPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect - radiusEffect - 5 #+ 10
 
     def capillarePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
@@ -688,10 +680,6 @@ class BodySystem():
 
         bp = BloodPressure()
 
-        radiusEffect = self.radi[3] * 0.001
-        radiusEffect *= self.lumFactor[3]
-        radiusEffect = np.log(radiusEffect) * 0.3
-
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[3]
 
@@ -711,14 +699,14 @@ class BodySystem():
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
 
-            volumePressureConstant = 0.01
+            volumePressureConstant = 0.001
             volumeEffect = volumePressureConstant * currentVolume
 
-            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
-            radiusEffect = np.log(radiusEffect) * 0.3
+            radiusEffect = self.radi[3] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect)
             
             self.capillarePressure[i] = self.arteriolPressure[i] * 0.5
-            self.capillarePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect
+            self.capillarePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect - radiusEffect - 6
 
     def venolePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
@@ -748,10 +736,6 @@ class BodySystem():
         
         bp = BloodPressure()
 
-        radiusEffect = self.radi[4] * 0.001
-        radiusEffect *= self.lumFactor[4]
-        radiusEffect = np.log(radiusEffect) * 0.3
-
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[4]
 
@@ -771,14 +755,14 @@ class BodySystem():
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
 
-            volumePressureConstant = 0.01
+            volumePressureConstant = 0.001
             volumeEffect = volumePressureConstant * currentVolume
 
-            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
-            radiusEffect = np.log(radiusEffect) * 0.3
+            radiusEffect = self.radi[4] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect)
                        
             self.venolePressure[i] = self.capillarePressure[i] * 0.4
-            self.venolePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect + 5
+            self.venolePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect - 7
             
     def venePresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
@@ -808,10 +792,6 @@ class BodySystem():
         
         bp = BloodPressure()
 
-        radiusEffect = self.radi[5] * 0.001
-        radiusEffect *= self.lumFactor[5]
-        radiusEffect = np.log(radiusEffect) * 0.3
-
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[5]
 
@@ -831,14 +811,14 @@ class BodySystem():
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
 
-            volumePressureConstant = 0.01
+            volumePressureConstant = 0.001
             volumeEffect = volumePressureConstant * currentVolume
 
-            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
-            radiusEffect = np.log(radiusEffect) * 0.3
+            radiusEffect = self.radi[5] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect)
 
             self.venePressure[i] = self.venolePressure[i] * 0.3
-            self.venePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect + 3
+            self.venePressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect  - radiusEffect - 2
             
     def vCavaPresSim(self, le, nu, ctHR=[], newHR=[], ctVis=[], newVis=[], ctRadius=[], newRadius=[], ctVol=[], newVol=[]):
         """_summary_
@@ -868,10 +848,6 @@ class BodySystem():
 
         bp = BloodPressure()
 
-        radiusEffect = self.radi[6] * 0.001
-        radiusEffect *= self.lumFactor[6]
-        radiusEffect = np.log(radiusEffect) * 0.3
-
         resis = self.vesselResistances(le, nu)
         resisEffect = self.normalizeResistance(resis)[6]
 
@@ -891,14 +867,14 @@ class BodySystem():
             viskosityEffect = currentViscosity / 100
             p1, p2 = bp.bpFunction(t, currentHeartRate)
 
-            volumePressureConstant = 0.01
+            volumePressureConstant = 0.001
             volumeEffect = volumePressureConstant * currentVolume
 
-            radiusEffect = self.radi[0] * 0.001 * currentRadiusFactor
-            radiusEffect = np.log(radiusEffect) * 0.3
+            radiusEffect = self.radi[6] * 0.001 * currentRadiusFactor
+            radiusEffect = np.log(radiusEffect)
             
             self.vCavaPressure[i] = self.venePressure[i] * 0.2
-            self.vCavaPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect - radiusEffect
+            self.vCavaPressure[i] += resisEffect * (p1 + p2) + volumeEffect + viskosityEffect - radiusEffect - 1
 
     def vesselSimulator(self, le, nu, ctHR, newHR, ctVis, newVis, ctRadius, newRadius, ctVol, newVol):
         """_summary_
